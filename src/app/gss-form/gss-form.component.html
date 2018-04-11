@@ -1,0 +1,139 @@
+<div class="container">
+  <br />
+  <form #myForm="ngForm">
+        <app-sender-form *ngIf="wizardStep === 0" [ratesRequest]="ratesRequest"></app-sender-form>
+        <app-receiver-form *ngIf="wizardStep === 1" [ratesRequest]="ratesRequest"></app-receiver-form>
+        <app-package-form *ngIf="wizardStep == 2" [ratesRequest]="ratesRequest"></app-package-form>
+      <button *ngIf="wizardStep === 2" type="submit" id="btncalculate" class="btn btn-primary" [disabled]="myForm.invalid || !isUnitAndKgOkay() || !isStreetsOkay()" (click)="onSubmit()">
+        Calculate freight</button>
+  </form>
+  <!--
+    <p>valid: {{ myForm.valid }}</p>
+    <p>value: {{ ratesRequest | json }}</p>
+    <p>isUnitAndKgOkay: {{ isUnitAndKgOkay() }}</p>
+    -->
+  <div *ngIf="wizardStep === 2" id="div_rates">
+    <br>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>
+            <img id="img_loader" style="height: 20px;" [src]="loaderpath" [hidden]="!isLoading">
+          </th>
+          <th>&nbsp;</th>
+
+          <th>Service</th>
+          <th>Cost</th>
+          <th>Service Standard</th>
+        </tr>
+      </thead>
+      <tbody id="tblrates-body">
+        <tr *ngFor="let avail of available.Available; let i = index;">
+          <td>{{ avail.CarrierName }}</td>
+          <td>
+            <div class="dropdown">
+              <button class="btn btn-primary dropdown-toggle" type="button"
+                id="dropdownMenu_{{avail.CarrierId}}"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false">
+                Go
+              </button>
+              <div class="dropdown-menu">
+                <span class="dropdown-item"
+                  (click)="GoWithTheCarrier(avail)">
+                  Email Ticket</span>
+                <span class="dropdown-item"
+                  (click)="GoWithTheCarrier(avail, false)">
+                  Print</span>
+              </div>
+            </div>
+          </td>
+          <td>{{ avail.CarrierServiceType }}</td>
+          <td>{{ avail.Cost | currency }}</td>
+          <td [innerHTML]="avail.ServiceStandard"></td>
+        </tr>
+        <tr *ngIf="available.Available.length == 0">
+          <td colspan="5">No rates available</td>
+        </tr>
+        <tr *ngIf="available.ValidationErrors && available.ValidationErrors.Origin">
+          <td colspan="5" class="text-danger">
+            <strong>{{ available.ValidationErrors.Origin }}</strong>
+          </td>
+        </tr>
+        <tr *ngIf="available.ValidationErrors && available.ValidationErrors.Destination">
+          <td colspan="5" class="text-danger">
+            <strong>{{ available.ValidationErrors.Destination }}</strong>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <span *ngIf="errorResponse" class="text-danger">
+      <strong>Error occurred! Please try later again.</strong>
+    </span>
+    <span *ngIf="available.Available.length > 0" class="text-danger">
+      <strong>Pricing does not include additional South Island service disruption surcharge - </strong>
+      <a href="https://sweetspotgroup.zendesk.com/hc/en-us/articles/235661948" target="_blank">read more...</a>
+    </span>
+  </div>
+  <br>
+</div>
+<!-- Button trigger modal -->
+<button id="btnShowModal" hidden type="button" class="btn btn-primary" data-toggle="modal" data-target="#rsltModal">
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="rsltModal" tabindex="-1" role="dialog" aria-labelledby="rsltModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 [ngClass]="isSuccess ?'text-success' : 'text-danger'" id="exampleModalLabel">{{modalTitle}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {{modalBody}}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Button trigger modal -->
+<button id="btnShowStripe" hidden type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalStripe">
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="modalStripe" tabindex="-1" role="dialog" aria-labelledby="modalStripeLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="card-header">
+        <h4 class="card-title">Checkout : </h4>
+        <!--
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      -->
+      </div>
+      <form novalidate (ngSubmit)="processPayment()" [formGroup]="stripeTest">
+        <div class="modal-body">
+          <input type="text" class="form-control" required
+            [class.alert-danger]="isNameError"
+            formControlName="name"
+            (change)="isNameError = false;cardError = '';"
+            placeholder="Name on Card">
+          <ngx-stripe-card [options]="cardOptions" [elementsOptions]="elementsOptions"></ngx-stripe-card>
+          <span *ngIf="cardError !== undefined && cardError !== null && cardError.length > 0" class="text-danger">{{cardError}}</span>
+        </div>
+        <div class="modal-footer card-footer">
+          <button [hidden]="isProcessing" type="submit" class="btn btn-primary">Pay</button>
+          <button [hidden]="isProcessing" type="button" id="cancelBtn" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <img id="img_loader_processing" [src]="loaderpath" [hidden]="!isProcessing">
+        </div>
+      </form>
+      </div>
+  </div>
+</div>

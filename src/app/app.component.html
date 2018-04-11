@@ -1,0 +1,46 @@
+<nav class="navbar navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">
+    <img [src]="logopath" alt="ReturnIt">
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Item 1</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Item 2</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#">Disabled</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="steps">
+  <div class="center row">
+      <span class="col-md-1"></span>
+      <span class="col-md-2 step text-dark">1. {{steps[0] | uppercase}}</span>
+      <span class="col-md-2 step">2. {{steps[1] | uppercase}}</span>
+      <span class="col-md-2 step">3. {{steps[2] | uppercase}}</span>
+      <span class="col-md-2 step">4. {{steps[3] | uppercase}}</span>
+      <span class="col-md-2 step">5. {{steps[4] | uppercase}}</span>
+      <span class="col-md-1"></span>
+  </div>
+</div>
+
+<app-gss-form [wizardStep]="current_step"></app-gss-form>
+
+<footer class="footer">
+  <div class="container center">
+      <button type="button" class="btn btn-light btn-sm">BACK</button>
+      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+      <button type="button" class="btn btn-primary btn-lg">NEXT STEP</button>
+  </div>
+</footer>

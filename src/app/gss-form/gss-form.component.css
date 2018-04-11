@@ -1,0 +1,31 @@
+table {
+    background-color: #fff;
+}
+thead th {
+    font-size: 13px;
+    background-color: rgba(0,0,0,.03);
+}
+
+tfoot td {
+    font-size: 13px;
+    background-color: rgba(0,0,0,.03);
+}
+
+.table td, .table th {
+    font-size: 13px;
+    padding: 5px;
+}
+
+span.dropdown-item {
+    font-size: 13px;
+}
+
+.modal-body {
+    white-space: pre-line;
+}
+
+h4.card-title {
+    color: #333;
+    font-family: Oswald,'Trebuchet MS','Open Sans',arial,sans-serif;
+    font-size: 16px;
+}

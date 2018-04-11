@@ -1,0 +1,32 @@
+.card {
+    word-wrap: normal;
+}
+
+.control-label {
+    font-size: 13px;
+    margin-top: 8px;
+}
+
+.form-control {
+    font-size: 13px;
+}
+
+thead th {
+    font-size: 13px;
+    background-color: rgba(0,0,0,.03);
+}
+
+tfoot td {
+    font-size: 13px;
+    background-color: rgba(0,0,0,.03);
+}
+
+.table td, .table th {
+    padding: 5px;
+}
+
+a.accordion-toggle {
+    color: #333;
+    font-family: Oswald,'Trebuchet MS','Open Sans',arial,sans-serif;
+    font-size: 16px;
+}

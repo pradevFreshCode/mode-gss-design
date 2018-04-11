@@ -1,0 +1,138 @@
+<div class="card-group" id="accordionpackages">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="card-title">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionpackages" href="#collapsepackages" aria-expanded="true">
+          Packages :
+        </a>
+      </h4>
+    </div>
+    <div id="collapsepackages" class="card-collapse collapse in show" aria-expanded="true">
+      <div class="card-body">
+        <table class="table table-bordered table-condensed" id="tblStock">
+          <thead>
+            <tr>
+              <th>Stock
+              </th>
+              <th>Unit</th>
+              <th>Length
+                <br>(cm)</th>
+              <th>Width
+                <br>(cm)</th>
+              <th>Height
+                <br>(cm)</th>
+              <th>KG
+                <br>(kg)</th>
+                <!--
+              <th>Cubic
+                <br>(m3)</th>
+              <th style="display:none;">Type</th>
+              -->
+              <th>&nbsp;</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let package of ratesRequest.Packages; let i = index" id="rowStock_{{i}}">
+              <td>
+                <select class="form-control" id="sel_stock_{{i}}" name="sel_stock_{{i}}" (change)="onPkgTypeChange(i)" required [(ngModel)]="package.Name">
+                  <option value="custom">-- Custom --</option>
+                  <option value="GSS-A2 SATCHEL">GSS-A2 SATCHEL</option>
+                  <option value="GSS-A3 SATCHEL">GSS-A3 SATCHEL</option>
+                  <option value="GSS-A4 SATCHEL">GSS-A4 SATCHEL</option>
+                  <option value="GSS-DLE SATCHEL">GSS-DLE SATCHEL</option>
+                  <option value="GSS-A5 SATCHEL">GSS-A5 SATCHEL</option>
+                </select>
+              </td>
+              <td>
+                <input type="number" name="unit_{{i}}" id="unit_{{i}}" class="form-control" min="1" max="10" required #packageUnit="ngModel"
+                  [class.alert-danger]="(packageUnit.invalid || packageUnit.value < 1 || packageUnit.value > 10) && (packageUnit.dirty || packageUnit.touched)"
+                  [(ngModel)]="package.Unit" (change)="updateTotals()">
+              </td>
+              <td>
+                <input type="number" name="length_{{i}}" id="length_{{i}}" class="form-control" [disabled]="package.Name !== 'custom'" min="0"
+                  max="100" required #packageLength="ngModel" [class.alert-danger]="(packageLength.invalid || packageLength.value <= 0 || packageLength.value > 100)"
+                  [(ngModel)]="package.Length" (change)="updateTotals()">
+              </td>
+              <td>
+                <input type="number" name="width_{{i}}" id="width_{{i}}" class="form-control" [disabled]="package.Name !== 'custom'" min="0"
+                  max="100" required #packageWidth="ngModel" [class.alert-danger]="(packageWidth.invalid || packageWidth.value <= 0 || packageWidth.value > 100)"
+                  [(ngModel)]="package.Width" (change)="updateTotals()">
+              </td>
+              <td>
+                <input type="number" name="height_{{i}}" id="height_{{i}}" class="form-control" [disabled]="package.Name !== 'custom'" min="0"
+                  max="100" required #packageHeight="ngModel" [class.alert-danger]="(packageHeight.invalid || packageHeight.value <= 0 || packageHeight.value > 100)"
+                  [(ngModel)]="package.Height" (change)="updateTotals()">
+              </td>
+              <td>
+                <input type="number" name="kg_{{i}}" id="kg_{{i}}" class="form-control" min="0" max="100" required #packageKg="ngModel" [class.alert-danger]="(packageKg.invalid || packageKg.value <= 0 || packageKg.value > 100)"
+                  [(ngModel)]="package.Kg" (change)="updateTotals()">
+              </td>
+              <!--
+              <td>
+                <input type="number" name="m3_{{i}}" id="m3_{{i}}" class="form-control" disabled (change)="updateTotals()" [value]="(package.Length * package.Width * package.Height/1000000) | number: '1.6'">
+              </td>
+            -->
+              <td>
+                <span style="cursor: pointer;" (click)="deleteStockRow(i)">
+                  <strong>x</strong>
+                </span>
+              </td>
+            </tr>
+            <tr id="rowStock_new">
+              <td>
+                <select class="form-control" id="sel_stock_new" name="sel_stock_new" [(ngModel)]="selStockNew" (change)="onPkgTypeChange()">
+                  <option value="custom" selected>-- Custom --</option>
+                  <option value="GSS-A2 SATCHEL">GSS-A2 SATCHEL</option>
+                  <option value="GSS-A3 SATCHEL">GSS-A3 SATCHEL</option>
+                  <option value="GSS-A4 SATCHEL">GSS-A4 SATCHEL</option>
+                  <option value="GSS-DLE SATCHEL">GSS-DLE SATCHEL</option>
+                  <option value="GSS-A5 SATCHEL">GSS-A5 SATCHEL</option>
+                </select>
+              </td>
+              <td>
+                <input type="number" name="unitNew" id="unitNew" class="form-control" [(ngModel)]="unitNew" value="1" (change)="checkNew()">
+              </td>
+              <td>
+                <input type="number" name="length_new" id="length_new" class="form-control" [(ngModel)]="lengthNew" (change)="checkNew()">
+              </td>
+              <td>
+                <input type="number" name="width_new" id="width_new" class="form-control" [(ngModel)]="widthNew" (change)="checkNew()">
+              </td>
+              <td>
+                <input type="number" name="height_new" id="height_new" class="form-control" [(ngModel)]="heightNew" (change)="checkNew()">
+              </td>
+              <td>
+                <input type="number" name="kgnew" id="kgnew" class="form-control" [(ngModel)]="kgNew">
+              </td>
+              <!--
+              <td>
+                <input type="number" name="m3_new" id="m3_new" class="form-control" disabled>
+              </td>
+            -->
+              <td>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td>Totals:&nbsp;</td>
+              <td>
+                <label id="totalunits">{{totalUnit}}</label>
+              </td>
+              <td colspan="3">&nbsp;</td>
+              <td>
+                <label id="totalkg">{{totalKg}}</label>
+              </td>
+              <!--
+              <td>
+                <label id="totalcubic">{{totalCubic | number: '1.6'}}</label>
+              </td>
+            -->
+              <td>&nbsp;</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
