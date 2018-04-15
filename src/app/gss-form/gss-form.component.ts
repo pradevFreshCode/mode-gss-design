@@ -22,7 +22,7 @@ import { PaymentFormComponent } from '../payment-form/payment-form.component';
     trigger('slideInOut', [
       transition(':enter', [
         style({transform: 'translateX(120%)'}),
-        animate('200ms 200ms ease-in', style({transform: 'translateX(0%)'}))
+        animate('200ms 200ms ease-out', style({transform: 'translateX(0%)'}))
       ]),
       transition(':leave', [
         animate('200ms ease-in', style({transform: 'translateX(-120%)'}))
@@ -108,8 +108,6 @@ export class GssFormComponent implements OnInit {
 
   onGo(avail: Available) {
     this.availToGo = avail;
-    // console.log(this.availToGo);
-
     this.clickNext();
   }
 

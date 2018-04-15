@@ -4,7 +4,6 @@ import { GssRequestService } from '../gss-request.service';
 import { Package } from '../package';
 import { Available } from '../available';
 import { environment } from '../../environments/environment';
-// import { EventEmitter } from 'protractor';
 
 @Component({
   selector: 'app-carrier-form',
@@ -13,7 +12,7 @@ import { environment } from '../../environments/environment';
 })
 export class CarrierFormComponent implements OnInit {
   @Input() ratesRequest: RatesRequest;
-  @Output() onGo = new EventEmitter<any>();
+  @Output() goClicked = new EventEmitter<any>();
 
   loaderpath = environment.assets_dir + 'ajax-loader.gif';
   isLoading: boolean;
@@ -35,7 +34,6 @@ export class CarrierFormComponent implements OnInit {
 
     // remove Packages
     toGo.Packages = [];
-    // console.log(copy);
 
     this.ratesRequest.Packages.forEach(pkg => {
       let i = 0;
@@ -54,7 +52,6 @@ export class CarrierFormComponent implements OnInit {
       }
     });
 
-    // console.log(toGo);
     this.getAvails(toGo);
   }
 
@@ -74,9 +71,6 @@ export class CarrierFormComponent implements OnInit {
 
   public GoWithTheCarrier(avail: Available, isEmail: boolean = true) {
     avail.IsEmail = isEmail;
-    this.onGo.emit(avail);
-
-    // show StripeCardComponent
-    // document.getElementById('btnShowStripe').click();
+    this.goClicked.emit(avail);
   }
 }

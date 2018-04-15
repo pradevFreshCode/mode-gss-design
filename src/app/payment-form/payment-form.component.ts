@@ -24,7 +24,7 @@ export class PaymentFormComponent implements OnInit {
   @Input() availToGo: Available;
   @ViewChild('myModal') myModal: ElementRef;
   @ViewChild(StripeCardComponent) card: StripeCardComponent;
-  @Output() onCardDone = new EventEmitter<any>();
+  @Output() cardDone = new EventEmitter<any>();
 
   loaderpath = environment.assets_dir + 'ajax-loader.gif';
   shipmentResponse: any;
@@ -55,7 +55,6 @@ export class PaymentFormComponent implements OnInit {
   stripeTest: FormGroup;
   isNameError: boolean;
   cardError: string;
-  // isProcessing: boolean;
 
   constructor(
     private fb: FormBuilder,
@@ -69,10 +68,8 @@ export class PaymentFormComponent implements OnInit {
       name: ['', [Validators.required]]
     });
 
-    // document.getElementById('btnShowStripe').click();
     this.isNameError = false;
     this.cardError = '';
-    // this.isProcessing = false;
   }
 
   processPayment() {
@@ -82,7 +79,7 @@ export class PaymentFormComponent implements OnInit {
       // alert ('name is required');
       this.isNameError = true;
       this.cardError = 'Name is required';
-      this.onCardDone.emit(false);
+      this.cardDone.emit(false);
       return false;
     }
 
@@ -100,9 +97,6 @@ export class PaymentFormComponent implements OnInit {
             result.token.id)
               .subscribe(
                 data => {
-                  /*
-                  this.onCardDone.emit(true);
-                  */
                   this.checkout();
                 },
                 error => {
@@ -115,7 +109,7 @@ export class PaymentFormComponent implements OnInit {
                   } else {
                     this.cardError = 'Unknown error has occurred. Please try later again.';
                   }
-                  this.onCardDone.emit(false);
+                  this.cardDone.emit(false);
               }, () => {
                 // completed
               });
@@ -124,13 +118,13 @@ export class PaymentFormComponent implements OnInit {
           // console.log(result.error.message);
           // hide loader
           // this.isProcessing = false;
-          this.onCardDone.emit(false);
+          this.cardDone.emit(false);
           // Show error modal
           this.cardError = result.error.message;
         } else {
           // hide loader
           // this.isProcessing = false;
-          this.onCardDone.emit(false);
+          this.cardDone.emit(false);
         }
       });
   }
@@ -213,7 +207,7 @@ export class PaymentFormComponent implements OnInit {
             this.shipmentResponse.Errors.forEach(item => {
               this.cardError += JSON.stringify(item) + '\n';
             });
-            this.onCardDone.emit(false);
+            this.cardDone.emit(false);
           } else {
             // download labels
             this.shipmentResponse.Consignments.forEach(item => {
@@ -230,10 +224,10 @@ export class PaymentFormComponent implements OnInit {
                     }
                     const blob = new Blob([uintArray], { type: 'application/pdf' });
                     saveAs(blob, item.Connote + '.pdf');
-                    this.onCardDone.emit(true);
+                    this.cardDone.emit(true);
                   },
                   error => {
-                    this.onCardDone.emit(false);
+                    this.cardDone.emit(false);
                   }
               );
             });
@@ -242,7 +236,7 @@ export class PaymentFormComponent implements OnInit {
         err => {
           this.shipmentErrorResponse = err;
           this.cardError = 'Unknown error occurred. Please try later again.';
-          this.onCardDone.emit(false);
+          this.cardDone.emit(false);
         }
       );
   }

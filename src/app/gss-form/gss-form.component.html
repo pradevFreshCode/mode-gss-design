@@ -11,32 +11,32 @@
 <div class="container">
   <div style="margin: 2rem 0;">
     <form #senderForm="ngForm">
-      <div [@slideInOut] *ngIf="wizardStep === 0">
+      <div [@slideInOut] *ngIf="wizardStep == 0">
         <app-sender-form [ratesRequest]="ratesRequest"></app-sender-form>
       </div>
     </form>
     <form #receiverForm="ngForm">
-      <div [@slideInOut] *ngIf="wizardStep === 1">
+      <div [@slideInOut] *ngIf="wizardStep == 1">
         <app-receiver-form [ratesRequest]="ratesRequest"></app-receiver-form>
       </div>
     </form>
     <form #packageForm="ngForm">
-      <div [@slideInOut] *ngIf="wizardStep === 2">
+      <div [@slideInOut] *ngIf="wizardStep == 2">
         <app-package-form [ratesRequest]="ratesRequest"></app-package-form>
       </div>
     </form>
     <form #carrierForm="ngForm">
-      <div [@slideInOut] *ngIf="wizardStep === 3">
-        <app-carrier-form [ratesRequest]="ratesRequest" (onGo)="onGo($event)"></app-carrier-form>
+      <div [@slideInOut] *ngIf="wizardStep == 3">
+        <app-carrier-form [ratesRequest]="ratesRequest" (goClicked)="onGo($event)"></app-carrier-form>
       </div>
     </form>
     <form #paymentForm="ngForm">
-      <div [@slideInOut] *ngIf="wizardStep === 4">
-        <app-payment-form #payment [ratesRequest]="ratesRequest" [availToGo]="availToGo" (onCardDone)="onCardDone($event)"></app-payment-form>
+      <div [@slideInOut] *ngIf="wizardStep == 4">
+        <app-payment-form #payment [ratesRequest]="ratesRequest" [availToGo]="availToGo" (cardDone)="onCardDone($event)"></app-payment-form>
       </div>
     </form>
     <form #pickupForm="ngForm">
-      <div [@slideInOut] *ngIf="wizardStep === 5">
+      <div [@slideInOut] *ngIf="wizardStep == 5">
         <app-pickup-form [ratesRequest]="ratesRequest"></app-pickup-form>
       </div>
     </form>
