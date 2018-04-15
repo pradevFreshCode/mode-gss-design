@@ -34,6 +34,9 @@ export class SenderFormComponent implements OnInit {
     this.ratesRequest.Origin.Address.CountryCode = 'NZ';
     this.isStreetTouched = false;
     this.searchControl = new FormControl();
+
+    this.lookupAddress();
+
     this.mapsAPILoader.load().then(() => {
       const autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement,
       {
@@ -98,5 +101,21 @@ export class SenderFormComponent implements OnInit {
 
   public setStreetTouched() {
     this.isStreetTouched = true;
+  }
+
+  public lookupAddress() {
+    const address = (this.ratesRequest.Origin.Address.StreetAddress || '')
+      + ' ' + (this.ratesRequest.Origin.Address.Suburb || '')
+      + ' ' + (this.ratesRequest.Origin.Address.City || '')
+      + ' ' + (this.ratesRequest.Origin.Address.CountryCode || '');
+
+    this.geocodingService.codeAddress(address).subscribe(
+      (result => {
+        if (result.length > 0) {
+          this.latitude = result[0].geometry.location.lat();
+          this.longitude = result[0].geometry.location.lng();
+          this.zoom = 15;
+        }
+      }));
   }
 }

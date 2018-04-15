@@ -9,6 +9,4 @@ import { environment } from '../environments/environment';
 export class AppComponent {
   title = 'app';
   logopath = environment.assets_dir + 'logo_returnit.png';
-  steps = ['sender details', 'recipient details', 'package size', 'payment', 'book pickup'];
-  current_step = 0;
 }

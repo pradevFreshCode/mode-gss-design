@@ -22,25 +22,4 @@
     </ul>
   </div>
 </nav>
-
-<div class="steps">
-  <div class="center row">
-      <span class="col-md-1"></span>
-      <span class="col-md-2 step text-dark">1. {{steps[0] | uppercase}}</span>
-      <span class="col-md-2 step">2. {{steps[1] | uppercase}}</span>
-      <span class="col-md-2 step">3. {{steps[2] | uppercase}}</span>
-      <span class="col-md-2 step">4. {{steps[3] | uppercase}}</span>
-      <span class="col-md-2 step">5. {{steps[4] | uppercase}}</span>
-      <span class="col-md-1"></span>
-  </div>
-</div>
-
-<app-gss-form [wizardStep]="current_step"></app-gss-form>
-
-<footer class="footer">
-  <div class="container center">
-      <button type="button" class="btn btn-light btn-sm">BACK</button>
-      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-      <button type="button" class="btn btn-primary btn-lg">NEXT STEP</button>
-  </div>
-</footer>
+<app-gss-form></app-gss-form>

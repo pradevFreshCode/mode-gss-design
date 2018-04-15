@@ -11,4 +11,5 @@ export class Available {
     IsSaturdayDelivery: boolean;
     IsFreightForward: boolean;
     CarrierServiceType: string;
+    IsEmail: boolean;
 }

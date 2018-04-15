@@ -1,0 +1,21 @@
+<div class="card-group">
+  <div class="col-md-12">
+    <h4>PAYMENT</h4>
+  </div>
+  <div class="col-md-3"></div>
+  <form class="col-md-6" novalidate (ngSubmit)="processPayment()" [formGroup]="stripeTest">
+    <div class="modal-body">
+      <input type="text" class="form-control" required [class.alert-danger]="isNameError" formControlName="name" (change)="isNameError = false;cardError = '';"
+        placeholder="NAME ON CARD">
+      <ngx-stripe-card [options]="cardOptions" [elementsOptions]="elementsOptions"></ngx-stripe-card>
+      <span *ngIf="cardError !== undefined && cardError !== null && cardError.length > 0" class="text-danger">{{cardError}}</span>
+    </div>
+    <!--
+    <div class="modal-footer card-footer">
+      <button [hidden]="isProcessing" type="submit" class="btn btn-primary">Pay</button>
+      <img id="img_loader_processing" [src]="loaderpath" [hidden]="!isProcessing">
+      <button [hidden]="isProcessing" type="button" id="cancelBtn" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+    </div>
+  -->
+  </form>
+  <div class="col-md-3"></div>

@@ -1,50 +1,74 @@
 import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+// import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
-import { StripeService, StripeCardComponent, ElementOptions, ElementsOptions } from 'ngx-stripe';
-import { saveAs } from 'file-saver/dist/FileSaver';
+// import { StripeService, StripeCardComponent, ElementOptions, ElementsOptions } from 'ngx-stripe';
+// import { saveAs } from 'file-saver/FileSaver';
 import { Response } from '@angular/http';
 
+import { trigger, transition, animate, style } from '@angular/animations';
+
 import { environment } from '../../environments/environment';
-import { GssRequestService } from '../gss-request.service';
+// import { GssRequestService } from '../gss-request.service';
 
 import { RatesRequest } from '../rates-request';
 import { Origin } from '../origin';
 import { Destination } from '../destination';
 import { Address } from '../address';
-import { Package } from '../package';
+// import { Package } from '../package';
 import { ShipmentsRequest } from '../shipments-request';
+// import { Available } from '../available';
+
+// import { StripeChargeService } from '../stripe-charge.service';
 import { Available } from '../available';
 
-import { StripeChargeService } from '../stripe-charge.service';
+import { PaymentFormComponent } from '../payment-form/payment-form.component';
 
 @Component({
   selector: 'app-gss-form',
   templateUrl: './gss-form.component.html',
-  styleUrls: ['./gss-form.component.css']
+  styleUrls: ['./gss-form.component.css'],
+  animations: [
+    trigger('slideInOut', [
+      transition(':enter', [
+        style({transform: 'translateX(120%)'}),
+        animate('200ms 200ms ease-in', style({transform: 'translateX(0%)'}))
+      ]),
+      transition(':leave', [
+        animate('200ms ease-in', style({transform: 'translateX(-120%)'}))
+      ])
+    ])
+  ]
 })
+
 export class GssFormComponent implements OnInit {
-  @Input() wizardStep: number;
-  @ViewChild('myModal') myModal: ElementRef;
-  @ViewChild(StripeCardComponent) card: StripeCardComponent;
+  // @ViewChild('myModal') myModal: ElementRef;
+  // @ViewChild(StripeCardComponent) card: StripeCardComponent;
+  @ViewChild(PaymentFormComponent) paymentComponent: PaymentFormComponent;
+
+  loaderpath = environment.assets_dir + 'ajax-loader.gif';
+
+  steps = ['sender details', 'recipient details', 'package size', 'carrier', 'payment', 'book pickup'];
+  wizardStep: number;
 
   ratesRequest: RatesRequest;
+  isPackageFormValid: boolean;
   available: any;
   errorResponse: any;
-  shipmentResponse: any;
-  shipmentErrorResponse: any;
-  loaderpath = environment.assets_dir + 'ajax-loader.gif';
-  isLoading: boolean;
+  // shipmentResponse: any;
+  // shipmentErrorResponse: any;
+  // loaderpath = environment.assets_dir + 'ajax-loader.gif';
+  // isLoading: boolean;
 
-  isSuccess: boolean;
-  modalTitle: string;
-  modalBody: string;
+  // isSuccess: boolean;
+  // modalTitle: string;
+  // modalBody: string;
 
   availToGo: any;
-  isEmail: boolean;
+  // isEmail: boolean;
   isProcessing: boolean;
 
   // stripe
+  /*
   cardOptions: ElementOptions = {
     style: {
       base: {
@@ -69,15 +93,19 @@ export class GssFormComponent implements OnInit {
   stripeTest: FormGroup;
   isNameError: boolean;
   cardError: string;
+  */
 
   constructor(
-    private gssRequestService: GssRequestService,
+    // private gssRequestService: GssRequestService,
+    /*
     private fb: FormBuilder,
     private stripeService: StripeService,
     private stripeChargeService: StripeChargeService
+    */
   ) { }
 
   ngOnInit() {
+    this.wizardStep = 0;
     this.ratesRequest = new RatesRequest();
     this.ratesRequest.Origin = new Origin();
     this.ratesRequest.Origin.Address = new Address();
@@ -85,10 +113,11 @@ export class GssFormComponent implements OnInit {
     this.ratesRequest.Destination.Address = new Address();
     this.ratesRequest.Packages = [];
 
-    this.available = {};
-    this.available.Available = [];
-    this.isLoading = false;
+    // this.available = {};
+    // this.available.Available = [];
+    // this.isLoading = false;
 
+    /*
     this.stripeTest = this.fb.group({
       name: ['', [Validators.required]]
     });
@@ -96,54 +125,41 @@ export class GssFormComponent implements OnInit {
     // document.getElementById('btnShowStripe').click();
     this.isNameError = false;
     this.cardError = '';
+    */
 
     // to go
     this.availToGo = {};
-    this.isEmail = true;
+    // this.isEmail = true;
     this.isProcessing = false;
 
-  }
-
-  public isStreetsOkay(): boolean {
-    if (this.ratesRequest.Origin.Address.StreetAddress === undefined
-      || this.ratesRequest.Origin.Address.StreetAddress === null
-      || this.ratesRequest.Origin.Address.StreetAddress.trim() === '') {
-      return false;
-    }
-
-    if (this.ratesRequest.Destination.Address.StreetAddress === undefined
-      || this.ratesRequest.Destination.Address.StreetAddress === null
-      || this.ratesRequest.Destination.Address.StreetAddress.trim() === '') {
-      return false;
-    }
-
-    return true;
+    //
+    this.isPackageFormValid = false;
   }
 
   public isUnitAndKgOkay(): boolean {
     let itemTotal = 0;
-    let isZero = false;
+    let isInvalid = false;
     this.ratesRequest.Packages.forEach(item => {
       itemTotal += item.Unit;
-      if (item.Kg <= 0) {
-        isZero = true;
+      if (item.Kg <= 0 || item.Kg > 20) {
+        isInvalid = true;
         return false;
       }
-      if (item.Length <= 0) {
-        isZero = true;
+      if (item.Length <= 0 || item.Length > 200) {
+        isInvalid = true;
         return false;
       }
-      if (item.Height <= 0) {
-        isZero = true;
+      if (item.Height <= 0 || item.Height > 200) {
+        isInvalid = true;
         return false;
       }
-      if (item.Width <= 0) {
-        isZero = true;
+      if (item.Width <= 0 || item.Width > 200) {
+        isInvalid = true;
         return false;
       }
     });
 
-    if (isZero) {
+    if (isInvalid) {
       return false;
     }
 
@@ -154,8 +170,9 @@ export class GssFormComponent implements OnInit {
     return true;
   }
 
+  /*
   public onSubmit() {
-    this.isLoading = true;
+    // this.isLoading = true;
     this.errorResponse = null;
 
     // reorganize Package: remove Unit
@@ -309,7 +326,6 @@ export class GssFormComponent implements OnInit {
                     for (let i = 0; i < length; i++) {
                       uintArray[i] = binaryPdf.charCodeAt(i);
                     }
-                    // const blob = new Blob([atob(response[0])], { type: 'application/pdf' });
                     const blob = new Blob([uintArray], { type: 'application/pdf' });
                     saveAs(blob, item.Connote + '.pdf');
                 }
@@ -404,5 +420,33 @@ export class GssFormComponent implements OnInit {
           this.isProcessing = false;
         }
       });
+  }
+  */
+
+  clickNext() {
+    this.wizardStep = (this.wizardStep + 1) % 6;
+  }
+
+  clickBack() {
+    this.wizardStep = (this.wizardStep - 1) % 6;
+  }
+
+  onGo(avail: Available) {
+    this.availToGo = avail;
+    // console.log(this.availToGo);
+
+    this.clickNext();
+  }
+
+  onCardDone(isDone: boolean) {
+    this.isProcessing = false;
+    if (isDone) {
+      this.clickNext();
+    }
+  }
+
+  processPayment() {
+    this.isProcessing = true;
+    this.paymentComponent.processPayment();
   }
 }

@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { ReceiverFormComponent } from './receiver-form/receiver-form.component';
@@ -17,6 +18,9 @@ import { NgxStripeModule } from 'ngx-stripe';
 
 import { environment } from '../environments/environment';
 import { StripeChargeService } from './stripe-charge.service';
+import { PaymentFormComponent } from './payment-form/payment-form.component';
+import { PickupFormComponent } from './pickup-form/pickup-form.component';
+import { CarrierFormComponent } from './carrier-form/carrier-form.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +28,10 @@ import { StripeChargeService } from './stripe-charge.service';
     ReceiverFormComponent,
     SenderFormComponent,
     PackageFormComponent,
-    GssFormComponent
+    GssFormComponent,
+    PaymentFormComponent,
+    PickupFormComponent,
+    CarrierFormComponent
   ],
   imports: [
     BrowserModule,
@@ -36,6 +43,7 @@ import { StripeChargeService } from './stripe-charge.service';
       libraries: ['places']
     }),
     NgxStripeModule.forRoot(environment.stripe_pk_key),
+    BrowserAnimationsModule
   ],
   providers: [GssRequestService, GeocodingService, StripeChargeService],
   bootstrap: [AppComponent]

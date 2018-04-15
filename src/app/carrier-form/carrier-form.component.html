@@ -1,0 +1,63 @@
+<div class="card-group">
+  <div class="col-md-12">
+    <h4>CARRIER</h4>
+  </div>
+  <div class="col-md-12">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>
+            <img id="img_loader" style="height: 20px;" [src]="loaderpath" [hidden]="!isLoading">
+          </th>
+          <th>&nbsp;</th>
+
+          <th>Service</th>
+          <th>Cost</th>
+          <th>Service Standard</th>
+        </tr>
+      </thead>
+      <tbody id="tblrates-body">
+        <tr *ngFor="let avail of available.Available; let i = index;">
+          <td>{{ avail.CarrierName }}</td>
+          <td>
+            <div class="dropdown">
+              <button class="btn btn-primary dropdown-toggle" type="button" style="padding: 6px 12px;" id="dropdownMenu_{{avail.CarrierId}}"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Go
+              </button>
+              <div class="dropdown-menu">
+                <span class="dropdown-item" (click)="GoWithTheCarrier(avail)">
+                  Email Ticket</span>
+                <span class="dropdown-item" (click)="GoWithTheCarrier(avail, false)">
+                  Print</span>
+              </div>
+            </div>
+          </td>
+          <td>{{ avail.CarrierServiceType }}</td>
+          <td>{{ avail.Cost | currency }}</td>
+          <td [innerHTML]="avail.ServiceStandard"></td>
+        </tr>
+        <tr *ngIf="!isLoading && available.Available.length == 0">
+          <td colspan="5">No rates available</td>
+        </tr>
+        <tr *ngIf="available.ValidationErrors && available.ValidationErrors.Origin">
+          <td colspan="5" class="text-danger">
+            <strong>{{ available.ValidationErrors.Origin }}</strong>
+          </td>
+        </tr>
+        <tr *ngIf="available.ValidationErrors && available.ValidationErrors.Destination">
+          <td colspan="5" class="text-danger">
+            <strong>{{ available.ValidationErrors.Destination }}</strong>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <span *ngIf="errorResponse" class="text-danger">
+      <strong>Error occurred! Please try later again.</strong>
+    </span>
+    <span *ngIf="available.Available.length > 0" class="text-danger">
+      <strong>Pricing does not include additional South Island service disruption surcharge - </strong>
+      <a href="https://sweetspotgroup.zendesk.com/hc/en-us/articles/235661948" target="_blank">read more...</a>
+    </span>
+  </div>
+</div>

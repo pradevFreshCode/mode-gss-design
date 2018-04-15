@@ -13,6 +13,7 @@ import { Package } from '../package';
 
 export class PackageFormComponent implements OnInit {
   @Input() ratesRequest: RatesRequest;
+  @Input() isFormValid: boolean;
 
   selStockNew: string;
   unitNew: number;
@@ -30,6 +31,7 @@ export class PackageFormComponent implements OnInit {
   ngOnInit() {
     this.selStockNew = 'custom';
     this.unitNew = 1;
+    this.updateTotals();
   }
 
   public deleteStockRow(index: number) {
@@ -216,5 +218,46 @@ export class PackageFormComponent implements OnInit {
         });
       }
     }
+  }
+
+  public isUnitAndKgOkay(): boolean {
+    let itemTotal = 0;
+    let isZero = false;
+    this.ratesRequest.Packages.forEach(item => {
+      itemTotal += item.Unit;
+      if (item.Kg <= 0) {
+        isZero = true;
+        this.isFormValid = false;
+        return false;
+      }
+      if (item.Length <= 0) {
+        isZero = true;
+        this.isFormValid = false;
+        return false;
+      }
+      if (item.Height <= 0) {
+        isZero = true;
+        this.isFormValid = false;
+        return false;
+      }
+      if (item.Width <= 0) {
+        isZero = true;
+        this.isFormValid = false;
+        return false;
+      }
+    });
+
+    if (isZero) {
+      this.isFormValid = false;
+      return false;
+    }
+
+    if (itemTotal <= 0) {
+      this.isFormValid = false;
+      return false;
+    }
+
+    this.isFormValid = true;
+    return true;
   }
 }
