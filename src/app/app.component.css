@@ -1,16 +1,13 @@
-/* You can add global styles to this file, and also import other style files */
 @import url('https://fonts.googleapis.com/css?family=Montserrat');
 
 body {
-  background-color: #ebeff0;
+  background-color: #ebeff0 !important;
   font-family: 'Montserrat', sans-serif !important;
-  /* font-family: Oswald,'Trebuchet MS','Open Sans',arial,sans-serif; */
-  font-size: 13px;
+  font-size: 13px !important;
 }
 
 .navbar {
-  padding: 0px 20px;
-  /* background-color: #1D2B42; */
+  padding: 0px 20px !important;
 }
 
 .bg-dark {
@@ -18,64 +15,64 @@ body {
 }
 
 .center {
-  text-align: center;
-  margin: auto;
-  width: 90%;
-  padding: 1rem 0rem;
+  text-align: center !important;
+  margin: auto !important;
+  width: 90% !important;
+  padding: 1rem 0rem !important;
 }
 
 .steps {
-  margin: auto;
-  width: 100%;
-  font-size: 1.2em;
-  border: 0;
-  text-align: center;
-  background-color: #fcfcfc;
-  display: flex;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  color: #cccccc;
+  margin: auto !important;
+  width: 100% !important;
+  font-size: 1.2em !important;
+  border: 0 !important;
+  text-align: center !important;
+  background-color: #fcfcfc !important;
+  display: flex !important;
+  -ms-flex-wrap: wrap !important;
+  flex-wrap: wrap !important;
+  color: #cccccc !important;
 }
 
 .step {
-  padding-left: 0rem;
-  padding-right: .1rem;
+  padding-left: 0rem !important;
+  padding-right: .1rem !important;
 }
 
 .form-group {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.5rem !important;
 }
 
 select.form-control {
-  line-height: 2.6rem;
+  line-height: 2.6rem !important;
   height: 3.2rem !important;
 }
 
 .form-control {
-  line-height: 2.6rem;
+  line-height: 2.6rem !important;
   font-size: 1.2em !important;
-  border: none;
-  margin-bottom: .1rem;
+  border: none !important;
+  margin-bottom: .1rem !important;
 }
 
 .form-control::-moz-placeholder {
-  color: #999;
-  font-size: .6em;
-  font-style: italic;
+  color: #999 !important;
+  font-size: .6em !important;
+  font-style: italic !important;
   padding: 0px 0px !important;
 }
 
 .form-control:-ms-input-placeholder {
-  color: #999;
-  font-size: .6em;
-  font-style: italic;
+  color: #999 !important;
+  font-size: .6em !important;
+  font-style: italic !important;
   padding: 0px 0px !important;
 }
 
 .form-control::-webkit-input-placeholder {
-  color: #999;
-  font-size: .6em;
-  font-style: italic;
+  color: #999 !important;
+  font-size: .6em !important;
+  font-style: italic !important;
   padding: 0px 0px !important;
 }
 
@@ -149,71 +146,71 @@ select.form-control {
 .col-xl-8,
 .col-xl-9,
 .col-xl-auto {
-  position: relative;
-  width: 100%;
-  min-height: 1px;
-  padding-right: 6px;
-  padding-left: 6px;
+  position: relative !important;
+  width: 100% !important;
+  min-height: 1px !important;
+  padding-right: 6px !important;
+  padding-left: 6px !important;
 }
 
 .btn-primary {
-    color: #fff;
-    background-color: #c13885;
-    border-color: #c13885;
-    padding: 10px 80px;
+    color: #fff !important;
+    background-color: #c13885 !important;
+    border-color: #c13885 !important;
+    padding: 10px 80px !important;
   }
   
   .btn-primary:hover {
-    color: #fff;
-    background-color: #e453a5;
-    border-color: #e453a5;
+    color: #fff !important;
+    background-color: #e453a5 !important;
+    border-color: #e453a5 !important;
   }
   
   .btn-primary:focus, .btn-primary.focus {
-    box-shadow: 0 0 0 .1rem #972265;
+    box-shadow: 0 0 0 .1rem #972265 !important;
   }
   
   .btn-primary.disabled, .btn-primary:disabled {
-    background-color: #c13885;
-    border-color: #c13885;
+    background-color: #c13885 !important;
+    border-color: #c13885 !important;
   }
   
   .btn-primary:active, .btn-primary.active,
   .show > .btn-primary.dropdown-toggle {
-    background-color: #c13885;
-    background-image: none;
-    border-color: #c13885;
+    background-color: #c13885 !important;
+    background-image: none !important;
+    border-color: #c13885 !important;
   }
 
   .btn-primary:not([disabled]):not(.disabled):active, .show>.btn-primary.dropdown-toggle {
-    color: #fff;
-    background-color: #c13885;
-    border-color: #c13885;
-    box-shadow: 0 0 0 0.1rem #972265;
+    color: #fff !important;
+    background-color: #c13885 !important;
+    border-color: #c13885 !important;
+    box-shadow: 0 0 0 0.1rem #972265 !important;
 }
 
 table {
-  background-color: #fcfcfc;
+  background-color: #fcfcfc !important;
 }
 thead th {
-  font-size: 1.2em;
-  background-color: #fcfcfc;
+  font-size: 1.2em !important;
+  background-color: #fcfcfc !important;
 }
 
 tfoot td {
-  font-size: 1.2em;
-  background-color: #fcfcfc;
+  font-size: 1.2em !important;
+  background-color: #fcfcfc !important;
 }
 
 .table td, .table th {
-  font-size: 1.2em;
-  padding: 5px;
+  font-size: 1.2em !important;
+  padding: 5px !important;
 }
 
 span.dropdown-item {
-  font-size: 13px;
+  font-size: 13px !important;
 }
 
 .modal-body {
-  white-space: pre-line;
+  white-space: pre-line !important;
 }
