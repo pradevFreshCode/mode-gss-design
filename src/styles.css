@@ -157,7 +157,7 @@ select.form-control {
     color: #fff !important;
     background-color: #c13885 !important;
     border-color: #c13885 !important;
-    padding: 10px 80px !important;
+    /* padding: 10px 40px !important; */
   }
   
   .btn-primary:hover {
@@ -213,4 +213,43 @@ span.dropdown-item {
 
 .modal-body {
   white-space: pre-line !important;
+}
+
+.box-shadow {
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, .05);
+}
+
+.form-control.custom {
+  line-height: 1.2rem !important;
+  font-size: 1em !important;
+  border: 1px solid #ddd !important;
+  width: 40px !important;
+  padding: 0px !important;
+  text-align: right !important;
+  display: inline-block !important;
+}
+
+.form-control.custom::-moz-placeholder {
+  color: #999 !important;
+  font-size: .6em !important;
+  font-style: italic !important;
+  padding: 2px 2px !important;
+}
+
+.form-control.custom:-ms-input-placeholder {
+  color: #999 !important;
+  font-size: .6em !important;
+  font-style: italic !important;
+  padding: 0px 0px !important;
+}
+
+.form-control.custom::-webkit-input-placeholder {
+  color: #999 !important;
+  font-size: .6em !important;
+  font-style: italic !important;
+  padding: 0px 0px !important;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+  background-color: transparent !important;
 }

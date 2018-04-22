@@ -1,6 +1,6 @@
 <div class="card-group">
   <div class="col-md-12">
-    <h4>PAYMENT</h4>
+    <h4>PAYMENT {{availToGo.Cost | currency}}</h4>
   </div>
   <div class="col-md-3"></div>
   <form class="col-md-6" novalidate (ngSubmit)="processPayment()" [formGroup]="stripeTest">

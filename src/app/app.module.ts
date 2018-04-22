@@ -21,6 +21,7 @@ import { StripeChargeService } from './stripe-charge.service';
 import { PaymentFormComponent } from './payment-form/payment-form.component';
 import { PickupFormComponent } from './pickup-form/pickup-form.component';
 import { CarrierFormComponent } from './carrier-form/carrier-form.component';
+import { PackageComponent } from './package/package.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { CarrierFormComponent } from './carrier-form/carrier-form.component';
     GssFormComponent,
     PaymentFormComponent,
     PickupFormComponent,
-    CarrierFormComponent
+    CarrierFormComponent,
+    PackageComponent
   ],
   imports: [
     BrowserModule,

@@ -70,6 +70,11 @@ export class PaymentFormComponent implements OnInit {
 
     this.isNameError = false;
     this.cardError = '';
+
+    /*
+    console.log('Cost: ' + this.availToGo.Cost.toFixed(2));
+    console.log('isEmail: ' + this.availToGo.IsEmail);
+    */
   }
 
   processPayment() {

@@ -22,10 +22,11 @@ import { PaymentFormComponent } from '../payment-form/payment-form.component';
     trigger('slideInOut', [
       transition(':enter', [
         style({transform: 'translateX(120%)'}),
-        animate('200ms 200ms ease-out', style({transform: 'translateX(0%)'}))
+        animate('200ms ease-out', style({transform: 'translateX(0%)'}))
       ]),
       transition(':leave', [
-        animate('200ms ease-in', style({transform: 'translateX(-120%)'}))
+        // animate('200ms ease-in', style({transform: 'translateX(-120%)'}))
+        animate('0ms ease-in', style({height: 0, width: 0}))
       ])
     ])
   ]
@@ -36,7 +37,7 @@ export class GssFormComponent implements OnInit {
 
   loaderpath = environment.assets_dir + 'ajax-loader.gif';
 
-  steps = ['sender details', 'recipient details', 'package size', 'carrier', 'payment', 'book pickup'];
+  steps = ['sender details', 'recipient details', 'package size', 'payment', 'book pickup'];
   wizardStep: number;
 
   ratesRequest: RatesRequest;
@@ -99,11 +100,11 @@ export class GssFormComponent implements OnInit {
   }
 
   clickNext() {
-    this.wizardStep = (this.wizardStep + 1) % 6;
+    this.wizardStep = (this.wizardStep + 1) % 5;
   }
 
   clickBack() {
-    this.wizardStep = (this.wizardStep - 1) % 6;
+    this.wizardStep = (this.wizardStep - 1) % 5;
   }
 
   onGo(avail: Available) {

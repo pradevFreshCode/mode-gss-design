@@ -6,6 +6,9 @@ export class Package {
     Width: number;
     Kg: number;
     Name: string;
+    Title?: string;
     PackageCode?: string;
     Type?: string;
+    Description?: string;
+    Price?: number;
 }

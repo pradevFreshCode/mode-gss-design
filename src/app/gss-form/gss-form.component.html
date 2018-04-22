@@ -3,9 +3,9 @@
     <span class="col-md-2 step" [class.text-dark]="wizardStep === 0">1. {{steps[0] | uppercase}}</span>
     <span class="col-md-2 step" [class.text-dark]="wizardStep === 1">2. {{steps[1] | uppercase}}</span>
     <span class="col-md-2 step" [class.text-dark]="wizardStep === 2">3. {{steps[2] | uppercase}}</span>
+    <!--<span class="col-md-2 step" [class.text-dark]="wizardStep === 3">4. {{steps[3] | uppercase}}</span>-->
     <span class="col-md-2 step" [class.text-dark]="wizardStep === 3">4. {{steps[3] | uppercase}}</span>
     <span class="col-md-2 step" [class.text-dark]="wizardStep === 4">5. {{steps[4] | uppercase}}</span>
-    <span class="col-md-2 step" [class.text-dark]="wizardStep === 5">6. {{steps[5] | uppercase}}</span>
   </div>
 </div>
 <div class="container">
@@ -22,21 +22,23 @@
     </form>
     <form #packageForm="ngForm">
       <div [@slideInOut] *ngIf="wizardStep == 2">
-        <app-package-form [ratesRequest]="ratesRequest"></app-package-form>
+        <app-package [ratesRequest]="ratesRequest" (goClicked)="onGo($event)"></app-package>
       </div>
     </form>
+    <!--
     <form #carrierForm="ngForm">
       <div [@slideInOut] *ngIf="wizardStep == 3">
         <app-carrier-form [ratesRequest]="ratesRequest" (goClicked)="onGo($event)"></app-carrier-form>
       </div>
     </form>
+    -->
     <form #paymentForm="ngForm">
-      <div [@slideInOut] *ngIf="wizardStep == 4">
+      <div [@slideInOut] *ngIf="wizardStep == 3">
         <app-payment-form #payment [ratesRequest]="ratesRequest" [availToGo]="availToGo" (cardDone)="onCardDone($event)"></app-payment-form>
       </div>
     </form>
     <form #pickupForm="ngForm">
-      <div [@slideInOut] *ngIf="wizardStep == 5">
+      <div [@slideInOut] *ngIf="wizardStep == 4">
         <app-pickup-form [ratesRequest]="ratesRequest"></app-pickup-form>
       </div>
     </form>
@@ -55,15 +57,12 @@
       <button *ngIf="wizardStep === 1" type="button" class="btn btn-primary btn-lg" [disabled]="receiverForm.invalid" (click)="clickNext()">
         NEXT STEP
       </button>
+      <!--
       <button *ngIf="wizardStep === 2" type="button" class="btn btn-primary btn-lg" [disabled]="packageForm.invalid || !isUnitAndKgOkay()" (click)="clickNext()">
         NEXT STEP
       </button>
-      <!--
-      <button *ngIf="wizardStep === 3" type="button" class="btn btn-primary btn-lg" [disabled]="carrierForm.invalid" (click)="clickNext()">
-        NEXT STEP
-      </button>
-      -->
-      <button *ngIf="wizardStep === 4" type="button" class="btn btn-primary btn-lg" [disabled]="paymentForm.invalid" (click)="processPayment()">
+    -->
+      <button *ngIf="wizardStep === 3" type="button" class="btn btn-primary btn-lg" [disabled]="paymentForm.invalid" (click)="processPayment()">
         PAY
       </button>
     </div>
@@ -77,55 +76,3 @@
     <p>availToGo: {{ availToGo | json }}</p>
     -->
   </footer>
-
-  <!--
-  <button id="btnShowModal" hidden type="button" class="btn btn-primary" data-toggle="modal" data-target="#rsltModal">
-  </button>
-
-  <div class="modal fade" id="rsltModal" tabindex="-1" role="dialog" aria-labelledby="rsltModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 [ngClass]="isSuccess ?'text-success' : 'text-danger'" id="exampleModalLabel">{{modalTitle}}</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          {{modalBody}}
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
--->
-
-  <!-- Button trigger modal
-  <button id="btnShowStripe" hidden type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalStripe">
-  </button>
-
-  <div class="modal fade" id="modalStripe" tabindex="-1" role="dialog" aria-labelledby="modalStripeLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="card-header">
-          <h4 class="card-title">Checkout : </h4>
-        </div>
-        <form novalidate (ngSubmit)="processPayment()" [formGroup]="stripeTest">
-          <div class="modal-body">
-            <input type="text" class="form-control" required [class.alert-danger]="isNameError" formControlName="name" (change)="isNameError = false;cardError = '';"
-              placeholder="Name on Card">
-            <ngx-stripe-card [options]="cardOptions" [elementsOptions]="elementsOptions"></ngx-stripe-card>
-            <span *ngIf="cardError !== undefined && cardError !== null && cardError.length > 0" class="text-danger">{{cardError}}</span>
-          </div>
-          <div class="modal-footer card-footer">
-            <button [hidden]="isProcessing" type="submit" class="btn btn-primary">Pay</button>
-            <button [hidden]="isProcessing" type="button" id="cancelBtn" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-            <img id="img_loader_processing" [src]="loaderpath" [hidden]="!isProcessing">
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
--->
