@@ -2,7 +2,7 @@ import { Package } from './package';
 
 export const PACKAGE_OPTIONS: Package[] = [
     {
-        Title: 'GSS-DLE SATCHEL',
+        Title: 'DLE SATCHEL',
         Id: 0,
         Unit: 1,
         Length: 15,
@@ -16,7 +16,7 @@ export const PACKAGE_OPTIONS: Package[] = [
         Price: 4.95
     },
     {
-        Title: 'GSS-A5 SATCHEL',
+        Title: 'A5 SATCHEL',
         Id: 0,
         Unit: 1,
         Length: 21,
@@ -30,7 +30,7 @@ export const PACKAGE_OPTIONS: Package[] = [
         Price: 6.95
     },
     {
-        Title: 'GSS-A4 SATCHEL',
+        Title: 'A4 SATCHEL',
         Id: 0,
         Unit: 1,
         Length: 28,
@@ -44,7 +44,7 @@ export const PACKAGE_OPTIONS: Package[] = [
         Price: 8.95
     },
     {
-        Title: 'GSS-A3 SATCHEL',
+        Title: 'A3 SATCHEL',
         Id: 0,
         Unit: 1,
         Length: 36,
@@ -58,7 +58,7 @@ export const PACKAGE_OPTIONS: Package[] = [
         Price: 9.95
     },
     {
-        Title: 'GSS-A2 SATCHEL',
+        Title: 'A2 SATCHEL',
         Id: 0,
         Unit: 1,
         Length: 45,
