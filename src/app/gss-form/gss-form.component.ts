@@ -13,6 +13,7 @@ import { ShipmentsRequest } from '../shipments-request';
 import { Available } from '../available';
 
 import { PaymentFormComponent } from '../payment-form/payment-form.component';
+import { CheckoutComponent } from '../checkout/checkout.component';
 
 @Component({
   selector: 'app-gss-form',
@@ -34,10 +35,11 @@ import { PaymentFormComponent } from '../payment-form/payment-form.component';
 
 export class GssFormComponent implements OnInit {
   @ViewChild(PaymentFormComponent) paymentComponent: PaymentFormComponent;
+  @ViewChild(CheckoutComponent) checkoutComponent: CheckoutComponent;
 
   loaderpath = environment.assets_dir + 'ajax-loader.gif';
 
-  steps = ['sender details', 'recipient details', 'package size', 'payment', 'book pickup'];
+  steps = ['sender details', 'recipient details', 'package size', 'payment', 'checkout', 'book pickup'];
   wizardStep: number;
 
   ratesRequest: RatesRequest;
@@ -100,11 +102,11 @@ export class GssFormComponent implements OnInit {
   }
 
   clickNext() {
-    this.wizardStep = (this.wizardStep + 1) % 5;
+    this.wizardStep = (this.wizardStep + 1) % 6;
   }
 
   clickBack() {
-    this.wizardStep = (this.wizardStep - 1) % 5;
+    this.wizardStep = (this.wizardStep - 1) % 6;
   }
 
   onGo(avail: Available) {
@@ -122,5 +124,18 @@ export class GssFormComponent implements OnInit {
   processPayment() {
     this.isProcessing = true;
     this.paymentComponent.processPayment();
+  }
+
+  processCheckout(isEmail: boolean = true) {
+    this.isProcessing = true;
+    this.checkoutComponent.processCheckout(isEmail);
+  }
+
+  onCheckoutDone(isDone: boolean) {
+    this.isProcessing = false;
+    if (!isDone) {
+      alert('error occurred.');
+    }
+    this.clickNext();
   }
 }

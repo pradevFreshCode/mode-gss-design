@@ -1,10 +1,5 @@
-import { Component, OnInit, Input, Output, ElementRef, ViewChild, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { StripeService, StripeCardComponent, ElementOptions, ElementsOptions } from 'ngx-stripe';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { saveAs } from 'file-saver/FileSaver';
-
-import { environment } from '../../environments/environment';
-import { StripeChargeService } from '../stripe-charge.service';
 import { GssRequestService } from '../gss-request.service';
 import { RatesRequest } from '../rates-request';
 import { Available } from '../available';
@@ -15,127 +10,24 @@ import { Package } from '../package';
 import { ShipmentsRequest } from '../shipments-request';
 
 @Component({
-  selector: 'app-payment-form',
-  templateUrl: './payment-form.component.html',
-  styleUrls: ['./payment-form.component.css']
+  selector: 'app-checkout',
+  templateUrl: './checkout.component.html',
+  styleUrls: ['./checkout.component.css']
 })
-export class PaymentFormComponent implements OnInit {
+export class CheckoutComponent implements OnInit {
   @Input() ratesRequest: RatesRequest;
   @Input() availToGo: Available;
-  @ViewChild('myModal') myModal: ElementRef;
-  @ViewChild(StripeCardComponent) card: StripeCardComponent;
-  @Output() cardDone = new EventEmitter<any>();
+  @Output() checkoutDone = new EventEmitter<any>();
 
-  loaderpath = environment.assets_dir + 'ajax-loader.gif';
   shipmentResponse: any;
   shipmentErrorResponse: any;
 
-  // stripe
-  cardOptions: ElementOptions = {
-    style: {
-      base: {
-        iconColor: '#666EE8',
-        color: '#31325F',
-        /* lineHeight: '40px', */
-        fontWeight: 300,
-        /* fontFamily: '"Helvetica Neue", Helvetica, sans-serif', */
-        fontSize: '18px',
-        '::placeholder': {
-          color: '#CFD7E0'
-        }
-      }
-    },
-    hidePostalCode: true
-  };
-
-  elementsOptions: ElementsOptions = {
-    locale: 'en'
-  };
-
-  stripeTest: FormGroup;
-  isNameError: boolean;
-  cardError: string;
-
-  constructor(
-    private fb: FormBuilder,
-    private stripeService: StripeService,
-    private stripeChargeService: StripeChargeService,
-    private gssRequestService: GssRequestService,
-  ) { }
+  constructor(private gssRequestService: GssRequestService) { }
 
   ngOnInit() {
-    this.stripeTest = this.fb.group({
-      name: ['', [Validators.required]]
-    });
-
-    this.isNameError = false;
-    this.cardError = '';
-
-    /*
-    console.log('Cost: ' + this.availToGo.Cost.toFixed(2));
-    console.log('isEmail: ' + this.availToGo.IsEmail);
-    */
   }
 
-  processPayment() {
-    const name = this.stripeTest.get('name').value;
-    this.cardError = '';
-    if (name === undefined || name === null || name.trim() === '') {
-      // alert ('name is required');
-      this.isNameError = true;
-      this.cardError = 'Name is required';
-      this.cardDone.emit(false);
-      return false;
-    }
-
-    // show loader
-    // this.isProcessing = true;
-
-    this.stripeService
-      .createToken(this.card.getCard(), { name })
-      .subscribe(result => {
-        if (result.token) {
-          this.stripeChargeService
-            .chargePostRequest(this.availToGo.Cost,
-            'NZD',
-            'Returning Cost from ' + this.ratesRequest.Origin.Name,
-            result.token.id)
-              .subscribe(
-                data => {
-                  // this.checkout();
-                  this.cardDone.emit(true);
-                },
-                error => {
-                  // hide loader
-                  // this.isProcessing = false;
-                  // console.log(error);
-                  // Show error msg
-                  if (error.message !== undefined && error.message !== null && error.message.length > 0) {
-                    this.cardError = error.message;
-                  } else {
-                    this.cardError = 'Unknown error has occurred. Please try later again.';
-                  }
-                  this.cardDone.emit(false);
-              }, () => {
-                // completed
-              });
-        } else if (result.error) {
-          // Error creating the token
-          // console.log(result.error.message);
-          // hide loader
-          // this.isProcessing = false;
-          this.cardDone.emit(false);
-          // Show error modal
-          this.cardError = result.error.message;
-        } else {
-          // hide loader
-          // this.isProcessing = false;
-          this.cardDone.emit(false);
-        }
-      });
-  }
-
-  private checkout() {
+  public processCheckout(isEmail: boolean) {
     // this.isLoading = true;
     this.shipmentErrorResponse = null;
 
@@ -199,7 +91,7 @@ export class PaymentFormComponent implements OnInit {
     req.ShipType = 1,
     req.HasDG = false;
     req.DangerousGoods = null;
-    req.DisableFreightForwardEmails = this.availToGo.IsEmail ? false : true;
+    req.DisableFreightForwardEmails = isEmail ? false : true;
     req.IncludeInsurance = false;
     // console.log(req);
 
@@ -210,10 +102,12 @@ export class PaymentFormComponent implements OnInit {
           // check if there're any errors
           if (this.shipmentResponse.Errors.length > 0) {
             // error occurred
+            let errMsg = '';
             this.shipmentResponse.Errors.forEach(item => {
-              this.cardError += JSON.stringify(item) + '\n';
+              errMsg += JSON.stringify(item) + '\n';
             });
-            this.cardDone.emit(false);
+            alert(errMsg);
+            this.checkoutDone.emit(false);
           } else {
             // download labels
             this.shipmentResponse.Consignments.forEach(item => {
@@ -230,10 +124,10 @@ export class PaymentFormComponent implements OnInit {
                     }
                     const blob = new Blob([uintArray], { type: 'application/pdf' });
                     saveAs(blob, item.Connote + '.pdf');
-                    this.cardDone.emit(true);
+                    this.checkoutDone.emit(true);
                   },
                   error => {
-                    this.cardDone.emit(false);
+                    this.checkoutDone.emit(false);
                   }
               );
             });
@@ -241,8 +135,8 @@ export class PaymentFormComponent implements OnInit {
         },
         err => {
           this.shipmentErrorResponse = err;
-          this.cardError = 'Unknown error occurred. Please try later again.';
-          this.cardDone.emit(false);
+          alert('Unknown error occurred. Please try later again.');
+          this.checkoutDone.emit(false);
         }
       );
   }

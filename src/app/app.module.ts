@@ -22,6 +22,7 @@ import { PaymentFormComponent } from './payment-form/payment-form.component';
 import { PickupFormComponent } from './pickup-form/pickup-form.component';
 import { CarrierFormComponent } from './carrier-form/carrier-form.component';
 import { PackageComponent } from './package/package.component';
+import { CheckoutComponent } from './checkout/checkout.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { PackageComponent } from './package/package.component';
     PaymentFormComponent,
     PickupFormComponent,
     CarrierFormComponent,
-    PackageComponent
+    PackageComponent,
+    CheckoutComponent
   ],
   imports: [
     BrowserModule,

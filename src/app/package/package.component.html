@@ -1,5 +1,6 @@
 <div class="container">
   <div class="card-deck mb-3 text-center">
+    <!--
     <div class="col-md-4">
       <div class="card mb-4 box-shadow">
         <div class="card-header">
@@ -144,6 +145,28 @@
         </div>
       </div>
     </div>
+  -->
+    <div class="col-md-4" *ngFor="let pkg of packageOptions; let i = index">
+      <div class="card mb-4 box-shadow">
+        <div class="card-header">
+          <h1 class="my-0 font-weight-normal" style="color: #c13885; font-weight: 900 !important;">{{pkg.Title}}</h1>
+        </div>
+        <div class="card-body">
+          <p>({{pkg.Length}} X {{pkg.Width}} X {{pkg.Height}}CM UP TO {{pkg.Kg}}KG)</p>
+          <p>
+            {{pkg.Description}}
+          </p>
+          <h4 class="card-title pricing-card-title">{{pkg.Price | currency}}
+          </h4>
+          <button [hidden]="isAvailLoading[i]" class="btn btn-lg btn-block btn-info" type="button" (click)="goWithIt(i)">
+            SELECT
+          </button>
+            <p [hidden]="!isAvailLoading[i]">
+              <img id="img_loader" [src]="loaderpath">
+            </p>
+        </div>
+      </div>
+    </div>
     <div class="col-md-4">
       <div class="card mb-4 box-shadow">
         <div class="card-header">
@@ -152,28 +175,19 @@
         <div class="card-body">
           <form>
             <p>(
-              <input type="number" name="CustomLength" class="form-control custom" min="0" max="120" placeholder="Length" required
-              [class.alert-danger]="(CustomLength.invalid || customLength <= 0 || customLength > 120) && (CustomLength.dirty || CustomLength.touched)"
-              [(ngModel)]="customLength"
-              #CustomLength="ngModel"> X
-              <input type="number" name="CustomWidth" class="form-control custom" min="0" max="120" placeholder="Width" required
-              [class.alert-danger]="(CustomWidth.invalid || customWidth <= 0 || customWidth > 120) && (CustomWidth.dirty || CustomWidth.touched)"
-              [(ngModel)]="customWidth"
-              #CustomWidth="ngModel"> X
-              <input type="number" name="CustomHeight" class="form-control custom" min="0" max="120" placeholder="Height" required
-              [class.alert-danger]="(CustomHeight.invalid || customHeight <= 0 || customHeight > 120) && (CustomHeight.dirty || CustomHeight.touched)"
-              [(ngModel)]="customHeight"
-              #CustomHeight="ngModel">CM,
-              <input type="number" name="CustomWeight" class="form-control custom" min="0" max="30" placeholder="Weight" required
-              [class.alert-danger]="(CustomWeight.invalid || customWeight <= 0 || customWeight > 30) && (CustomWeight.dirty || CustomWeight.touched)"
-              [(ngModel)]="customWeight"
-              #CustomWeight="ngModel">KG)
+              <input type="number" name="CustomLength" class="form-control custom" min="0" max="120" placeholder="Length" required [class.alert-danger]="(CustomLength.invalid || customLength <= 0 || customLength > 120) && (CustomLength.dirty || CustomLength.touched)"
+                [(ngModel)]="customLength" #CustomLength="ngModel"> X
+              <input type="number" name="CustomWidth" class="form-control custom" min="0" max="120" placeholder="Width" required [class.alert-danger]="(CustomWidth.invalid || customWidth <= 0 || customWidth > 120) && (CustomWidth.dirty || CustomWidth.touched)"
+                [(ngModel)]="customWidth" #CustomWidth="ngModel"> X
+              <input type="number" name="CustomHeight" class="form-control custom" min="0" max="120" placeholder="Height" required [class.alert-danger]="(CustomHeight.invalid || customHeight <= 0 || customHeight > 120) && (CustomHeight.dirty || CustomHeight.touched)"
+                [(ngModel)]="customHeight" #CustomHeight="ngModel">CM,
+              <input type="number" name="CustomWeight" class="form-control custom" min="0" max="30" placeholder="Weight" required [class.alert-danger]="(CustomWeight.invalid || customWeight <= 0 || customWeight > 30) && (CustomWeight.dirty || CustomWeight.touched)"
+                [(ngModel)]="customWeight" #CustomWeight="ngModel">KG)
             </p>
             <p class="text-danger" [hidden]="!isNoCustomAvails">No available rates for the inputs.</p>
             <p [hidden]="isCustomLoading">
               Type in your measurements and&nbsp;
-              <button type="submit"
-              [disabled]="customWidth === undefined || customLength === undefined || customHeight === undefined || customWeight === undefined
+              <button type="submit" [disabled]="customWidth === undefined || customLength === undefined || customHeight === undefined || customWeight === undefined
               || customWidth <= 0 || customLength <= 0 || customHeight <= 0 || customWeight <= 0" class="btn btn-info" (click)="getCustomAvail()">Get the Rate</button>
             </p>
             <p [hidden]="!isCustomLoading">
@@ -182,24 +196,10 @@
           </form>
           <h4 class="card-title pricing-card-title">{{ customRate | currency }}
           </h4>
-          <div class="dropdown">
-            <button type="button" [disabled]="customRate <= 0" class="btn btn-lg btn-block btn-info dropdown-toggle"
-              type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              SELECT
-            </button>
-            <div class="dropdown-menu">
-              <span class="dropdown-item">
-                <button class="btn btn-lg btn-block btn-primary" (click)="goWithCustom()">
-                  Email Ticket
-                </button>
-              </span>
-              <span class="dropdown-item">
-                <button class="btn btn-lg btn-block btn-primary" (click)="goWithCustom(false)">
-                  Print
-                </button>
-              </span>
-            </div>
-          </div>
+          <button type="button" [disabled]="customRate <= 0" class="btn btn-lg btn-block btn-info" type="button"
+            (click)="goWithCustom()">
+            SELECT
+          </button>
         </div>
       </div>
     </div>

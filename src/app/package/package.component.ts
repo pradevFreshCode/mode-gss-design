@@ -18,7 +18,7 @@ export class PackageComponent implements OnInit {
 
   loaderpath = environment.assets_dir + 'ajax-loader.gif';
   packageOptions = PACKAGE_OPTIONS;
-  selectedOption = Package;
+  // selectedOption = Package;
   customRate = 0.0;
   customWidth: number;
   customLength: number;
@@ -30,6 +30,7 @@ export class PackageComponent implements OnInit {
   customErrorResponse: any;
   isNoCustomAvails: boolean;
 
+  /*
   a2Rate: number;
   a3Rate: number;
   a4Rate: number;
@@ -46,6 +47,9 @@ export class PackageComponent implements OnInit {
   isNoA3Avail: boolean;
   isNoA4Avail: boolean;
   isNoA5Avail: boolean;
+  */
+  available: any;
+  isAvailLoading: boolean[];
 
   constructor(
     private gssRequestService: GssRequestService,
@@ -54,12 +58,21 @@ export class PackageComponent implements OnInit {
   ngOnInit() {
     this.isCustomLoading = false;
     this.isNoCustomAvails = false;
+    this.available = {};
+    this.available.Available = [];
+    /*
     this.getA2Avail();
     this.getA3Avail();
     this.getA4Avail();
     this.getA5Avail();
+    */
+    this.isAvailLoading = [];
+    this.packageOptions.forEach((value, index) => {
+      this.isAvailLoading[index] = false;
+    });
   }
 
+  /*
   getA2Avail() {
     this.a2Rate = 0.0;
     this.isA2Loading = true;
@@ -279,6 +292,7 @@ export class PackageComponent implements OnInit {
         }
       );
   }
+  */
 
   getCustomAvail() {
     this.customRate = 0.0;
@@ -337,6 +351,7 @@ export class PackageComponent implements OnInit {
       );
   }
 
+  /*
   public goWithA2(isEmail: boolean = true) {
     // create Packages
     this.ratesRequest.Packages = [];
@@ -420,6 +435,7 @@ export class PackageComponent implements OnInit {
     this.a5Available.Available[0].Cost = this.a5Rate;
     this.goClicked.emit(this.a5Available.Available[0]);
   }
+  */
 
   public goWithCustom(isEmail: boolean = true) {
     // create Packages
@@ -440,5 +456,57 @@ export class PackageComponent implements OnInit {
     this.customAvailable.Available[0].IsEmail = isEmail;
     this.customAvailable.Available[0].Cost = this.customRate;
     this.goClicked.emit(this.customAvailable.Available[0]);
+  }
+
+  public goWithIt(idx: number) {
+    this.setAvailLoading(idx);
+    // create Packages
+    this.ratesRequest.Packages = [];
+
+    const pkg = new Package();
+
+    pkg.Id = 0;
+    pkg.Length = PACKAGE_OPTIONS[idx].Length;
+    pkg.Width = PACKAGE_OPTIONS[idx].Width;
+    pkg.Height = PACKAGE_OPTIONS[idx].Height;
+    pkg.Name = PACKAGE_OPTIONS[idx].Name;
+    pkg.Kg = PACKAGE_OPTIONS[idx].Kg;
+    pkg.PackageCode = PACKAGE_OPTIONS[idx].PackageCode;
+    pkg.Type = 'Box';
+
+    this.ratesRequest.Packages.push(pkg);
+
+    ///
+    // copy existing ratesRequest
+    const toGo = Object.assign({}, this.ratesRequest);
+
+    this.gssRequestService.getAvails(this.ratesRequest)
+      .map(data => {
+        data.Available.sort((a, b) => {
+          return a.Cost - b.Cost; // lowest cost first
+        });
+        return data;
+      })
+      .subscribe(
+        avails => {
+          this.available = avails;
+          this.available.Available[0].IsEmail = false;
+          this.available.Available[0].Cost = PACKAGE_OPTIONS[idx].Price;
+
+          // console.log(this.available.Available[0]);
+          this.goClicked.emit(this.available.Available[0]);
+        },
+        err => {
+          // TODO error
+          alert('error occurred.');
+        },
+        () => {
+        }
+      );
+
+  }
+
+  public setAvailLoading(idx: number) {
+    this.isAvailLoading[idx] = true;
   }
 }
