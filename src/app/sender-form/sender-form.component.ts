@@ -1,17 +1,18 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, NgZone } from '@angular/core';
-import { ControlContainer, NgForm, FormControl } from '@angular/forms';
-import { RatesRequest } from '../rates-request';
+import {Component, OnInit, Input, ViewChild, ElementRef, NgZone} from '@angular/core';
+import {ControlContainer, NgForm, FormControl} from '@angular/forms';
+import {RatesRequest} from '../rates-request';
 
-import { AgmCoreModule, MapsAPILoader } from '@agm/core';
-import {} from 'googlemaps';
+import {AgmCoreModule, MapsAPILoader} from '@agm/core';
 
-import { GeocodingService } from '../geocoding.service';
+import {GeocodingService} from '../geocoding.service';
+import {CountryWithCodeModel} from '../models/country-with-code.model';
+import {CountriesListProviderService} from '../services/countries-list-provider.service';
 
 @Component({
   selector: 'app-sender-form',
   templateUrl: './sender-form.component.html',
   styleUrls: ['./sender-form.component.css'],
-  viewProviders: [ { provide: ControlContainer, useExisting: NgForm } ]
+  viewProviders: [{provide: ControlContainer, useExisting: NgForm}]
 })
 export class SenderFormComponent implements OnInit {
   @Input() ratesRequest: RatesRequest;
@@ -23,13 +24,17 @@ export class SenderFormComponent implements OnInit {
   public searchControl: FormControl;
   public isStreetTouched: boolean;
 
-  constructor(
-    private mapsAPILoader: MapsAPILoader,
-    private ngZone: NgZone,
-    private geocodingService: GeocodingService
-  ) { }
+  public countriesList: CountryWithCodeModel[] = [];
+
+  constructor(private mapsAPILoader: MapsAPILoader,
+              private ngZone: NgZone,
+              private geocodingService: GeocodingService,
+              private _countriesListProviderService: CountriesListProviderService) {
+  }
 
   ngOnInit() {
+    this.countriesList = this._countriesListProviderService.FullCountriesList;
+
     // set the country to NZ
     this.ratesRequest.Origin.Address.CountryCode = 'NZ';
     this.isStreetTouched = false;
@@ -39,9 +44,9 @@ export class SenderFormComponent implements OnInit {
 
     this.mapsAPILoader.load().then(() => {
       const autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement,
-      {
-        types: ['address']
-      });
+        {
+          types: ['address']
+        });
 
       autocomplete.setComponentRestrictions({'country': ['nz']});
 
@@ -93,10 +98,10 @@ export class SenderFormComponent implements OnInit {
     if (this.ratesRequest.Origin.Address.StreetAddress === undefined
       || this.ratesRequest.Origin.Address.StreetAddress === null
       || this.ratesRequest.Origin.Address.StreetAddress.trim() === '') {
-        return false;
-      }
+      return false;
+    }
 
-      return true;
+    return true;
   }
 
   public setStreetTouched() {

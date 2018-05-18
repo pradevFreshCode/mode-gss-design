@@ -1,5 +1,60 @@
-<div class="col-md-12">
-    <h4>
-      BOOK PICKUP
-    </h4>
+<div class="card-group">
+  <div class="col-6 offset-6">
+    <div class="row">
+      <div class="col-12">
+        <h4>
+          BOOK PICKUP
+        </h4>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <h5>
+          Courier Details
+        </h5>
+      </div>
+    </div>
+    <div *ngIf="pickupRequestModel">
+      <div class="form-group row">
+        <label class="control-label col-md-12" for="pickupRequest.CloseTime">Your business close time?</label>
+        <div class="controls col-md-12">
+          <select class="form-control" id="pickupRequest.CloseTime" required name="pickupRequest.CloseTime"
+                  [(ngModel)]="pickupRequestModel.CloseTime">
+            <option *ngFor="let time of timeList" [value]="time">
+              {{time}}:00
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-12">
+          <p>If your address is a residential pickup,
+            please provide details on how to access the package below.</p>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="control-label col-md-12" for="pickupRequest.Message">Any instructions for pickup driver?</label>
+        <div class="controls col-md-12">
+          <textarea id="pickupRequest.Message" name="pickupRequest.Message" class="form-control" maxlength="60"
+                    [(ngModel)]="pickupRequestModel.Message"></textarea>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-md-12">
+          <input id="isPackageReady" name="isPackageReady" type="checkbox"
+                 [(ngModel)]="isPackageReady">
+          <label class="control-label" for="isPackageReady"> Yes the goods are packaged, label attached/taped and ready for collection.</label>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-12">
+          <button [disabled]="!isPackageReady" type="button" class="btn btn-primary btn-lg" (click)="processPickup()">
+            Book Pickup Now
+          </button>
+        </div>
+      </div>
+    </div>
+
   </div>
+</div>

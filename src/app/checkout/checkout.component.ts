@@ -1,13 +1,13 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { saveAs } from 'file-saver/FileSaver';
-import { GssRequestService } from '../gss-request.service';
-import { RatesRequest } from '../rates-request';
-import { Available } from '../available';
-import { Origin } from '../origin';
-import { Destination } from '../destination';
-import { Address } from '../address';
-import { Package } from '../package';
-import { ShipmentsRequest } from '../shipments-request';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {saveAs} from 'file-saver/FileSaver';
+import {GssRequestService} from '../gss-request.service';
+import {RatesRequest} from '../rates-request';
+import {Available} from '../available';
+import {Origin} from '../origin';
+import {Destination} from '../destination';
+import {Address} from '../address';
+import {Package} from '../package';
+import {ShipmentsRequest} from '../shipments-request';
 
 @Component({
   selector: 'app-checkout',
@@ -22,7 +22,8 @@ export class CheckoutComponent implements OnInit {
   shipmentResponse: any;
   shipmentErrorResponse: any;
 
-  constructor(private gssRequestService: GssRequestService) { }
+  constructor(private gssRequestService: GssRequestService) {
+  }
 
   ngOnInit() {
   }
@@ -89,7 +90,7 @@ export class CheckoutComponent implements OnInit {
     req.SiteId = 0;
     req.IncludeLineDetails = false;
     req.ShipType = 1,
-    req.HasDG = false;
+      req.HasDG = false;
     req.DangerousGoods = null;
     req.DisableFreightForwardEmails = isEmail ? false : true;
     req.IncludeInsurance = false;
@@ -107,37 +108,46 @@ export class CheckoutComponent implements OnInit {
               errMsg += JSON.stringify(item) + '\n';
             });
             alert(errMsg);
-            this.checkoutDone.emit(false);
+            this.checkoutDone.emit(null);
           } else {
             // download labels
-            this.shipmentResponse.Consignments.forEach(item => {
-              this.gssRequestService.downloadLabel(item.Connote)
-                .subscribe(
-                  response => {
-                    // console.log(response);
-                    const binaryPdf = atob(response[0]);
-                    const length = binaryPdf.length;
-                    const arrayBuf = new ArrayBuffer(length);
-                    const uintArray = new Uint8Array(arrayBuf);
-                    for (let i = 0; i < length; i++) {
-                      uintArray[i] = binaryPdf.charCodeAt(i);
-                    }
-                    const blob = new Blob([uintArray], { type: 'application/pdf' });
-                    saveAs(blob, item.Connote + '.pdf');
-                    this.checkoutDone.emit(true);
-                  },
-                  error => {
-                    this.checkoutDone.emit(false);
-                  }
-              );
-            });
+
+            // if data returned without errors, return response object
+            if (this.shipmentResponse.Consignments.length > 0) {
+              this.checkoutDone.emit(this.shipmentResponse);
+            } else {
+              this.checkoutDone.emit(null);
+            }
+
+            // this.shipmentResponse.Consignments.forEach(item => {
+            //   this.gssRequestService.downloadLabel(item.Connote)
+            //     .subscribe(
+            //       response => {
+            //         // console.log(response);
+            //         const binaryPdf = atob(response[0]);
+            //         const length = binaryPdf.length;
+            //         const arrayBuf = new ArrayBuffer(length);
+            //         const uintArray = new Uint8Array(arrayBuf);
+            //         for (let i = 0; i < length; i++) {
+            //           uintArray[i] = binaryPdf.charCodeAt(i);
+            //         }
+            //         const blob = new Blob([uintArray], {type: 'application/pdf'});
+            //         saveAs(blob, item.Connote + '.pdf');
+            //         this.checkoutDone.emit(true);
+            //       },
+            //       error => {
+            //         this.checkoutDone.emit(false);
+            //       }
+            //     );
+            // });
           }
         },
         err => {
           this.shipmentErrorResponse = err;
           alert('Unknown error occurred. Please try later again.');
-          this.checkoutDone.emit(false);
+          this.checkoutDone.emit(null);
         }
       );
+    // this.checkoutDone.emit(true);
   }
 }

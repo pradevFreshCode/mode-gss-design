@@ -37,7 +37,7 @@
     </form>
     <form #pickupForm="ngForm">
       <div [@slideInOut] *ngIf="wizardStep == 5">
-        <app-pickup-form [ratesRequest]="ratesRequest"></app-pickup-form>
+        <app-pickup-form [pickupRequestModel]="pickupRequest" [ratesRequest]="ratesRequest"></app-pickup-form>
       </div>
     </form>
   </div>
@@ -53,13 +53,16 @@
       <button *ngIf="wizardStep === 3" type="button" class="btn btn-primary btn-lg" [disabled]="paymentForm.invalid" (click)="processPayment()">
         PAY
       </button>
-      <button *ngIf="wizardStep === 4" type="button" class="btn btn-primary btn-lg" (click)="processCheckout(true)">
-        EMAIL TICKET
-      </button>
-      <span *ngIf="wizardStep === 4">&nbsp;</span>
       <button *ngIf="wizardStep === 4" type="button" class="btn btn-primary btn-lg" (click)="processCheckout(false)">
-        PRINT
+        PROCESS CHECKOUT
       </button>
+      <!--<button *ngIf="wizardStep === 4" type="button" class="btn btn-primary btn-lg" (click)="processCheckout(true)">-->
+        <!--EMAIL TICKET-->
+      <!--</button>-->
+      <!--<span *ngIf="wizardStep === 4">&nbsp;</span>-->
+      <!--<button *ngIf="wizardStep === 4" type="button" class="btn btn-primary btn-lg" (click)="processCheckout(false)">-->
+        <!--PRINT-->
+      <!--</button>-->
     </div>
     <div class="container center" [hidden]="!isProcessing">
       <img id="img_loader_processing" [src]="loaderpath" [hidden]="!isProcessing">

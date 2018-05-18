@@ -1,11 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { ControlContainer, NgForm, FormControl } from '@angular/forms';
-import { GssRequestService } from '../gss-request.service';
-import { RatesRequest } from '../rates-request';
-import { Package } from '../package';
-import { Available } from '../available';
-import { PACKAGE_OPTIONS } from '../package-options';
-import { environment } from '../../environments/environment';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {ControlContainer, NgForm, FormControl} from '@angular/forms';
+import {GssRequestService} from '../gss-request.service';
+import {RatesRequest} from '../rates-request';
+import {Package} from '../package';
+import {Available} from '../available';
+import {PACKAGE_OPTIONS} from '../package-options';
+import {environment} from '../../environments/environment';
 
 @Component({
   selector: 'app-package',
@@ -51,9 +51,8 @@ export class PackageComponent implements OnInit {
   available: any;
   isAvailLoading: boolean[];
 
-  constructor(
-    private gssRequestService: GssRequestService,
-  ) { }
+  constructor(private gssRequestService: GssRequestService,) {
+  }
 
   ngOnInit() {
     this.isCustomLoading = false;
@@ -493,7 +492,6 @@ export class PackageComponent implements OnInit {
           this.available.Available[0].IsEmail = false;
           this.available.Available[0].Cost = PACKAGE_OPTIONS[idx].Price;
 
-          // console.log(this.available.Available[0]);
           this.goClicked.emit(this.available.Available[0]);
         },
         err => {

@@ -7,4 +7,7 @@ export const environment = {
   stripe_sk_key: 'sk_test_Np3ugz2TvTNyFtgiITM8lNQf',
   stripe_api_url: 'https://api.stripe.com/v1/charges',
   return_charge: 5.5,
+
+  //ToDo : replace with production api url, if exist
+  apiUrl: 'http://localhost'
 };

@@ -23,6 +23,8 @@ import { PickupFormComponent } from './pickup-form/pickup-form.component';
 import { CarrierFormComponent } from './carrier-form/carrier-form.component';
 import { PackageComponent } from './package/package.component';
 import { CheckoutComponent } from './checkout/checkout.component';
+import {CountriesListProviderService} from './services/countries-list-provider.service';
+import {LocalStorageModule} from 'angular-2-local-storage';
 
 @NgModule({
   declarations: [
@@ -47,9 +49,13 @@ import { CheckoutComponent } from './checkout/checkout.component';
       libraries: ['places']
     }),
     NgxStripeModule.forRoot(environment.stripe_pk_key),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    LocalStorageModule.withConfig({
+      prefix: 'my-app',
+      storageType: 'localStorage'
+    })
   ],
-  providers: [GssRequestService, GeocodingService, StripeChargeService],
+  providers: [GssRequestService, GeocodingService, StripeChargeService, CountriesListProviderService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
