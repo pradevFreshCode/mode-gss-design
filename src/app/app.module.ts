@@ -25,6 +25,8 @@ import { PackageComponent } from './package/package.component';
 import { CheckoutComponent } from './checkout/checkout.component';
 import {CountriesListProviderService} from './services/countries-list-provider.service';
 import {LocalStorageModule} from 'angular-2-local-storage';
+import {DataServicesModule} from './modules/data-services/data-services.module';
+import {SessionService} from './services/session.service';
 
 @NgModule({
   declarations: [
@@ -53,9 +55,10 @@ import {LocalStorageModule} from 'angular-2-local-storage';
     LocalStorageModule.withConfig({
       prefix: 'my-app',
       storageType: 'localStorage'
-    })
+    }),
+    DataServicesModule.forRoot()
   ],
-  providers: [GssRequestService, GeocodingService, StripeChargeService, CountriesListProviderService],
+  providers: [GssRequestService, GeocodingService, StripeChargeService, CountriesListProviderService, SessionService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -109,8 +109,8 @@ export class SessionService implements ISessionService {
 
   public login(login: string, password: string): Observable<UserModel | any> {
     return Observable.create(observer => {
-      this._apiServise.get('/auth/login', {login: login, password: password})
-        .pipe(catchError(this.handleError))
+      this._apiServise.post('/auth/signin', {login: login, password: password})
+        .catch(this.handleError)
         .subscribe(resp => {
           const isTokenProcessed = this.processTokenResponse(resp);
           if (isTokenProcessed) {

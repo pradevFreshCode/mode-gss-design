@@ -13,6 +13,5 @@ export const environment = {
   stripe_api_url: 'https://api.stripe.com/v1/charges',
   return_charge: 5.5,
 
-  //ToDo : replace with development api url, if exist
-  apiUrl: 'http://localhost'
+  apiUrl: 'http://localhost:3000/api'
 };

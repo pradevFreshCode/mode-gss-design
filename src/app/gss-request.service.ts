@@ -47,7 +47,7 @@ export class GssRequestService {
   }
 
   pickupShipment(pickupRequest: PickupRequestModel): Observable<any> {
-    if (!pickupRequest.SiteId || !pickupRequest.Connote) {
+    if (!pickupRequest.SiteId || !pickupRequest) {
       return new ErrorObservable('required');
     }
 
@@ -56,6 +56,6 @@ export class GssRequestService {
   }
 
   private _getFullBookPickupUrl(pickupRequest: PickupRequestModel) {
-    return `${this.bookpickup_url}/${pickupRequest.SiteId}-${pickupRequest.Connote.ConsignmentNumber}`;
+    return `${this.bookpickup_url}/${pickupRequest.SiteId}-${pickupRequest.ConnoteConsignmentNumber}`;
   }
 }

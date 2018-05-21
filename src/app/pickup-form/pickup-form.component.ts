@@ -1,6 +1,6 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {RatesRequest} from '../rates-request';
-import {PickupRequestConnoteModel, PickupRequestModel} from '../models/pickup-request.model';
+import {PickupRequestModel} from '../models/pickup-request.model';
 import {GssRequestService} from '../gss-request.service';
 
 @Component({

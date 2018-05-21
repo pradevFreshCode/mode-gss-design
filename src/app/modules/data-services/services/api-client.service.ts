@@ -59,7 +59,7 @@ export class ApiClientService {
         this.handleSessionExpired();
       }
 
-      errMessage = `${error.status} - ${error.statusText || ''}: ${err}`;
+      errMessage = `${error.status} - ${error.statusText || ''}`;
     } else
       errMessage = error.message ? error.message : error.toString();
 
