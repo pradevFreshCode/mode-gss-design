@@ -39,7 +39,7 @@ export abstract class BaseClientService<T extends BaseSerializableModel> extends
   }
 
   public update(entity: T): Observable<T> {
-    return this.post(`${this.apiBasePath}/${entity.id}`, this.toJson(entity)).pipe(map(response => {
+    return this.post(`${this.apiBasePath}/${entity._id}`, this.toJson(entity)).pipe(map(response => {
       return this.fromJson(this.handleResponse(response));
     }));
   }

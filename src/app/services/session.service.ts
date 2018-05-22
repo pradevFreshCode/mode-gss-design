@@ -7,8 +7,9 @@ import {catchError} from 'rxjs/operators';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
-import {LoginModel} from '../models/login.model';
 import {RegistrationModel} from '../models/registration.model';
+import {ErrorObservable} from 'rxjs/observable/ErrorObservable';
+import {environment} from '../../environments/environment';
 
 @Injectable()
 export class SessionService implements ISessionService {
@@ -33,16 +34,17 @@ export class SessionService implements ISessionService {
     return this._currentUser;
   }
 
-  constructor(private _apiServise: ApiClientService, private _localStorageService: LocalStorageService) {
+  constructor(private _apiService: ApiClientService, private _localStorageService: LocalStorageService) {
     this._currentUserReplaySubject.subscribe(user => {
       this._currentUser = user;
     });
 
-    this.reinitTokenFromLocalStorage();
+    this.reinitCurrentUser().subscribe(() => {
+    });
   }
 
   private reinitTokenFromLocalStorage(): void {
-    this._token = this._localStorageService.get('jwt_token');
+    this._token = this._localStorageService.get(environment.JWTTokenLocalStorageKey);
   }
 
   private processTokenResponse(response): boolean {
@@ -50,7 +52,7 @@ export class SessionService implements ISessionService {
     const token = data.token;
     if (token) {
       this._token = token;
-      this._localStorageService.set('token', token);
+      this._localStorageService.set(environment.JWTTokenLocalStorageKey, token);
       return true;
     } else {
       return false;
@@ -63,53 +65,32 @@ export class SessionService implements ISessionService {
     return JSON.parse(window.atob(base64));
   }
 
-  // public registerLocal(registrationModel: RegistrationModel): Observable<UserModel | any> {
-  //   return Observable.create(observer => {
-  //     if (!registrationModel) {
-  //       observer.throw('wrong login');
-  //       observer.complete();
-  //       return;
-  //     }
-  //
-  //     if (!password) {
-  //       observer.throw('wrong password');
-  //       observer.complete();
-  //       return;
-  //     }
-  //
-  //     const newFictiveUser = new UserModel('1', login, login);
-  //
-  //     this._currentUserReplaySubject.next(newFictiveUser);
-  //     observer.next(newFictiveUser);
-  //     observer.complete();
-  //   });
-  // }
-
-  public loginLocal(loginModel: LoginModel): Observable<UserModel | any> {
+  public login(login: string, password: string): Observable<UserModel | any> {
     return Observable.create(observer => {
-      if (!loginModel.login) {
-        observer.throw('wrong login');
-        observer.complete();
-        return;
-      }
-
-      if (!loginModel.password) {
-        observer.throw('wrong password');
-        observer.complete();
-        return;
-      }
-
-      const newFictiveUser = new UserModel('1', loginModel.login, loginModel.password);
-
-      this._currentUserReplaySubject.next(newFictiveUser);
-      observer.next(newFictiveUser);
-      observer.complete();
+      this._apiService.post('/auth/signin', {login: login, password: password})
+        .catch(this.handleError)
+        .subscribe(resp => {
+          const isTokenProcessed = this.processTokenResponse(resp);
+          if (isTokenProcessed) {
+            this.reinitCurrentUser().subscribe(userModel => {
+              observer.next(userModel);
+              observer.complete();
+            });
+          } else {
+            this.processLogout();
+            observer.next(null);
+            observer.complete();
+          }
+        }, err => {
+          observer.error(err);
+          observer.complete();
+        });
     });
   }
 
-  public login(login: string, password: string): Observable<UserModel | any> {
+  register(registerModel: RegistrationModel): Observable<UserModel> {
     return Observable.create(observer => {
-      this._apiServise.post('/auth/signin', {login: login, password: password})
+      this._apiService.post('/auth/register', registerModel.toJson())
         .catch(this.handleError)
         .subscribe(resp => {
           const isTokenProcessed = this.processTokenResponse(resp);
@@ -131,12 +112,12 @@ export class SessionService implements ISessionService {
   }
 
   handleError(error) {
-    return Observable.throw(error || 'Server error');
+    return new ErrorObservable(error || 'Server error');
   }
 
   public logout(): Subject<boolean> {
     const logoutSubject = new Subject<any>();
-    this._apiServise.get('/api/signout')
+    this._apiService.post('/auth/signout')
       .pipe(catchError(this.handleError))
       .subscribe(resp => {
         this.processLogout();
@@ -150,6 +131,7 @@ export class SessionService implements ISessionService {
   }
 
   private processLogout(): void {
+    this._localStorageService.remove(environment.JWTTokenLocalStorageKey);
     this._token = null;
     this._currentUserReplaySubject.next(null);
   }
@@ -157,11 +139,14 @@ export class SessionService implements ISessionService {
   public reinitCurrentUser(): Observable<UserModel> {
     this.reinitTokenFromLocalStorage();
     if (!this._token) {
-      return Observable.create(observer => observer.next(null));
+      return Observable.create(observer => {
+        observer.next(null);
+        observer.complete();
+      });
     }
 
     return Observable.create(observer => {
-      this._apiServise.get('/auth/current_user')
+      this._apiService.get('/auth/me')
         .subscribe(response => {
           const data = response.body['data'];
           const parsedUser = UserModel.FromJson(data.user);

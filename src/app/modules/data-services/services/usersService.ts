@@ -20,4 +20,20 @@ export class UsersService extends NamedClientService<UserModel> {
   public toJson(entity: UserModel): any {
     return entity.toJson();
   }
+
+  public sendConfirmationEmail(userId: string) {
+    return this.get(`${this.apiBasePath}/confirm_email/${userId}`)
+      .map(response => {
+        return this.handleResponse(response);
+      })
+      .catch(err => this.handleError(err));
+  }
+
+  public confirmEmail(userId: string, confirmationCode: string) {
+    return this.post(`${this.apiBasePath}/confirm_email`, {userId: userId, confirmationCode: confirmationCode})
+      .map(response => {
+        return this.handleResponse(response);
+      })
+      .catch(err => this.handleError(err));
+  }
 }

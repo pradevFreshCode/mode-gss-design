@@ -9,5 +9,6 @@ export const environment = {
   return_charge: 5.5,
 
   //ToDo : replace with production api url, if exist
-  apiUrl: 'http://localhost'
+  apiUrl: 'http://localhost',
+  JWTTokenLocalStorageKey: 'jwt_token'
 };

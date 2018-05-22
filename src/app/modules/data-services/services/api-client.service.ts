@@ -4,6 +4,7 @@ import {LocalStorageService} from 'angular-2-local-storage';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import {AppSettings} from '../../../../AppSettings';
+import {ErrorObservable} from 'rxjs/observable/ErrorObservable';
 
 // ToDo : will be used, when backend provided
 @Injectable()
@@ -15,7 +16,7 @@ export class ApiClientService {
 
   createRequestOptions(getParams: any = {}): any {
     const headers = {};
-    const token = this.localStorage.get('token');
+    const token = this.localStorage.get('jwt_token');
     if (!!token) {
       headers['Authorization'] = 'Bearer ' + token;
     }
@@ -29,7 +30,7 @@ export class ApiClientService {
     });
   }
 
-  post(url: string, data: any): Observable<HttpResponse<Object>> {
+  post(url: string, data: any = {}): Observable<HttpResponse<Object>> {
     return this.http.post(AppSettings.getAPIUrl(url), data, this.createRequestOptions()).catch((err) => {
       return this.handleError(err);
     });
@@ -42,9 +43,10 @@ export class ApiClientService {
   }
 
   protected handleResponse(response: HttpResponse<Object>) {
-    let body = response.body;
-    if (body['status'] == 'error')
+    const body = response.body;
+    if (body['status'] === 'error') {
       throw new Error('Server error');
+    }
 
     return !!body['data'] ? body['data'] : body;
   }
@@ -60,11 +62,12 @@ export class ApiClientService {
       }
 
       errMessage = `${error.status} - ${error.statusText || ''}`;
-    } else
+    } else {
       errMessage = error.message ? error.message : error.toString();
+    }
 
     console.log(`%c${errMessage}`, 'color:blue;');
-    return Observable.throw(errMessage);
+    return new ErrorObservable(errMessage);
   }
 
   protected handleSessionExpired() {

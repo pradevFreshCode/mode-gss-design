@@ -69,7 +69,7 @@ export abstract class BaseLocalStorageService<T extends BaseSerializableModel> i
       const localStorageCollection = this.localStorage.get(this.getLocalStorageCollectionName());
       let parsedFounded = null;
       if (localStorageCollection && _.isArray(localStorageCollection)) {
-        const foundedItem = _.toArray(localStorageCollection).find(item => item.id === entity.id);
+        const foundedItem = _.toArray(localStorageCollection).find(item => item._id === entity._id);
         parsedFounded = foundedItem ? foundedItem.map(j => this.fromJson(j)) : null;
       }
 

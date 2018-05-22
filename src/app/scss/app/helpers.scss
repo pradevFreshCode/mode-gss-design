@@ -1,0 +1,175 @@
+$i: 0;
+@while $i < 10 {
+  .m-#{$i}{
+    margin: $i+px;
+  }
+  .m-t-#{$i}{
+    margin-top: $i+px;
+  }
+  .m-t-n-#{$i}{
+    margin-top: -$i+px;
+  }
+  .m-b-#{$i}{
+    margin-bottom: $i+px;
+  }
+  .m-l-#{$i}{
+    margin-left: $i+px;
+  }
+  .m-r-#{$i}{
+    margin-right: $i+px;
+  }
+  .p-#{$i}{
+    padding: $i+px;
+  }
+  .p-t-#{$i}{
+    padding-top: $i+px;
+  }
+  .p-b-#{$i}{
+    padding-bottom: $i+px;
+  }
+  .p-l-#{$i}{
+    padding-left: $i+px;
+  }
+  .p-r-#{$i}{
+    padding-right: $i+px;
+  }
+  .height-#{$i}{
+    height: $i+px;
+  }
+  .width-#{$i}{
+    width: $i+px;
+  }
+
+
+  $i: $i + 1;
+}
+
+$i: -150;
+@while $i < 150 {
+  .m-#{$i}{
+    margin: $i+px;
+  }
+  .m-t-#{$i}{
+    margin-top: $i+px;
+  }
+  .m-b-#{$i}{
+    margin-bottom: $i+px;
+  }
+  .m-l-#{$i}{
+    margin-left: $i+px;
+  }
+  .m-r-#{$i}{
+    margin-right: $i+px;
+  }
+  .p-#{$i}{
+    padding: $i+px;
+  }
+  .p-t-#{$i}{
+    padding-top: $i+px;
+  }
+  .p-b-#{$i}{
+    padding-bottom: $i+px;
+  }
+  .p-l-#{$i}{
+    padding-left: $i+px;
+  }
+  .p-r-#{$i}{
+    padding-right: $i+px;
+  }
+  .height-#{$i}{
+    height: $i+px;
+  }
+  .width-#{$i}{
+    width: $i+px;
+  }
+  .min-width-#{$i}0{
+    min-width: ($i*10)+px;
+  }
+  .min-width-important-#{$i}0{
+    min-width: ($i*10)+px !important;
+  }
+  .max-width-#{$i}0{
+    max-width: ($i*10)+px;
+  }
+  $i: $i + 1;
+}
+
+
+
+.p-x-04 {
+  padding-right: 0.4rem !important;
+  padding-left: 0.4rem !important;
+}
+
+.overflow-h{
+  overflow: hidden;
+}
+
+.overflow-x-auto{
+  overflow-x: auto;
+}
+
+
+
+.no-interaction{
+  pointer-events: none;
+}
+
+.border-none{
+  border:none !important;
+}
+
+.text-align-right{
+  text-align: right !important;
+}
+
+.text-underline{
+  text-decoration: underline !important;
+}
+
+.float-right{
+  float: right;
+}
+
+.float-left{
+  float: left;
+}
+
+.width-25-percent{
+  width: 25%;
+}
+
+.rotate-90-left {
+  -webkit-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  -o-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+  display: inline-block;
+}
+
+.flex-container {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+}
+.flex-center-justify{
+  justify-content: center;
+}
+.flex-direction-column{
+  flex-direction: column;
+}
+
+.fa-stack-15x {
+  font-size: 1.5em;
+}
+
+.zero-padding {
+  padding: 0 !important;
+}
+
+.shadow-custom, .modal-dialog {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
