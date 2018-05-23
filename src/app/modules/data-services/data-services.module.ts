@@ -3,6 +3,8 @@ import {UsersService} from './services/usersService';
 import {ApiClientService} from './services/api-client.service';
 import {RouterModule} from '@angular/router';
 import {CommonModule} from '@angular/common';
+import {PaymentProcessService} from './services/payment-process.service';
+import {ProcessedShipmentsService} from './services/processedShipmentsService';
 
 @NgModule({
   imports: [
@@ -16,7 +18,9 @@ export class DataServicesModule {
       ngModule: DataServicesModule,
       providers: [
         ApiClientService,
-        UsersService
+        UsersService,
+        PaymentProcessService,
+        ProcessedShipmentsService
       ]
     };
   }

@@ -5,8 +5,9 @@ import {ApiClientService} from './api-client.service';
 import {map} from 'rxjs/operators';
 import {BaseSerializableModel} from '../models/BaseSerializableModel';
 import {Observable} from 'rxjs/Observable';
+import {IRestAPICompatible} from '../../../interfaces/IRestAPICompatible';
 
-export abstract class BaseClientService<T extends BaseSerializableModel> extends ApiClientService implements IService<T> {
+export abstract class BaseClientService<T extends IRestAPICompatible> extends ApiClientService implements IService<T> {
   protected apiBasePath: string;
 
   public abstract fromJson(json: any): T;

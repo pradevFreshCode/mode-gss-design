@@ -11,6 +11,8 @@ import {EmailConfirmationComponent} from './components/email-confirmation/email-
 import {UnconfirmedAccountGuard} from './guards/unconfirmed-account.guard';
 import {RegisterSuccessComponent} from './components/register-success/register-success.component';
 import {ConfirmedAccountGuard} from './guards/confirmed-account.guard';
+import {ProcessedShipmentsComponent} from './components/processed-shipments/processed-shipments.component';
+import {NotConfirmedComponent} from './components/not-confirmed/not-confirmed.component';
 
 export const routes: Routes = [
   {
@@ -23,6 +25,12 @@ export const routes: Routes = [
         component: GssFormComponent,
         data: {title: 'Return It'}
       },
+      {
+        path: 'processed-shipments',
+        component: ProcessedShipmentsComponent,
+        data: {title: 'Return It | Processed shipments'},
+        canActivate: [ConfirmedAccountGuard]
+      }
     ]
   },
   {
@@ -52,9 +60,14 @@ export const routes: Routes = [
         path: 'register-complete',
         component: RegisterSuccessComponent,
         data: {title: 'Return It | Registration succeed'},
-        // canActivate: [ConfirmedAccountGuard]
+        canActivate: [ConfirmedAccountGuard]
       }
     ]
+  },
+  {
+    path: 'not-confirmed',
+    component: NotConfirmedComponent,
+    data: {title: 'Page not found | Account not confirmed'}
   },
   {
     path: '**',

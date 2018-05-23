@@ -8,6 +8,7 @@ import {Destination} from '../../models/destination';
 import {Address} from '../../address';
 import {Package} from '../../models/package';
 import {ShipmentsRequest} from '../../models/shipments-request';
+import {PaymentProcessService} from '../../modules/data-services/services/payment-process.service';
 
 @Component({
   selector: 'app-checkout',
@@ -22,7 +23,7 @@ export class CheckoutComponent implements OnInit {
   shipmentResponse: any;
   shipmentErrorResponse: any;
 
-  constructor(private gssRequestService: GssRequestService) {
+  constructor(private gssRequestService: GssRequestService, private _paymentProcessService: PaymentProcessService) {
   }
 
   ngOnInit() {
@@ -76,27 +77,14 @@ export class CheckoutComponent implements OnInit {
       req.Packages.push(pkg);
     });
     // others
-    req.Commodities = null;
-    req.IsSaturdayDelivery = false;
-    req.IsSignatureRequired = true;
-    req.IsUrgentCouriers = false;
-    req.DutiesAndTaxesByReceiver = false;
     req.DeliveryReference = this.ratesRequest.DeliveryReference;
-    req.PrintToPrinter = true;
-    req.Outputs = null;
     req.CarrierId = this.availToGo.CarrierId;
     req.Carrier = this.availToGo.CarrierName;
-    req.Service = null;
-    req.SiteId = 0;
-    req.IncludeLineDetails = false;
-    req.ShipType = 1,
-      req.HasDG = false;
-    req.DangerousGoods = null;
-    req.DisableFreightForwardEmails = isEmail ? false : true;
-    req.IncludeInsurance = false;
-    // console.log(req);
+    req.ShipType = 1;
+    req.DisableFreightForwardEmails = this.availToGo.IsEmail ? false : true;
+    req.Cost = this.availToGo.Cost;
 
-    this.gssRequestService.postShipments(req)
+    this._paymentProcessService.postShipments(req)
       .subscribe(
         res => {
           this.shipmentResponse = res;
@@ -113,33 +101,34 @@ export class CheckoutComponent implements OnInit {
             // download labels
 
             // if data returned without errors, return response object
+
+            this.shipmentResponse.Consignments.forEach(item => {
+              this.gssRequestService.downloadLabel(item.Connote)
+                .subscribe(
+                  response => {
+                    // console.log(response);
+                    const binaryPdf = atob(response[0]);
+                    const length = binaryPdf.length;
+                    const arrayBuf = new ArrayBuffer(length);
+                    const uintArray = new Uint8Array(arrayBuf);
+                    for (let i = 0; i < length; i++) {
+                      uintArray[i] = binaryPdf.charCodeAt(i);
+                    }
+                    const blob = new Blob([uintArray], {type: 'application/pdf'});
+                    saveAs(blob, item.Connote + '.pdf');
+                    this.checkoutDone.emit(true);
+                  },
+                  error => {
+                    this.checkoutDone.emit(false);
+                  }
+                );
+            });
+
             if (this.shipmentResponse.Consignments.length > 0) {
-              this.checkoutDone.emit(this.shipmentResponse);
+              this.checkoutDone.emit(true);
             } else {
               this.checkoutDone.emit(null);
             }
-
-            // this.shipmentResponse.Consignments.forEach(item => {
-            //   this.gssRequestService.downloadLabel(item.Connote)
-            //     .subscribe(
-            //       response => {
-            //         // console.log(response);
-            //         const binaryPdf = atob(response[0]);
-            //         const length = binaryPdf.length;
-            //         const arrayBuf = new ArrayBuffer(length);
-            //         const uintArray = new Uint8Array(arrayBuf);
-            //         for (let i = 0; i < length; i++) {
-            //           uintArray[i] = binaryPdf.charCodeAt(i);
-            //         }
-            //         const blob = new Blob([uintArray], {type: 'application/pdf'});
-            //         saveAs(blob, item.Connote + '.pdf');
-            //         this.checkoutDone.emit(true);
-            //       },
-            //       error => {
-            //         this.checkoutDone.emit(false);
-            //       }
-            //     );
-            // });
           }
         },
         err => {

@@ -56,12 +56,12 @@ export class ApiClientService {
     console.log(error);
     if (error instanceof HttpErrorResponse) {
       // let body = error.body || '';
-      const err = error.error.data || JSON.stringify(error);
+      const errorMessageFromServer = error.error.data;
       if (error.status === 401) {
         this.handleSessionExpired();
       }
 
-      errMessage = `${error.status} - ${error.statusText || ''}`;
+      errMessage = errorMessageFromServer || `${error.status} - ${error.statusText || ''}`;
     } else {
       errMessage = error.message ? error.message : error.toString();
     }

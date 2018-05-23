@@ -489,10 +489,14 @@ export class PackageComponent implements OnInit {
       .subscribe(
         avails => {
           this.available = avails;
-          this.available.Available[0].IsEmail = false;
-          this.available.Available[0].Cost = PACKAGE_OPTIONS[idx].Price;
+          if (this.available.Available.length) {
+            this.available.Available[0].IsEmail = false;
+            this.available.Available[0].Cost = PACKAGE_OPTIONS[idx].Price;
 
-          this.goClicked.emit(this.available.Available[0]);
+            this.goClicked.emit(this.available.Available[0]);
+          } else {
+            alert('No availables.');
+          }
         },
         err => {
           // TODO error

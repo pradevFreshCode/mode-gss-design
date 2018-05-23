@@ -113,9 +113,8 @@
               <div class="input-group-append cursor-pointer"
                    (click)="isPasswordVisible = !isPasswordVisible">
                       <span class="input-group-text">
-                        <fa *ngIf="isPasswordVisible" name="eye"></fa>
-                        <fa *ngIf="!isPasswordVisible" name="eye-slash"></fa>
-
+                        <fa *ngIf="isPasswordVisible" name="eye" [fixed]="true"></fa>
+                        <fa *ngIf="!isPasswordVisible" name="eye-slash" [fixed]="true"></fa>
                       </span>
               </div>
             </div>

@@ -32,9 +32,9 @@ export class GssRequestService {
     return this.http.post<any>(this.api_rate, JSON.stringify(ratesRequest), httpOptions);
   }
 
-  postShipments(shipmentsRequest: ShipmentsRequest): Observable<any> {
-    return this.http.post<any>(this.api_shipments, JSON.stringify(shipmentsRequest), httpOptions);
-  }
+  // postShipments(shipmentsRequest: ShipmentsRequest): Observable<any> {
+  //   return this.http.post<any>(this.api_shipments, JSON.stringify(shipmentsRequest), httpOptions);
+  // }
 
   downloadLabel(connote: string): Observable<any> {
 
@@ -46,16 +46,16 @@ export class GssRequestService {
                  */
   }
 
-  pickupShipment(pickupRequest: PickupRequestModel): Observable<any> {
-    if (!pickupRequest.SiteId || !pickupRequest) {
-      return new ErrorObservable('required');
-    }
-
-    // return new EmptyObservable();
-    return this.http.post<any>(this._getFullBookPickupUrl(pickupRequest), JSON.stringify(pickupRequest), httpOptions);
-  }
-
-  private _getFullBookPickupUrl(pickupRequest: PickupRequestModel) {
-    return `${this.bookpickup_url}/${pickupRequest.SiteId}-${pickupRequest.ConnoteConsignmentNumber}`;
-  }
+  // pickupShipment(pickupRequest: PickupRequestModel): Observable<any> {
+  //   if (!pickupRequest.SiteId || !pickupRequest) {
+  //     return new ErrorObservable('required');
+  //   }
+  //
+  //   // return new EmptyObservable();
+  //   return this.http.post<any>(this._getFullBookPickupUrl(pickupRequest), JSON.stringify(pickupRequest), httpOptions);
+  // }
+  //
+  // private _getFullBookPickupUrl(pickupRequest: PickupRequestModel) {
+  //   return `${this.bookpickup_url}/${pickupRequest.SiteId}-${pickupRequest.ConnoteConsignmentNumber}`;
+  // }
 }

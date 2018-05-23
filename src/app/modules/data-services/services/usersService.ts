@@ -30,7 +30,7 @@ export class UsersService extends NamedClientService<UserModel> {
   }
 
   public confirmEmail(userId: string, confirmationCode: string) {
-    return this.post(`${this.apiBasePath}/confirm_email`, {userId: userId, confirmationCode: confirmationCode})
+    return this.post(`${this.apiBasePath}/confirm_email/${userId}`, {confirmationCode: confirmationCode})
       .map(response => {
         return this.handleResponse(response);
       })

@@ -1,11 +1,11 @@
 import {LocalStorageService} from 'angular-2-local-storage';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {BaseSerializableModel} from '../models/BaseSerializableModel';
 import {BaseClientService} from './base-client.service';
+import {IRestAPICompatible} from '../../../interfaces/IRestAPICompatible';
 
 @Injectable()
-export abstract class NamedClientService<T extends BaseSerializableModel> extends BaseClientService<T> {
+export abstract class NamedClientService<T extends IRestAPICompatible> extends BaseClientService<T> {
 
   public constructor(http: HttpClient,
                      localStorage: LocalStorageService) {

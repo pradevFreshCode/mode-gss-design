@@ -15,6 +15,8 @@ export class EmailConfirmationComponent implements OnInit {
   public isEmailSending: boolean = false;
   public error: string = null;
 
+  public sendingResult: any;
+
   constructor(private _sessionService: SessionService,
               private _usersService: UsersService,
               private _router: Router) {
@@ -34,12 +36,17 @@ export class EmailConfirmationComponent implements OnInit {
       return;
     }
     this.isEmailSending = true;
-    this._usersService.sendConfirmationEmail(this.currentUser._id).subscribe(() => {
+    this._usersService.sendConfirmationEmail(this.currentUser._id).subscribe(result => {
+      this.sendingResult = result;
       this.isEmailSending = false;
     }, err => {
       this.error = 'Error occurred when sending confirmation email';
       this.isEmailSending = false;
     });
+  }
+
+  clearError() {
+    this.error = null;
   }
 
   confirmEmail() {
@@ -50,9 +57,13 @@ export class EmailConfirmationComponent implements OnInit {
     this.isLoading = true;
     this._usersService.confirmEmail(this.currentUser._id, this.confirmationCode).subscribe(response => {
       this.isLoading = false;
-      this._router.navigate(['/auth/register-complete']);
+      this._sessionService.reinitCurrentUser().subscribe(user => {
+        this._router.navigate(['/auth/register-complete']);
+      }, err => {
+        this.error = 'Error occurred when updating user data';
+      });
     }, err => {
-      this.error = 'Error occurred when validate confirmation code';
+      this.error = err || 'Error occurred when validate confirmation code';
       this.isLoading = false;
     });
   }
