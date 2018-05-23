@@ -11,7 +11,7 @@ import {ErrorObservable} from 'rxjs/observable/ErrorObservable';
 
 @Injectable()
 export class PaymentProcessService extends ApiClientService {
-  private _apiBasePath: string = 'payment_process';
+  private _apiBasePath: string = 'booking_process';
 
   constructor(http: HttpClient,
               localStorage: LocalStorageService) {
