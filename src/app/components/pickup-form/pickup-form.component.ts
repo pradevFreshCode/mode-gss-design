@@ -24,7 +24,8 @@ export class PickupFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.pickupRequestModel = new PickupRequestModel(6215943, 'AIG00012137', 4180, 10, '');
+    // uncomment to test using fake data
+    // this.pickupRequestModel = new PickupRequestModel(6215943, 'AIG00012137', 4180, 10, '');
   }
 
   processPickup() {
