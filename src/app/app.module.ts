@@ -44,6 +44,7 @@ import {ConfirmedAccountGuard} from './guards/confirmed-account.guard';
 import {UnconfirmedAccountGuard} from './guards/unconfirmed-account.guard';
 import {AngularFontAwesomeModule} from 'angular-font-awesome';
 import { ProcessedShipmentsComponent } from './components/processed-shipments/processed-shipments.component';
+import {PasswordChangeComponent} from './components/password-change/password-change.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import { ProcessedShipmentsComponent } from './components/processed-shipments/pr
     RegisterSuccessComponent,
     NotConfirmedComponent,
     EmailConfirmationComponent,
-    ProcessedShipmentsComponent
+    ProcessedShipmentsComponent,
+    PasswordChangeComponent
   ],
   imports: [
     BrowserModule,

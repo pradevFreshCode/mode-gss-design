@@ -36,4 +36,25 @@ export class UsersService extends NamedClientService<UserModel> {
       })
       .catch(err => this.handleError(err));
   }
+
+  public sendPasswordChangeEmail(email: string) {
+    return this.get(`${this.apiBasePath}/change_password`, {email: email})
+      .map(response => {
+        return this.handleResponse(response);
+      })
+      .catch(err => this.handleError(err));
+  }
+
+  public changePassword(email: string, confirmationCode: string, newPassword: string) {
+    const requestData = {
+      email: email,
+      confirmationCode: confirmationCode,
+      newPassword: newPassword
+    };
+    return this.post(`${this.apiBasePath}/change_password`, requestData)
+      .map(response => {
+        return this.handleResponse(response);
+      })
+      .catch(err => this.handleError(err));
+  }
 }
