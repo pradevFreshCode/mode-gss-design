@@ -27,12 +27,14 @@
     </form>
     <form #paymentForm="ngForm">
       <div [@slideInOut] *ngIf="wizardStep == 3">
-        <app-payment-form #payment [ratesRequest]="ratesRequest" [availToGo]="availToGo" (cardDone)="onCardDone($event)"></app-payment-form>
+        <app-payment-form #payment [ratesRequest]="ratesRequest" [availToGo]="availToGo"
+                          (cardDone)="onCardDone($event)"></app-payment-form>
       </div>
     </form>
     <form #checkoutForm="ngForm">
       <div [@slideInOut] *ngIf="wizardStep == 4">
-        <app-checkout #checkout [ratesRequest]="ratesRequest" [availToGo]="availToGo" (checkoutDone)="onCheckoutDone($event)"></app-checkout>
+        <app-checkout #checkout [ratesRequest]="ratesRequest" [availToGo]="availToGo"
+                      (checkoutDone)="onCheckoutDone($event)"></app-checkout>
       </div>
     </form>
     <form #pickupForm="ngForm">
@@ -41,36 +43,42 @@
       </div>
     </form>
   </div>
-  <footer class="footer">
-    <div class="container center" [hidden]="isProcessing">
-      <button *ngIf="wizardStep !== 0 && wizardStep !== 4 && wizardStep !== 5" type="button" style="margin-right: 20px;" class="btn btn-light btn-sm" (click)="clickBack()">BACK</button>
-      <button *ngIf="wizardStep === 0" type="button" class="btn btn-primary btn-lg" [disabled]="senderForm.invalid" (click)="clickNext()">
-        NEXT STEP
-      </button>
-      <button *ngIf="wizardStep === 1" type="button" class="btn btn-primary btn-lg" [disabled]="receiverForm.invalid" (click)="clickNext()">
-        NEXT STEP
-      </button>
-      <button *ngIf="wizardStep === 3" type="button" class="btn btn-primary btn-lg" [disabled]="paymentForm.invalid" (click)="processPayment()">
-        PAY
-      </button>
-      <button *ngIf="wizardStep === 4" type="button" class="btn btn-primary btn-lg" (click)="processCheckout(false)">
-        PROCESS CHECKOUT
-      </button>
-      <!--<button *ngIf="wizardStep === 4" type="button" class="btn btn-primary btn-lg" (click)="processCheckout(true)">-->
-        <!--EMAIL TICKET-->
-      <!--</button>-->
-      <!--<span *ngIf="wizardStep === 4">&nbsp;</span>-->
-      <!--<button *ngIf="wizardStep === 4" type="button" class="btn btn-primary btn-lg" (click)="processCheckout(false)">-->
-        <!--PRINT-->
-      <!--</button>-->
-    </div>
-    <div class="container center" [hidden]="!isProcessing">
-      <img id="img_loader_processing" [src]="loaderpath" [hidden]="!isProcessing">
-    </div>
-    <!--
-    <p>valid: {{ packageForm.valid }}</p>
-    <p>isUnitAndKgOkay: {{ isUnitAndKgOkay() }}</p>
-    <p>ratesRequest: {{ ratesRequest | json }}</p>
-    <p>availToGo: {{ availToGo | json }}</p>
-    -->
-  </footer>
+</div>
+<footer class="footer">
+  <div class="container center" [hidden]="isProcessing">
+    <button *ngIf="wizardStep !== 0 && wizardStep !== 4 && wizardStep !== 5" type="button" style="margin-right: 20px;"
+            class="btn btn-light btn-sm" (click)="clickBack()">BACK
+    </button>
+    <button *ngIf="wizardStep === 0" type="button" class="btn btn-primary btn-lg" [disabled]="senderForm.invalid"
+            (click)="clickNext()">
+      NEXT STEP
+    </button>
+    <button *ngIf="wizardStep === 1" type="button" class="btn btn-primary btn-lg" [disabled]="receiverForm.invalid"
+            (click)="clickNext()">
+      NEXT STEP
+    </button>
+    <button *ngIf="wizardStep === 3" type="button" class="btn btn-primary btn-lg" [disabled]="paymentForm.invalid"
+            (click)="processPayment()">
+      PAY
+    </button>
+    <button *ngIf="wizardStep === 4" type="button" class="btn btn-primary btn-lg" (click)="processCheckout(false)">
+      PROCESS CHECKOUT
+    </button>
+    <!--<button *ngIf="wizardStep === 4" type="button" class="btn btn-primary btn-lg" (click)="processCheckout(true)">-->
+    <!--EMAIL TICKET-->
+    <!--</button>-->
+    <!--<span *ngIf="wizardStep === 4">&nbsp;</span>-->
+    <!--<button *ngIf="wizardStep === 4" type="button" class="btn btn-primary btn-lg" (click)="processCheckout(false)">-->
+    <!--PRINT-->
+    <!--</button>-->
+  </div>
+  <div class="container center" [hidden]="!isProcessing">
+    <img id="img_loader_processing" [src]="loaderpath" [hidden]="!isProcessing">
+  </div>
+  <!--
+  <p>valid: {{ packageForm.valid }}</p>
+  <p>isUnitAndKgOkay: {{ isUnitAndKgOkay() }}</p>
+  <p>ratesRequest: {{ ratesRequest | json }}</p>
+  <p>availToGo: {{ availToGo | json }}</p>
+  -->
+</footer>
