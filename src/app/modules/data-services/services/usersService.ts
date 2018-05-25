@@ -37,21 +37,20 @@ export class UsersService extends NamedClientService<UserModel> {
       .catch(err => this.handleError(err));
   }
 
-  public sendPasswordChangeEmail(email: string) {
-    return this.get(`${this.apiBasePath}/change_password`, {email: email})
+  public sendPasswordChangeEmail(login: string) {
+    return this.get(`${this.apiBasePath}/change_password/${login}`)
       .map(response => {
         return this.handleResponse(response);
       })
       .catch(err => this.handleError(err));
   }
 
-  public changePassword(email: string, confirmationCode: string, newPassword: string) {
+  public changePassword(login: string, confirmationCode: string, newPassword: string) {
     const requestData = {
-      email: email,
       confirmationCode: confirmationCode,
       newPassword: newPassword
     };
-    return this.post(`${this.apiBasePath}/change_password`, requestData)
+    return this.post(`${this.apiBasePath}/change_password/${login}`, requestData)
       .map(response => {
         return this.handleResponse(response);
       })

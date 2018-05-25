@@ -13,6 +13,8 @@ import {RegisterSuccessComponent} from './components/register-success/register-s
 import {ConfirmedAccountGuard} from './guards/confirmed-account.guard';
 import {ProcessedShipmentsComponent} from './components/processed-shipments/processed-shipments.component';
 import {NotConfirmedComponent} from './components/not-confirmed/not-confirmed.component';
+import {PasswordChangeComponent} from './components/password-change/password-change.component';
+import {PasswordChangedComponent} from './components/password-changed/password-changed.component';
 
 export const routes: Routes = [
   {
@@ -61,6 +63,16 @@ export const routes: Routes = [
         component: RegisterSuccessComponent,
         data: {title: 'Return It | Registration succeed'},
         canActivate: [ConfirmedAccountGuard]
+      },
+      {
+        path: 'change-password',
+        component: PasswordChangeComponent,
+        data: {title: 'Return It | Password change'}
+      },
+      {
+        path: 'password-changed',
+        component: PasswordChangedComponent,
+        data: {title: 'Return It | Password Successfully changed'}
       }
     ]
   },

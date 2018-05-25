@@ -3,6 +3,7 @@ import {UserModel} from '../../modules/data-services/models/User.model';
 import {SessionService} from '../../services/session.service';
 import {UsersService} from '../../modules/data-services/services/usersService';
 import {Router} from '@angular/router';
+import {UtilsPassword} from '../../Utils/utilsPassword';
 
 @Component({
   selector: 'app-password-change',
@@ -14,8 +15,13 @@ export class PasswordChangeComponent implements OnInit {
   public isLoading: boolean = false;
   public isEmailSending: boolean = false;
   public error: string = null;
-  public emailToSend: string;
+  public login: string;
   public newPassword: string;
+  public newPasswordConfirm: string;
+  public isPasswordVisible: boolean = false;
+
+  public passwordPattern = UtilsPassword.passwordPattern;
+  public passwordValidationMessage = UtilsPassword.passwordValidationMessage;
 
   public sendingResult: any;
 
@@ -27,8 +33,8 @@ export class PasswordChangeComponent implements OnInit {
   ngOnInit() {
     this._sessionService.CurrentUserReplaySubject.subscribe(user => {
       this.currentUser = user;
-      if (this.currentUser.email) {
-        this.emailToSend = this.currentUser.email;
+      if (this.currentUser && this.currentUser.login) {
+        this.login = this.currentUser.login;
         this.sendPasswordChangeEmail();
       }
     });
@@ -37,15 +43,15 @@ export class PasswordChangeComponent implements OnInit {
   sendPasswordChangeEmail() {
     this.error = null;
 
-    if (!this.emailToSend) {
+    if (!this.login) {
       return;
     }
     this.isEmailSending = true;
-    this._usersService.sendPasswordChangeEmail(this.emailToSend).subscribe(result => {
+    this._usersService.sendPasswordChangeEmail(this.login).subscribe(result => {
       this.sendingResult = result;
       this.isEmailSending = false;
     }, err => {
-      this.error = 'Error occurred when sending confirmation email';
+      this.error = err;
       this.isEmailSending = false;
     });
   }
@@ -55,15 +61,15 @@ export class PasswordChangeComponent implements OnInit {
   }
 
   changePassword() {
-    if (!this.confirmationCode || !this.currentUser || !this.emailToSend) {
+    if (!this.confirmationCode || !this.newPassword || !this.login) {
       return;
     }
 
     this.isLoading = true;
-    this._usersService.changePassword(this.emailToSend, this.confirmationCode, this.newPassword).subscribe(response => {
+    this._usersService.changePassword(this.login, this.confirmationCode, this.newPassword).subscribe(response => {
       this.isLoading = false;
       this._sessionService.reinitCurrentUser().subscribe(user => {
-        this._router.navigate(['/auth/register-complete']);
+        this._router.navigate(['/auth/password-changed']);
       }, err => {
         this.error = 'Error occurred when updating user data';
       });
@@ -71,5 +77,9 @@ export class PasswordChangeComponent implements OnInit {
       this.error = err || 'Error occurred when validate confirmation code';
       this.isLoading = false;
     });
+  }
+
+  getPasswordInputType() {
+    return this.isPasswordVisible ? 'text' : 'password';
   }
 }

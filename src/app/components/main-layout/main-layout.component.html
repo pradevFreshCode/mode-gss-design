@@ -29,6 +29,9 @@
       <li *ngIf="!!currentUser && !!currentUser.confirmedAt" class="nav-item">
         <a class="nav-link" [routerLink]="['/processed-shipments']" routerLinkActive="active">Processed shipments</a>
       </li>
+      <li *ngIf="!!currentUser && !!currentUser.confirmedAt" class="nav-item">
+        <a class="nav-link" [routerLink]="['/auth/change-password']" routerLinkActive="active">Change password</a>
+      </li>
     </ul>
   </div>
 </nav>
