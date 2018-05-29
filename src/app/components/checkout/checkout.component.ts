@@ -83,7 +83,6 @@ export class CheckoutComponent implements OnInit {
     req.ShipType = 1;
     req.DisableFreightForwardEmails = this.availToGo.IsEmail ? false : true;
     req.Cost = this.availToGo.Cost;
-
     this._paymentProcessService.postShipments(req)
       .subscribe(
         res => {
@@ -102,30 +101,31 @@ export class CheckoutComponent implements OnInit {
 
             // if data returned without errors, return response object
 
-            this.shipmentResponse.Consignments.forEach(item => {
-              this.gssRequestService.downloadLabel(item.Connote)
-                .subscribe(
-                  response => {
-                    // console.log(response);
-                    const binaryPdf = atob(response[0]);
-                    const length = binaryPdf.length;
-                    const arrayBuf = new ArrayBuffer(length);
-                    const uintArray = new Uint8Array(arrayBuf);
-                    for (let i = 0; i < length; i++) {
-                      uintArray[i] = binaryPdf.charCodeAt(i);
+              this.shipmentResponse.Consignments.forEach(item => {
+                this.gssRequestService.downloadLabel(item.Connote)
+                  .subscribe(
+                    response => {
+                      // console.log(response);
+                      const binaryPdf = atob(response[0]);
+                      const length = binaryPdf.length;
+                      const arrayBuf = new ArrayBuffer(length);
+                      const uintArray = new Uint8Array(arrayBuf);
+                      for (let i = 0; i < length; i++) {
+                        uintArray[i] = binaryPdf.charCodeAt(i);
+                      }
+                      const blob = new Blob([uintArray], {type: 'application/pdf'});
+                      saveAs(blob, item.Connote + '.pdf');
+                      this.checkoutDone.emit(this.shipmentResponse);
+                    },
+                    error => {
+                      console.log('error occured when label downloaded', error);
+                      this.checkoutDone.emit(false);
                     }
-                    const blob = new Blob([uintArray], {type: 'application/pdf'});
-                    saveAs(blob, item.Connote + '.pdf');
-                    this.checkoutDone.emit(true);
-                  },
-                  error => {
-                    this.checkoutDone.emit(false);
-                  }
-                );
-            });
+                  );
+              });
 
             if (this.shipmentResponse.Consignments.length > 0) {
-              this.checkoutDone.emit(true);
+              this.checkoutDone.emit(this.shipmentResponse);
             } else {
               this.checkoutDone.emit(null);
             }
@@ -137,6 +137,5 @@ export class CheckoutComponent implements OnInit {
           this.checkoutDone.emit(null);
         }
       );
-    // this.checkoutDone.emit(true);
   }
 }

@@ -1,18 +1,18 @@
-import { Component, OnInit, Input, Output, ElementRef, ViewChild, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { StripeService, StripeCardComponent, ElementOptions, ElementsOptions } from 'ngx-stripe';
-import { saveAs } from 'file-saver/FileSaver';
+import {Component, OnInit, Input, Output, ElementRef, ViewChild, EventEmitter} from '@angular/core';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {StripeService, StripeCardComponent, ElementOptions, ElementsOptions} from 'ngx-stripe';
+import {saveAs} from 'file-saver/FileSaver';
 
-import { environment } from '../../../environments/environment';
-import { StripeChargeService } from '../../services/stripe-charge.service';
-import { GssRequestService } from '../../services/gss-request.service';
-import { RatesRequest } from '../../models/rates-request';
-import { Available } from '../../models/available';
-import { Origin } from '../../models/origin';
-import { Destination } from '../../models/destination';
-import { Address } from '../../address';
-import { Package } from '../../models/package';
-import { ShipmentsRequest } from '../../models/shipments-request';
+import {environment} from '../../../environments/environment';
+import {StripeChargeService} from '../../services/stripe-charge.service';
+import {GssRequestService} from '../../services/gss-request.service';
+import {RatesRequest} from '../../models/rates-request';
+import {Available} from '../../models/available';
+import {Origin} from '../../models/origin';
+import {Destination} from '../../models/destination';
+import {Address} from '../../address';
+import {Package} from '../../models/package';
+import {ShipmentsRequest} from '../../models/shipments-request';
 
 @Component({
   selector: 'app-payment-form',
@@ -56,12 +56,11 @@ export class PaymentFormComponent implements OnInit {
   isNameError: boolean;
   cardError: string;
 
-  constructor(
-    private fb: FormBuilder,
-    private stripeService: StripeService,
-    private stripeChargeService: StripeChargeService,
-    private gssRequestService: GssRequestService,
-  ) { }
+  constructor(private fb: FormBuilder,
+              private stripeService: StripeService,
+              private stripeChargeService: StripeChargeService,
+              private gssRequestService: GssRequestService,) {
+  }
 
   ngOnInit() {
     this.stripeTest = this.fb.group({
@@ -91,48 +90,50 @@ export class PaymentFormComponent implements OnInit {
     // show loader
     // this.isProcessing = true;
 
-    this.stripeService
-      .createToken(this.card.getCard(), { name })
-      .subscribe(result => {
-        if (result.token) {
-          this.stripeChargeService
-            .chargePostRequest(this.availToGo.Cost,
-            'NZD',
-            'Returning Cost from ' + this.ratesRequest.Origin.Name,
-            result.token.id)
-              .subscribe(
-                data => {
-                  // this.checkout();
-                  this.cardDone.emit(true);
-                },
-                error => {
-                  // hide loader
-                  // this.isProcessing = false;
-                  // console.log(error);
-                  // Show error msg
-                  if (error.message !== undefined && error.message !== null && error.message.length > 0) {
-                    this.cardError = error.message;
-                  } else {
-                    this.cardError = 'Unknown error has occurred. Please try later again.';
-                  }
-                  this.cardDone.emit(false);
-              }, () => {
-                // completed
-              });
-        } else if (result.error) {
-          // Error creating the token
-          // console.log(result.error.message);
-          // hide loader
-          // this.isProcessing = false;
-          this.cardDone.emit(false);
-          // Show error modal
-          this.cardError = result.error.message;
-        } else {
-          // hide loader
-          // this.isProcessing = false;
-          this.cardDone.emit(false);
-        }
-      });
+    this.cardDone.emit(true);
+
+    // this.stripeService
+    //   .createToken(this.card.getCard(), { name })
+    //   .subscribe(result => {
+    //     if (result.token) {
+    //       this.stripeChargeService
+    //         .chargePostRequest(this.availToGo.Cost,
+    //         'NZD',
+    //         'Returning Cost from ' + this.ratesRequest.Origin.Name,
+    //         result.token.id)
+    //           .subscribe(
+    //             data => {
+    //               // this.checkout();
+    //               this.cardDone.emit(true);
+    //             },
+    //             error => {
+    //               // hide loader
+    //               // this.isProcessing = false;
+    //               // console.log(error);
+    //               // Show error msg
+    //               if (error.message !== undefined && error.message !== null && error.message.length > 0) {
+    //                 this.cardError = error.message;
+    //               } else {
+    //                 this.cardError = 'Unknown error has occurred. Please try later again.';
+    //               }
+    //               this.cardDone.emit(false);
+    //           }, () => {
+    //             // completed
+    //           });
+    //     } else if (result.error) {
+    //       // Error creating the token
+    //       // console.log(result.error.message);
+    //       // hide loader
+    //       // this.isProcessing = false;
+    //       this.cardDone.emit(false);
+    //       // Show error modal
+    //       this.cardError = result.error.message;
+    //     } else {
+    //       // hide loader
+    //       // this.isProcessing = false;
+    //       this.cardDone.emit(false);
+    //     }
+    //   });
   }
 
   // private checkout() {

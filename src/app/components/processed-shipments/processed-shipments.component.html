@@ -56,7 +56,8 @@
 
             <ng-container *ngFor="let consignment of shipment.Consignments">
               <p *ngIf="consignment.Connote"><b>Connote</b>: {{consignment.Connote}}</p>
-              <p *ngIf="consignment.Cost"><b>Cost</b>: {{consignment.Cost}}</p>
+              <!--Cost differs from cost on our site. It's better to hide now. Need to be discussed-->
+              <!--<p *ngIf="consignment.Cost"><b>Cost</b>: {{consignment.Cost}}</p>-->
               <p *ngIf="consignment.IsSaturdayDelivery"><b>Is Saturday Delivery</b>: <b>Yes</b></p>
             </ng-container>
           </div>

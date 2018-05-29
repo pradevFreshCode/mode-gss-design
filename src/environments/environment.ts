@@ -13,6 +13,6 @@ export const environment = {
   stripe_api_url: 'https://api.stripe.com/v1/charges',
   return_charge: 5.5,
 
-  apiUrl: 'http://192.168.1.131:3000/api',
+  apiUrl: 'http://192.168.1.237:3000/api',
   JWTTokenLocalStorageKey: 'jwt_token'
 };

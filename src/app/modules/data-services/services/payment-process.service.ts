@@ -19,7 +19,7 @@ export class PaymentProcessService extends ApiClientService {
   }
 
   postShipments(requestData: ShipmentsRequest): Observable<ProcessedShipmentModel> {
-    return this.post(`${this._apiBasePath}/post_shipments`, requestData).pipe(map(response => {
+    return this.post(`${this._apiBasePath}/post_shipments`, {shipmentRequest: requestData}).pipe(map(response => {
       return ProcessedShipmentModel.FromJson(this.handleResponse(response));
     }));
   }
