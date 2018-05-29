@@ -15,6 +15,9 @@ import {ProcessedShipmentsComponent} from './components/processed-shipments/proc
 import {NotConfirmedComponent} from './components/not-confirmed/not-confirmed.component';
 import {PasswordChangeComponent} from './components/password-change/password-change.component';
 import {PasswordChangedComponent} from './components/password-changed/password-changed.component';
+import {UsersComponent} from './components/users/users.component';
+import {UserProfileComponent} from './components/user-profile/user-profile.component';
+import {AdminGuard} from './guards/admin.guard';
 
 export const routes: Routes = [
   {
@@ -32,7 +35,28 @@ export const routes: Routes = [
         component: ProcessedShipmentsComponent,
         data: {title: 'Return It | Processed shipments'},
         canActivate: [ConfirmedAccountGuard]
-      }
+      },
+      {
+        path: 'users',
+        children: [
+          {
+            path: 'list',
+            component: UsersComponent,
+            canActivate: [AdminGuard],
+            data: {title: 'Return It | Users'}
+          },
+          {
+            path: ':id',
+            component: UserProfileComponent,
+            data: {title: 'Return It | Profile'}
+          }
+        ]
+      },
+      {
+        path: 'not-confirmed',
+        component: NotConfirmedComponent,
+        data: {title: 'Page not found | Account not confirmed'}
+      },
     ]
   },
   {
@@ -75,11 +99,6 @@ export const routes: Routes = [
         data: {title: 'Return It | Password Successfully changed'}
       }
     ]
-  },
-  {
-    path: 'not-confirmed',
-    component: NotConfirmedComponent,
-    data: {title: 'Page not found | Account not confirmed'}
   },
   {
     path: '**',

@@ -1,0 +1,75 @@
+<div class="container">
+  <div class="row m-t-10 m-b-10">
+    <div class="col-sm-12">
+      <h3>Users</h3>
+    </div>
+  </div>
+
+  <!--<div class="row m-t-10 m-b-10" *ngIf="isSuperuser">-->
+    <!--<div class="col-sm-12">-->
+      <!--<a [routerLink]="['/users/new']" class="btn btn-outline-secondary">-->
+        <!--Add new-->
+      <!--</a>-->
+    <!--</div>-->
+  <!--</div>-->
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="table-responsive">
+        <table class="table table-hover min-width-900">
+          <thead>
+          <tr>
+            <th>Login</th>
+            <th>Role</th>
+            <th *ngIf="isSuperuser"></th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Verified</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let user of usersList">
+            <td><a [routerLink]="['/users/'+user._id]">{{user.login}}</a></td>
+            <td>
+              <select *ngIf="isSuperuser" #roleSelectInput="ngModel" class="form-control" id="roleId" name="roleId"
+                      [disabled]="!isSuperuser"
+                      [(ngModel)]="user.roleId" required>
+                <option *ngFor="let role of availableRoles" [value]="role._id">{{role.name}}</option>
+              </select>
+              <span *ngIf="!isSuperuser">
+                {{user?.role?.name}}
+              </span>
+            </td>
+            <td *ngIf="isSuperuser">
+              <button [disabled]="!isSuperuser" type="button" class="btn btn-sm btn-outline-success"
+                      (click)="saveUser(user._id)">
+                <i class="fa fa-check"></i>
+              </button>
+            </td>
+            <td>{{user.email}}</td>
+            <td>{{user.phone}}</td>
+            <td>
+              <span class="text-success" *ngIf="user.confirmedAt">
+                YES
+              </span>
+              <span class="text-danger" *ngIf="!user.confirmedAt">
+                NO
+              </span>
+            </td>
+            <td>
+              <a [routerLink]="['/users/'+user._id]" class="btn btn-sm btn-outline-info">
+                <i class="fa fa-info"></i>
+              </a>
+              <button [disabled]="!isSuperuser" type="button" class="btn btn-sm btn-outline-danger"
+                      (click)="removeUser(user._id)">
+                <i class="fa fa-trash-o"></i>
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

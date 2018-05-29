@@ -46,6 +46,11 @@ import {AngularFontAwesomeModule} from 'angular-font-awesome';
 import { ProcessedShipmentsComponent } from './components/processed-shipments/processed-shipments.component';
 import {PasswordChangeComponent} from './components/password-change/password-change.component';
 import { PasswordChangedComponent } from './components/password-changed/password-changed.component';
+import {UserProfileComponent} from './components/user-profile/user-profile.component';
+import {UsersComponent} from './components/users/users.component';
+import {AdminGuard} from './guards/admin.guard';
+import {UsersService} from './modules/data-services/services/usersService';
+import {UserRolesService} from './modules/data-services/services/userRolesService';
 
 @NgModule({
   declarations: [
@@ -69,7 +74,10 @@ import { PasswordChangedComponent } from './components/password-changed/password
     EmailConfirmationComponent,
     ProcessedShipmentsComponent,
     PasswordChangeComponent,
-    PasswordChangedComponent
+    PasswordChangedComponent,
+
+    UserProfileComponent,
+    UsersComponent
   ],
   imports: [
     BrowserModule,
@@ -101,7 +109,10 @@ import { PasswordChangedComponent } from './components/password-changed/password
     AuthorizedGuard,
     UnauthorizedGuard,
     ConfirmedAccountGuard,
-    UnconfirmedAccountGuard
+    UnconfirmedAccountGuard,
+    AdminGuard,
+    UsersService,
+    UserRolesService
   ],
   bootstrap: [AppComponent]
 })

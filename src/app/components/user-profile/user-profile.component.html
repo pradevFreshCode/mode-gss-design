@@ -1,0 +1,172 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div *ngIf="!!model" class="card-group">
+        <div class="card p-2">
+          <div class="card-body">
+            <form (ngSubmit)="onSubmit()" #userForm="ngForm">
+              <div class="form-group row">
+                <div class="col-12">
+                  <h3 *ngIf="model._id">Profile</h3>
+                  <h3 *ngIf="!model._id">New user</h3>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-12 col-md-3 col-form-label">Phone</label>
+                <div class="col-sm-12 col-md-9">
+                  <input type="text" id="parentPhone" class="form-control"
+                         #phoneInput="ngModel"
+                         [disabled]="!isSuperuser"
+                         [textMask]="{mask: phoneMask}" name="parentPhone"
+                         [(ngModel)]="model.phone" required
+                         placeholder="Phone">
+                  <div *ngIf="phoneInput.errors?.required" class="text-danger">
+                    <small>Enter phone</small>
+                  </div>
+                  <div *ngIf="phoneInput.errors?.pattern" class="text-danger">
+                    <small>Phone must contain only digits</small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-sm-12 col-md-3 col-form-label">First Name</label>
+                <div class="col-sm-12 col-md-9">
+                  <input type="text" id="firstName" class="form-control"
+                         [disabled]="!isSuperuser"
+                         #nameInput="ngModel" name="firstName" placeholder="First Name"
+                         [(ngModel)]="model.firstName" required>
+                  <div *ngIf="nameInput.errors?.required" class="text-danger">
+                    <small>Enter first name</small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-sm-12 col-md-3 col-form-label">Last Name</label>
+                <div class="col-sm-12 col-md-9">
+                  <input type="text" id="lastName" class="form-control"
+                         [disabled]="!isSuperuser"
+                         #lastNameInput="ngModel" name="lastName" placeholder="Last Name"
+                         [(ngModel)]="model.lastName" required>
+                  <div *ngIf="lastNameInput.errors?.required" class="text-danger">
+                    <small>Enter last name</small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-sm-12 col-md-3 col-form-label">Login</label>
+                <div class="col-sm-12 col-md-9">
+                  <input type="text" id="loginInput"
+                         class="form-control"
+                         [disabled]="model._id"
+                         #loginInput="ngModel"
+                         name="loginInput"
+                         placeholder="Login"
+                         [(ngModel)]="model.login" required>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-sm-12 col-md-3 col-form-label">Email</label>
+                <div class="col-sm-12 col-md-9">
+                  <input type="text" id="emailInput" class="form-control"
+                         #emailInput="ngModel"
+                         name="emailInput"
+                         [disabled]="model._id"
+                         placeholder="Actual email"
+                         [(ngModel)]="model.email" required
+                         [pattern]="emailMask">
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-sm-12 col-md-3 col-form-label">Role</label>
+                <div class="col-sm-12 col-md-9">
+                  <select #roleSelectInput="ngModel" class="form-control" id="roleId" name="roleId"
+                          [disabled]="!isSuperuser"
+                          [(ngModel)]="model.roleId" required>
+                    <option *ngFor="let role of availableRoles" [value]="role._id">{{role.name}}</option>
+                  </select>
+                  <div *ngIf="roleSelectInput.errors?.required" class="text-danger">
+                    <small>Select a role</small>
+                  </div>
+                </div>
+              </div>
+
+              <ng-container *ngIf="!model._id">
+                <div class="form-group row">
+                  <label class="col-sm-12 col-md-3 col-form-label">Password</label>
+                  <div class="col-sm-12 col-md-9">
+                    <div class="input-group">
+                      <input [type]="getPasswordInputType()" name="password"
+                             #passwordControl="ngModel"
+                             [(ngModel)]="model.password" required class="form-control"
+                             [pattern]="passwordPattern"
+                             placeholder="Password">
+                      <div class="input-group-append cursor-pointer"
+                           (click)="isPasswordVisible = !isPasswordVisible">
+                        <span class="input-group-text">
+                          <fa *ngIf="isPasswordVisible" name="eye" [fixed]="true"></fa>
+                          <fa *ngIf="!isPasswordVisible" name="eye-slash" [fixed]="true"></fa>
+                        </span>
+                      </div>
+                    </div>
+                    <div *ngIf="passwordControl.errors?.required" class="text-danger">
+                      <small>Enter new password</small>
+                    </div>
+                    <div *ngIf="passwordControl.errors?.pattern" class="text-danger">
+                      <small>{{passwordValidationMessage}}</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-12 col-md-3 col-form-label">Password conf.</label>
+                  <div class="col-sm-12 col-md-9">
+                    <div class="input-group">
+                      <input [type]="getPasswordInputType()" name="password"
+                             [(ngModel)]="passwordConfirmation" required
+                             class="form-control" placeholder="Password confirmation">
+                      <div class="input-group-append cursor-pointer"
+                           (click)="isPasswordVisible = !isPasswordVisible">
+                        <span class="input-group-text">
+                          <fa *ngIf="isPasswordVisible" name="eye" [fixed]="true"></fa>
+                          <fa *ngIf="!isPasswordVisible" name="eye-slash" [fixed]="true"></fa>
+                        </span>
+                      </div>
+                    </div>
+                    <div *ngIf="passwordConfirmation != model.password"
+                         class="text-danger">
+                      <small>Passwords doesn't match</small>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+
+              <ng-container *ngIf="isSuperuser">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <button type="submit" class="btn btn-info"
+                            [disabled]="isLoading || userForm.invalid || (!model._id && (passwordConfirmation != model.password))"
+                            [ngClass]="{'btn-primary':!isLoading,'btn-secondary':isLoading}">
+                      Save changes
+                      <i class="fa fa-spin fa-cog" *ngIf="isLoading"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div *ngIf="error" class="error-message">
+                      {{error}}
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {UserModel} from '../../modules/data-services/models/User.model';
 import {SessionService} from '../../services/session.service';
+import {AccessService} from '../../services/access.service';
 
 @Component({
   selector: 'app-main-layout',
@@ -11,9 +12,13 @@ export class MainLayoutComponent implements OnInit {
 
   public currentUser: UserModel = null;
 
-  constructor(private _sessionService: SessionService) {
+  isSuperuser: boolean = false;
+
+  constructor(private _sessionService: SessionService,
+              private _accessService: AccessService) {
     this._sessionService.CurrentUserReplaySubject.subscribe(user => {
       this.currentUser = user;
+      this.isSuperuser = this._accessService.IsAdmin();
     });
   }
 
