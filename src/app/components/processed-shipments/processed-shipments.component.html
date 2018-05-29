@@ -50,7 +50,7 @@
           </div>
           <div class="col-md-4">
             <h5>Shipment details</h5>
-            <p *ngIf="shipment.Message"><b>Message</b>: {{shipment.Message}}</p>
+            <p *ngIf="shipment.Message && !shipment.CarrierName"><b>Message</b>: {{shipment.Message}}</p>
             <p *ngIf="shipment.HasTrackPaks"><b>Has Track Paks</b>: <b>Yes</b></p>
             <p *ngIf="shipment.CarrierName"><b>Carrier Name</b>: {{shipment.CarrierName}}</p>
 
