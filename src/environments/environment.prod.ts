@@ -8,7 +8,6 @@ export const environment = {
   stripe_api_url: 'https://api.stripe.com/v1/charges',
   return_charge: 5.5,
 
-  //ToDo : replace with production api url, if exist
-  apiUrl: 'http://localhost',
+  apiUrl: 'http://192.168.1.163:3001/api',
   JWTTokenLocalStorageKey: 'jwt_token'
 };
