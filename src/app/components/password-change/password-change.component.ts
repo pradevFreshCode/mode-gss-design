@@ -35,7 +35,9 @@ export class PasswordChangeComponent implements OnInit {
       this.currentUser = user;
       if (this.currentUser && this.currentUser.login) {
         this.login = this.currentUser.login;
-        this.sendPasswordChangeEmail();
+        if (!this.sendingResult) {
+          this.sendPasswordChangeEmail();
+        }
       }
     });
   }
