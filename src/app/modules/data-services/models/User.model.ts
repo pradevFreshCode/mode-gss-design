@@ -27,8 +27,8 @@ export class UserModel extends BaseSerializableModel {
       json['password'],
       json['smallAvatarUrl'],
       UtilsDateTime.GetMomentFromString(json['confirmedAt']),
-      json['role']['_id'] ? json['role']['_id'] : json['role'],
-      UserRoleModel.FromJson(json['role'])
+      (json['role'] && json['role']['_id']) ? json['role']['_id'] : json['role'],
+      (json['role'] && json['role']['_id']) ? UserRoleModel.FromJson(json['role']) : null
     );
   }
 

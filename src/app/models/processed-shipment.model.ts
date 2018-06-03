@@ -56,6 +56,6 @@ export class ProcessedShipmentModel extends ShipmentsRequest {
     this.HasSaturdayDeliveryLabel = json['HasSaturdayDeliveryLabel'];
     this.created = json['created'] ? moment(json['created']) : null;
     this.createdAtString = this.created ? this.created.format(UtilsDateTime.DateTimeDisplayFormat) : null;
-    this.user = json['user'] ? json['user']['_id'] ? UserModel.FromJson(json['user']) : json['user'] : null;
+    this.user = json['user'] ? (json['user']['_id'] ? UserModel.FromJson(json['user']) : json['user']) : null;
   }
 }

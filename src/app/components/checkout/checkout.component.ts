@@ -133,6 +133,7 @@ export class CheckoutComponent implements OnInit {
         },
         err => {
           this.shipmentErrorResponse = err;
+          console.log(err);
           alert('Unknown error occurred. Please try later again.');
           this.checkoutDone.emit(null);
         }
