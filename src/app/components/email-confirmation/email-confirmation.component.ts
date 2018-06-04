@@ -25,7 +25,9 @@ export class EmailConfirmationComponent implements OnInit {
   ngOnInit() {
     this._sessionService.CurrentUserReplaySubject.subscribe(user => {
       this.currentUser = user;
-      this.sendConfirmationEmail();
+      if (!this.sendingResult) {
+        this.sendConfirmationEmail();
+      }
     });
   }
 
