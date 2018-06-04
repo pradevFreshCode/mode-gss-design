@@ -139,7 +139,7 @@ export class GssFormComponent implements OnInit {
   onCheckoutDone(checkoutResult: any) {
     this.isProcessing = false;
     if (!checkoutResult) {
-      alert('error occurred.');
+      // alert('error occurred.');
     } else {
       this.pickupRequest = new PickupRequestModel(
         checkoutResult.Consignments[0].ConsignmentId,
