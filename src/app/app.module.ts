@@ -47,6 +47,7 @@ import { ProcessedShipmentsComponent } from './components/processed-shipments/pr
 import {PasswordChangeComponent} from './components/password-change/password-change.component';
 import { PasswordChangedComponent } from './components/password-changed/password-changed.component';
 import { BookingPickupDoneComponent } from './components/booking-pickup-done/booking-pickup-done.component';
+import {LocalStorageExtendedService} from './services/localStorageExtendedService';
 
 @NgModule({
   declarations: [
@@ -85,10 +86,6 @@ import { BookingPickupDoneComponent } from './components/booking-pickup-done/boo
     }),
     NgxStripeModule.forRoot(environment.stripe_pk_key),
     BrowserAnimationsModule,
-    LocalStorageModule.withConfig({
-      prefix: 'my-app',
-      storageType: 'localStorage'
-    }),
     DataServicesModule.forRoot(),
     TextMaskModule,
     AngularFontAwesomeModule
@@ -103,7 +100,8 @@ import { BookingPickupDoneComponent } from './components/booking-pickup-done/boo
     AuthorizedGuard,
     UnauthorizedGuard,
     ConfirmedAccountGuard,
-    UnconfirmedAccountGuard
+    UnconfirmedAccountGuard,
+    LocalStorageExtendedService
   ],
   bootstrap: [AppComponent]
 })

@@ -1,9 +1,9 @@
-import {LocalStorageService} from 'angular-2-local-storage';
 import {IService} from '../../../interfaces/IService';
 import {map} from 'rxjs/operators';
 import {BaseSerializableModel} from '../models/BaseSerializableModel';
 import {Observable} from 'rxjs/Observable';
 import * as _ from 'lodash';
+import {LocalStorageExtendedService} from '../../../services/localStorageExtendedService';
 
 type FunctionWithSingleParam = (n: any) => any;
 
@@ -14,7 +14,7 @@ export abstract class BaseLocalStorageService<T extends BaseSerializableModel> i
 
   public abstract getLocalStorageCollectionName(): string;
 
-  constructor(protected localStorage: LocalStorageService) {
+  constructor(protected localStorage: LocalStorageExtendedService) {
   }
 
   public getServiceName(): string {

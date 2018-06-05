@@ -31,19 +31,17 @@
                           (cardDone)="onCardDone($event)"></app-payment-form>
       </div>
     </form>
-    <form #checkoutForm="ngForm">
-      <div [@slideInOut] *ngIf="wizardStep == 4">
-        <app-checkout #checkout [ratesRequest]="ratesRequest" [availToGo]="availToGo"
-                      (checkoutDone)="onCheckoutDone($event)"></app-checkout>
-      </div>
-    </form>
-    <form #pickupForm="ngForm">
-      <div [@slideInOut] *ngIf="wizardStep == 5">
-        <app-pickup-form [pickupRequestModel]="pickupRequest"
-                         [ratesRequest]="ratesRequest"
-                         (pickupProcessed)="pickupProcessed($event)"></app-pickup-form>
-      </div>
-    </form>
+
+    <div [@slideInOut] *ngIf="wizardStep == 4">
+      <app-checkout #checkout [ratesRequest]="ratesRequest" [availToGo]="availToGo"
+                    (checkoutDone)="onCheckoutDone($event)"></app-checkout>
+    </div>
+
+    <div [@slideInOut] *ngIf="wizardStep == 5">
+      <app-pickup-form [pickupRequestModel]="pickupRequest"
+                       [ratesRequest]="ratesRequest"
+                       (pickupProcessed)="pickupProcessed($event)"></app-pickup-form>
+    </div>
     <div [@slideInOut] *ngIf="wizardStep == 6">
       <app-booking-pickup-done (goToStartClicked)="goToStartClicked()"></app-booking-pickup-done>
     </div>
@@ -66,9 +64,9 @@
             (click)="processPayment()">
       PAY
     </button>
-    <button *ngIf="wizardStep === 4" type="button" class="btn btn-primary btn-lg" (click)="processCheckout(false)">
-      PROCESS CHECKOUT
-    </button>
+    <!--<button *ngIf="wizardStep === 4" type="button" class="btn btn-primary btn-lg" (click)="processCheckout(false)">-->
+      <!--PROCESS CHECKOUT-->
+    <!--</button>-->
     <!--<button *ngIf="wizardStep === 4" type="button" class="btn btn-primary btn-lg" (click)="processCheckout(true)">-->
     <!--EMAIL TICKET-->
     <!--</button>-->

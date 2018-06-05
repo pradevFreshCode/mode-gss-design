@@ -131,10 +131,10 @@ export class GssFormComponent implements OnInit {
     this.paymentComponent.processPayment();
   }
 
-  processCheckout(isEmail: boolean = true) {
-    this.isProcessing = true;
-    this.checkoutComponent.processCheckout(isEmail);
-  }
+  // processCheckout(isEmail: boolean = true) {
+  //   this.isProcessing = true;
+  //   this.checkoutComponent.processCheckout(isEmail);
+  // }
 
   onCheckoutDone(checkoutResult: any) {
     this.isProcessing = false;

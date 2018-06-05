@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {SessionService} from '../../services/session.service';
 
 @Component({
@@ -7,7 +7,6 @@ import {SessionService} from '../../services/session.service';
   templateUrl: 'login.component.html'
 })
 export class LoginComponent implements OnInit, AfterViewInit {
-
   model: any;
 
   error: string;
@@ -16,7 +15,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
   @ViewChild('loginInput') loginInput: ElementRef;
 
   constructor(private sessionService: SessionService,
-              private router: Router) {
+              private router: Router,
+              private route: ActivatedRoute) {
     this.model = {
       login: '',
       password: ''
@@ -24,6 +24,12 @@ export class LoginComponent implements OnInit, AfterViewInit {
     if (!!this.sessionService.Token) {
       this.router.navigate(['/']);
     }
+
+    this.route.queryParams.subscribe(queryParams => {
+      if (queryParams['closeAfterSignIn']) {
+        this.sessionService.CloseTabAfterSighnIn = queryParams['closeAfterSignIn'];
+      }
+    });
   }
 
   private isPasswordVisible: boolean = false;

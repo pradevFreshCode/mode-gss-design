@@ -1,16 +1,16 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams, HttpResponse} from '@angular/common/http';
-import {LocalStorageService} from 'angular-2-local-storage';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import {AppSettings} from '../../../../AppSettings';
 import {ErrorObservable} from 'rxjs/observable/ErrorObservable';
+import {LocalStorageExtendedService} from '../../../services/localStorageExtendedService';
 
 // ToDo : will be used, when backend provided
 @Injectable()
 export class ApiClientService {
   constructor(private http: HttpClient,
-              protected localStorage: LocalStorageService) {
+              protected localStorage: LocalStorageExtendedService) {
 
   }
 

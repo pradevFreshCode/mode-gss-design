@@ -1,5 +1,86 @@
-<div class="col-md-12">
-  <h4>
-    CHECKOUT WITH TICKET
-  </h4>
-</div>
+<form #checkoutForm="ngForm">
+  <div class="row">
+    <div class="col-12 text-center">
+      <h3>
+        CHECKOUT
+      </h3>
+    </div>
+  </div>
+
+  <div class="form-group row" *ngIf="!currentUser">
+    <div class="col-12">
+      <div class="alert alert-info" role="alert">
+        <p>
+          Only authorized users can perform booking pickup.
+        </p>
+        <p>
+          Please, <a [routerLink]="['/auth/login']" [queryParams]="{closeAfterSignIn: true}" target="_blank">SIGN IN</a>,
+          to store your history, and be able to finish
+          pickup process.
+        </p>
+        <p>
+          Pay attention! You don't need to close this page. "Pickup" button will be enabled even after
+          registration/login in another tab
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="isShipmentResponseWaiting">
+    <div class="col-12 center">
+      <h5>
+        We already process your shipment. You can continue right after processing ends.
+      </h5>
+      <h3>
+        <fa name="spinner"
+            animation="spin"
+            [fixed]="true"></fa>
+      </h3>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 center">
+      <ng-container *ngIf="currentUser && shipmentResponse && !shipmentResponseError">
+        <button type="button" class="btn btn-primary btn-lg" (click)="finishCheckoutClicked()">
+          FINISH CHECKOUT
+        </button>
+
+        <button *ngIf="blobsToSave.length > 0 || pdfFormattingProcessing"
+                [disabled]="pdfFormattingProcessing"
+                type="button"
+                class="btn btn-primary btn-lg"
+                (click)="saveAllBlobs()">
+          SAVE TICKET
+          <fa *ngIf="pdfFormattingProcessing"
+              name="spinner"
+              animation="spin"
+              [fixed]="true"></fa>
+        </button>
+      </ng-container>
+
+      <a type="button" *ngIf="!currentUser"
+         class="btn btn-primary"
+         [routerLink]="['/auth/login']"
+         target="_blank"
+         [queryParams]="{closeAfterSignIn: true}">
+        Sign In
+      </a>
+
+      <button type="button"
+              *ngIf="currentUser && shipmentResponse && !!shipmentResponseError"
+              class="btn btn-primary btn-lg"
+              (click)="processCheckout()">
+        TRY ONE MORE TIME
+      </button>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="shipmentResponseError">
+    <div class="col-12">
+      <div class="text-danger text-center">
+        {{shipmentResponseError}}
+      </div>
+    </div>
+  </div>
+</form>

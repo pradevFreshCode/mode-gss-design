@@ -9,6 +9,10 @@ import {Address} from '../../address';
 import {Package} from '../../models/package';
 import {ShipmentsRequest} from '../../models/shipments-request';
 import {PaymentProcessService} from '../../modules/data-services/services/payment-process.service';
+import {SessionService} from '../../services/session.service';
+import {UserModel} from '../../modules/data-services/models/User.model';
+import {ProcessedShipmentModel} from '../../models/processed-shipment.model';
+import {BlobWithNameModel} from '../../models/blob-with-name.model';
 
 @Component({
   selector: 'app-checkout',
@@ -20,18 +24,39 @@ export class CheckoutComponent implements OnInit {
   @Input() availToGo: Available;
   @Output() checkoutDone = new EventEmitter<any>();
 
-  shipmentResponse: any;
+  shipmentResponse: ProcessedShipmentModel;
   shipmentErrorResponse: any;
+  currentUser: UserModel = null;
+  pdfFormattingProcessing: boolean = false;
 
-  constructor(private gssRequestService: GssRequestService, private _paymentProcessService: PaymentProcessService) {
+  blobsToSave: BlobWithNameModel[] = [];
+  isShipmentResponseWaiting: boolean = false;
+  shipmentResponseError: string;
+
+  constructor(private gssRequestService: GssRequestService,
+              private _paymentProcessService: PaymentProcessService,
+              private _sessionService: SessionService) {
   }
 
   ngOnInit() {
+    this._sessionService.CurrentUserReplaySubject.subscribe(currentUser => {
+      this.currentUser = currentUser;
+      this.shipmentResponseError = null;
+      if (!!this.currentUser) {
+        this.processCheckout();
+      }
+    });
   }
 
-  public processCheckout(isEmail: boolean) {
+  finishCheckoutClicked() {
+    this.checkoutDone.emit(this.shipmentResponse);
+  }
+
+  public processCheckout() {
     // this.isLoading = true;
     this.shipmentErrorResponse = null;
+    this.shipmentResponse = null;
+    this.shipmentResponseError = null;
 
     // console.log('index: ' + i + ', isEmail: ' + isEmail);
     const req = new ShipmentsRequest();
@@ -83,6 +108,9 @@ export class CheckoutComponent implements OnInit {
     req.ShipType = 1;
     req.DisableFreightForwardEmails = this.availToGo.IsEmail ? false : true;
     req.Cost = this.availToGo.Cost;
+
+    this.blobsToSave = [];
+    this.isShipmentResponseWaiting = true;
     this._paymentProcessService.postShipments(req)
       .subscribe(
         res => {
@@ -94,49 +122,49 @@ export class CheckoutComponent implements OnInit {
             this.shipmentResponse.Errors.forEach(item => {
               errMsg += JSON.stringify(item) + '\n';
             });
-            alert(errMsg);
-            this.checkoutDone.emit(null);
+            this.shipmentResponseError = errMsg;
           } else {
             // download labels
 
             // if data returned without errors, return response object
-
-              this.shipmentResponse.Consignments.forEach(item => {
-                this.gssRequestService.downloadLabel(item.Connote)
-                  .subscribe(
-                    response => {
-                      // console.log(response);
-                      const binaryPdf = atob(response[0]);
-                      const length = binaryPdf.length;
-                      const arrayBuf = new ArrayBuffer(length);
-                      const uintArray = new Uint8Array(arrayBuf);
-                      for (let i = 0; i < length; i++) {
-                        uintArray[i] = binaryPdf.charCodeAt(i);
-                      }
-                      const blob = new Blob([uintArray], {type: 'application/pdf'});
-                      saveAs(blob, item.Connote + '.pdf');
-                      this.checkoutDone.emit(this.shipmentResponse);
-                    },
-                    error => {
-                      console.log('error occured when label downloaded', error);
-                      this.checkoutDone.emit(false);
+            this.pdfFormattingProcessing = true;
+            this.shipmentResponse.Consignments.forEach(item => {
+              this.gssRequestService.downloadLabel(item.Connote)
+                .subscribe(
+                  response => {
+                    // console.log(response);
+                    const binaryPdf = atob(response[0]);
+                    const length = binaryPdf.length;
+                    const arrayBuf = new ArrayBuffer(length);
+                    const uintArray = new Uint8Array(arrayBuf);
+                    for (let i = 0; i < length; i++) {
+                      uintArray[i] = binaryPdf.charCodeAt(i);
                     }
-                  );
-              });
-
-            if (this.shipmentResponse.Consignments.length > 0) {
-              this.checkoutDone.emit(this.shipmentResponse);
-            } else {
-              this.checkoutDone.emit(null);
-            }
+                    const blob = new Blob([uintArray], {type: 'application/pdf'});
+                    this.blobsToSave.push(new BlobWithNameModel(item.Connote + '.pdf', blob));
+                    this.pdfFormattingProcessing = false;
+                  },
+                  error => {
+                    console.log('error occured when label downloaded', error);
+                  }
+                );
+            });
           }
+
+          this.isShipmentResponseWaiting = false;
         },
         err => {
           this.shipmentErrorResponse = err;
+          this.shipmentResponseError = err;
+          this.isShipmentResponseWaiting = false;
           console.log(err);
-          alert('Unknown error occurred. Please try later again.');
-          this.checkoutDone.emit(null);
         }
       );
+  }
+
+  saveAllBlobs() {
+    this.blobsToSave.forEach(bs => {
+      saveAs(bs.Blob, bs.Name);
+    });
   }
 }

@@ -2,7 +2,6 @@ import {EventEmitter, Injectable} from '@angular/core';
 import {ISessionService} from '../interfaces/ISessionService';
 import {UserModel} from '../modules/data-services/models/User.model';
 import {ApiClientService} from '../modules/data-services/services/api-client.service';
-import {LocalStorageService} from 'angular-2-local-storage';
 import {catchError} from 'rxjs/operators';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {Observable} from 'rxjs/Observable';
@@ -10,6 +9,7 @@ import {Subject} from 'rxjs/Subject';
 import {RegistrationModel} from '../models/registration.model';
 import {ErrorObservable} from 'rxjs/observable/ErrorObservable';
 import {environment} from '../../environments/environment';
+import {LocalStorageExtendedService} from './localStorageExtendedService';
 
 @Injectable()
 export class SessionService implements ISessionService {
@@ -17,6 +17,7 @@ export class SessionService implements ISessionService {
   private _currentUserReplaySubject = new ReplaySubject<UserModel>(1);
   private _currentUser: UserModel = null;
   private _tokenRefreshedEvent = new EventEmitter<string>();
+  private _closeTabAfterSignIn: boolean;
 
   get Token(): string {
     return this._token;
@@ -34,12 +35,22 @@ export class SessionService implements ISessionService {
     return this._currentUser;
   }
 
-  constructor(private _apiService: ApiClientService, private _localStorageService: LocalStorageService) {
+  set CloseTabAfterSighnIn(value) {
+    this._closeTabAfterSignIn = value;
+  }
+
+  constructor(private _apiService: ApiClientService, private _localStorageService: LocalStorageExtendedService) {
     this._currentUserReplaySubject.subscribe(user => {
+      console.log('_currentUserReplaySubject called');
       this._currentUser = user;
     });
 
-    this.reinitCurrentUser().subscribe(() => {
+    this.reinitCurrentUser().subscribe();
+
+    LocalStorageExtendedService.message$.subscribe(change => {
+      if (typeof change['current_user_changed'] !== 'undefined') {
+        this._currentUserReplaySubject.next(change['current_user_changed']);
+      }
     });
   }
 
@@ -73,6 +84,10 @@ export class SessionService implements ISessionService {
           const isTokenProcessed = this.processTokenResponse(resp);
           if (isTokenProcessed) {
             this.reinitCurrentUser().subscribe(userModel => {
+              if (this._closeTabAfterSignIn) {
+                window.close();
+              }
+
               observer.next(userModel);
               observer.complete();
             });
@@ -96,6 +111,10 @@ export class SessionService implements ISessionService {
           const isTokenProcessed = this.processTokenResponse(resp);
           if (isTokenProcessed) {
             this.reinitCurrentUser().subscribe(userModel => {
+              if (this._closeTabAfterSignIn) {
+                window.close();
+              }
+
               observer.next(userModel);
               observer.complete();
             });
@@ -134,6 +153,7 @@ export class SessionService implements ISessionService {
     this._localStorageService.remove(environment.JWTTokenLocalStorageKey);
     this._token = null;
     this._currentUserReplaySubject.next(null);
+    this._localStorageService.broadcastMessage({current_user_changed: null});
   }
 
   public reinitCurrentUser(): Observable<UserModel> {
@@ -151,6 +171,7 @@ export class SessionService implements ISessionService {
           const data = response.body['data'];
           const parsedUser = UserModel.FromJson(data.user);
           this._currentUserReplaySubject.next(parsedUser);
+          this._localStorageService.broadcastMessage({current_user_changed: parsedUser});
           observer.next(parsedUser);
           observer.complete();
         }, err => {

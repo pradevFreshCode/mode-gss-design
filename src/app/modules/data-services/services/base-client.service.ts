@@ -1,11 +1,11 @@
 import {HttpClient} from '@angular/common/http';
-import {LocalStorageService} from 'angular-2-local-storage';
 import {IService} from '../../../interfaces/IService';
 import {ApiClientService} from './api-client.service';
 import {map} from 'rxjs/operators';
 import {BaseSerializableModel} from '../models/BaseSerializableModel';
 import {Observable} from 'rxjs/Observable';
 import {IRestAPICompatible} from '../../../interfaces/IRestAPICompatible';
+import {LocalStorageExtendedService} from '../../../services/localStorageExtendedService';
 
 export abstract class BaseClientService<T extends IRestAPICompatible> extends ApiClientService implements IService<T> {
   protected apiBasePath: string;
@@ -15,7 +15,7 @@ export abstract class BaseClientService<T extends IRestAPICompatible> extends Ap
   public abstract toJson(entity: T): any;
 
   constructor(http: HttpClient,
-              localStorage: LocalStorageService) {
+              localStorage: LocalStorageExtendedService) {
     super(http, localStorage);
   }
 

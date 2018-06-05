@@ -3,6 +3,8 @@ import {RatesRequest} from '../../models/rates-request';
 import {PickupRequestModel} from '../../models/pickup-request.model';
 import {GssRequestService} from '../../services/gss-request.service';
 import {PaymentProcessService} from '../../modules/data-services/services/payment-process.service';
+import {SessionService} from '../../services/session.service';
+import {UserModel} from '../../modules/data-services/models/User.model';
 
 @Component({
   selector: 'app-pickup-form',
@@ -21,7 +23,8 @@ export class PickupFormComponent implements OnInit {
   isPickupProcessing: boolean = false;
   pickupProcessingError: string;
 
-  constructor(private _gssRequestService: GssRequestService, private _paymentProcessSewrvice: PaymentProcessService) {
+  constructor(private _gssRequestService: GssRequestService,
+              private _paymentProcessService: PaymentProcessService) {
     for (let i = 8; i <= 19; i++) {
       this.timeList.push(i);
     }
@@ -29,13 +32,13 @@ export class PickupFormComponent implements OnInit {
 
   ngOnInit() {
     // uncomment to test using fake data
-    // this.pickupRequestModel = new PickupRequestModel(6215943, 'AIG00012137', 4180, 10, '');
+    this.pickupRequestModel = new PickupRequestModel(6215943, 'AIG00012137', 4180, 10, '');
   }
 
   processPickup() {
     this.isPickupProcessing = true;
     this.pickupProcessingError = null;
-    this._paymentProcessSewrvice.pickupShipment(this.pickupRequestModel).subscribe(resp => {
+    this._paymentProcessService.pickupShipment(this.pickupRequestModel).subscribe(resp => {
         this.isPickupProcessing = false;
         this.pickupProcessed.emit(resp);
         console.log('resp', resp);
