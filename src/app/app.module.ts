@@ -46,6 +46,7 @@ import {AngularFontAwesomeModule} from 'angular-font-awesome';
 import { ProcessedShipmentsComponent } from './components/processed-shipments/processed-shipments.component';
 import {PasswordChangeComponent} from './components/password-change/password-change.component';
 import { PasswordChangedComponent } from './components/password-changed/password-changed.component';
+import { BookingPickupDoneComponent } from './components/booking-pickup-done/booking-pickup-done.component';
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import { PasswordChangedComponent } from './components/password-changed/password
     EmailConfirmationComponent,
     ProcessedShipmentsComponent,
     PasswordChangeComponent,
-    PasswordChangedComponent
+    PasswordChangedComponent,
+    BookingPickupDoneComponent
   ],
   imports: [
     BrowserModule,

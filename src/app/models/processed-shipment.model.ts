@@ -28,6 +28,8 @@ export class ProcessedShipmentModel extends ShipmentsRequest {
   created: moment.Moment = null;
   createdAtString: string = null;
 
+  isPickupRequested: boolean = false;
+
   user: string|UserModel = null;
 
   public static FromJson(json): ProcessedShipmentModel {
@@ -57,5 +59,6 @@ export class ProcessedShipmentModel extends ShipmentsRequest {
     this.created = json['created'] ? moment(json['created']) : null;
     this.createdAtString = this.created ? this.created.format(UtilsDateTime.DateTimeDisplayFormat) : null;
     this.user = json['user'] ? (json['user']['_id'] ? UserModel.FromJson(json['user']) : json['user']) : null;
+    this.isPickupRequested = !!json['IsPickupRequested'];
   }
 }

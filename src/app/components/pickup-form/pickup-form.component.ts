@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {RatesRequest} from '../../models/rates-request';
 import {PickupRequestModel} from '../../models/pickup-request.model';
 import {GssRequestService} from '../../services/gss-request.service';
@@ -13,9 +13,13 @@ export class PickupFormComponent implements OnInit {
   @Input() ratesRequest: RatesRequest;
   @Input() pickupRequestModel: PickupRequestModel;
 
+  @Output() pickupProcessed = new EventEmitter<any>();
+
   timeList: number[] = [];
 
-  isPackageReady = false;
+  isPackageReady: boolean = false;
+  isPickupProcessing: boolean = false;
+  pickupProcessingError: string;
 
   constructor(private _gssRequestService: GssRequestService, private _paymentProcessSewrvice: PaymentProcessService) {
     for (let i = 8; i <= 19; i++) {
@@ -29,12 +33,16 @@ export class PickupFormComponent implements OnInit {
   }
 
   processPickup() {
+    this.isPickupProcessing = true;
+    this.pickupProcessingError = null;
     this._paymentProcessSewrvice.pickupShipment(this.pickupRequestModel).subscribe(resp => {
-        console.log('shipment processed');
+        this.isPickupProcessing = false;
+        this.pickupProcessed.emit(resp);
         console.log('resp', resp);
       }, err => {
-        alert(err);
         console.log('error occured when pick up shipment', err);
+        this.pickupProcessingError = err;
+        this.isPickupProcessing = false;
       }
     );
   }

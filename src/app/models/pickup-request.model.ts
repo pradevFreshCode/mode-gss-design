@@ -3,5 +3,6 @@ export class PickupRequestModel {
                public ConnoteConsignmentNumber: string = null,
                public SiteId: number = null,
                public CloseTime: number = 9,
-               public Message: string = '') {}
+               public Message: string = '',
+               public StoredProcessingObjectId: string = null) {}
 }

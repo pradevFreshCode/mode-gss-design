@@ -60,6 +60,7 @@
               <!--<p *ngIf="consignment.Cost"><b>Cost</b>: {{consignment.Cost}}</p>-->
               <p *ngIf="consignment.IsSaturdayDelivery"><b>Is Saturday Delivery</b>: <b>Yes</b></p>
             </ng-container>
+            <h6 *ngIf="shipment.isPickupRequested"><b>Is pickup requested</b>: <b>Yes</b></h6>
           </div>
         </div>
 

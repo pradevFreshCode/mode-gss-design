@@ -39,14 +39,19 @@
     </form>
     <form #pickupForm="ngForm">
       <div [@slideInOut] *ngIf="wizardStep == 5">
-        <app-pickup-form [pickupRequestModel]="pickupRequest" [ratesRequest]="ratesRequest"></app-pickup-form>
+        <app-pickup-form [pickupRequestModel]="pickupRequest"
+                         [ratesRequest]="ratesRequest"
+                         (pickupProcessed)="pickupProcessed($event)"></app-pickup-form>
       </div>
     </form>
+    <div [@slideInOut] *ngIf="wizardStep == 6">
+      <app-booking-pickup-done (goToStartClicked)="goToStartClicked()"></app-booking-pickup-done>
+    </div>
   </div>
 </div>
 <footer class="footer">
   <div class="container center" [hidden]="isProcessing">
-    <button *ngIf="wizardStep !== 0 && wizardStep !== 4 && wizardStep !== 5" type="button" style="margin-right: 20px;"
+    <button *ngIf="[0,4,5,6].indexOf(wizardStep) < 0" type="button" style="margin-right: 20px;"
             class="btn btn-light btn-sm" (click)="clickBack()">BACK
     </button>
     <button *ngIf="wizardStep === 0" type="button" class="btn btn-primary btn-lg" [disabled]="senderForm.invalid"

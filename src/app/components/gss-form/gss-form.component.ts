@@ -41,7 +41,7 @@ export class GssFormComponent implements OnInit {
 
   loaderpath = environment.assets_dir + 'ajax-loader.gif';
 
-  steps = ['sender details', 'recipient details', 'package size', 'payment', 'checkout', 'book pickup'];
+  steps = ['sender details', 'recipient details', 'package size', 'payment', 'checkout', 'book pickup', 'pickup success'];
   wizardStep: number;
 
   ratesRequest: RatesRequest;
@@ -144,9 +144,18 @@ export class GssFormComponent implements OnInit {
       this.pickupRequest = new PickupRequestModel(
         checkoutResult.Consignments[0].ConsignmentId,
         checkoutResult.Consignments[0].Connote,
-        checkoutResult.SiteId
+        checkoutResult.SiteId,
+        checkoutResult._id
       );
       this.clickNext();
     }
+  }
+
+  goToStartClicked() {
+    this.wizardStep = 0;
+  }
+
+  pickupProcessed(processingResult: any) {
+    this.wizardStep = 6;
   }
 }
