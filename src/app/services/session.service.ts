@@ -51,6 +51,9 @@ export class SessionService implements ISessionService {
       if (typeof change['current_user_changed'] !== 'undefined') {
         this._currentUserReplaySubject.next(change['current_user_changed']);
       }
+      if (typeof change['jwt_token_changed'] !== 'undefined') {
+        this._token = change['jwt_token_changed'];
+      }
     });
   }
 
@@ -154,6 +157,7 @@ export class SessionService implements ISessionService {
     this._token = null;
     this._currentUserReplaySubject.next(null);
     this._localStorageService.broadcastMessage({current_user_changed: null});
+    this._localStorageService.broadcastMessage({jwt_token_changed: null});
   }
 
   public reinitCurrentUser(): Observable<UserModel> {
@@ -172,6 +176,7 @@ export class SessionService implements ISessionService {
           const parsedUser = UserModel.FromJson(data.user);
           this._currentUserReplaySubject.next(parsedUser);
           this._localStorageService.broadcastMessage({current_user_changed: parsedUser});
+          this._localStorageService.broadcastMessage({jwt_token_changed: this._token});
           observer.next(parsedUser);
           observer.complete();
         }, err => {

@@ -145,6 +145,8 @@ export class GssFormComponent implements OnInit {
         checkoutResult.Consignments[0].ConsignmentId,
         checkoutResult.Consignments[0].Connote,
         checkoutResult.SiteId,
+        9,
+        '',
         checkoutResult._id
       );
       this.clickNext();
