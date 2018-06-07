@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
     this.route.queryParams.subscribe(queryParams => {
       if (queryParams['closeAfterSignIn']) {
-        this.sessionService.CloseTabAfterSighnIn = queryParams['closeAfterSignIn'];
+        this.sessionService.CloseTabAfterSignIn = queryParams['closeAfterSignIn'];
       }
     });
   }
@@ -43,7 +43,11 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
     this.sessionService.login(this.model.login, this.model.password).subscribe(result => {
       if (result) {
-        this.router.navigate(['/']);
+        if (this.sessionService.CloseTabAfterSignIn) {
+          window.close();
+        } else {
+          this.router.navigate(['/']);
+        }
       } else {
         this.error = 'Authentication failed';
         this.loading = false;

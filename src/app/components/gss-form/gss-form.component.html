@@ -43,7 +43,7 @@
                        (pickupProcessed)="pickupProcessed($event)"></app-pickup-form>
     </div>
     <div [@slideInOut] *ngIf="wizardStep == 6">
-      <app-booking-pickup-done (goToStartClicked)="goToStartClicked()"></app-booking-pickup-done>
+      <app-booking-pickup-done [pickupProcessMessage]="pickupProcessMessage" (goToStartClicked)="goToStartClicked()"></app-booking-pickup-done>
     </div>
   </div>
 </div>

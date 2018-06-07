@@ -53,6 +53,7 @@ export class GssFormComponent implements OnInit {
   isProcessing: boolean;
 
   pickupRequest: PickupRequestModel = null;
+  pickupProcessMessage: string;
 
   constructor() {
   }
@@ -142,8 +143,8 @@ export class GssFormComponent implements OnInit {
       // alert('error occurred.');
     } else {
       this.pickupRequest = new PickupRequestModel(
-        checkoutResult.Consignments[0].ConsignmentId,
-        checkoutResult.Consignments[0].Connote,
+        checkoutResult.Consignments[0] ? checkoutResult.Consignments[0].ConsignmentId : null,
+        checkoutResult.Consignments[0] ? checkoutResult.Consignments[0].Connote : null,
         checkoutResult.SiteId,
         9,
         '',
@@ -159,5 +160,6 @@ export class GssFormComponent implements OnInit {
 
   pickupProcessed(processingResult: any) {
     this.wizardStep = 6;
+    this.pickupProcessMessage = processingResult;
   }
 }

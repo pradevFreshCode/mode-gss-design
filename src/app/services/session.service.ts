@@ -35,8 +35,12 @@ export class SessionService implements ISessionService {
     return this._currentUser;
   }
 
-  set CloseTabAfterSighnIn(value) {
+  set CloseTabAfterSignIn(value) {
     this._closeTabAfterSignIn = value;
+  }
+
+  get CloseTabAfterSignIn(): boolean {
+    return this._closeTabAfterSignIn;
   }
 
   constructor(private _apiService: ApiClientService, private _localStorageService: LocalStorageExtendedService) {
@@ -87,9 +91,9 @@ export class SessionService implements ISessionService {
           const isTokenProcessed = this.processTokenResponse(resp);
           if (isTokenProcessed) {
             this.reinitCurrentUser().subscribe(userModel => {
-              if (this._closeTabAfterSignIn) {
-                window.close();
-              }
+              // if (this._closeTabAfterSignIn) {
+              //   window.close();
+              // }
 
               observer.next(userModel);
               observer.complete();
@@ -114,9 +118,9 @@ export class SessionService implements ISessionService {
           const isTokenProcessed = this.processTokenResponse(resp);
           if (isTokenProcessed) {
             this.reinitCurrentUser().subscribe(userModel => {
-              if (this._closeTabAfterSignIn) {
-                window.close();
-              }
+              // if (this._closeTabAfterSignIn) {
+              //   window.close();
+              // }
 
               observer.next(userModel);
               observer.complete();

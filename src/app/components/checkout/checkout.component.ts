@@ -32,6 +32,7 @@ export class CheckoutComponent implements OnInit {
   blobsToSave: BlobWithNameModel[] = [];
   isShipmentResponseWaiting: boolean = false;
   shipmentResponseError: string;
+  checkoutCanBeFinished:boolean = false;
 
   constructor(private gssRequestService: GssRequestService,
               private _paymentProcessService: PaymentProcessService,
@@ -54,6 +55,7 @@ export class CheckoutComponent implements OnInit {
 
   public processCheckout() {
     // this.isLoading = true;
+    this.checkoutCanBeFinished = false;
     this.shipmentErrorResponse = null;
     this.shipmentResponse = null;
     this.shipmentResponseError = null;
@@ -149,6 +151,12 @@ export class CheckoutComponent implements OnInit {
                   }
                 );
             });
+          }
+
+          if (this.shipmentResponse.Consignments[0] && this.shipmentResponse.Consignments[0].ConsignmentId) {
+            this.checkoutCanBeFinished = true;
+          } else {
+            this.shipmentResponseError = "Server respond with no consignments!";
           }
 
           this.isShipmentResponseWaiting = false;

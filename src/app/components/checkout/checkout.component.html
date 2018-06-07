@@ -41,7 +41,7 @@
 
   <div class="row">
     <div class="col-12 center">
-      <ng-container *ngIf="currentUser && shipmentResponse && !shipmentResponseError">
+      <ng-container *ngIf="currentUser && shipmentResponse && !shipmentResponseError && checkoutCanBeFinished">
         <button type="button" class="btn btn-primary btn-lg" (click)="finishCheckoutClicked()">
           FINISH CHECKOUT
         </button>
