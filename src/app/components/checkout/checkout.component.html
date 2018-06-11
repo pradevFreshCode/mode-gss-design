@@ -41,24 +41,6 @@
 
   <div class="row">
     <div class="col-12 center">
-      <ng-container *ngIf="currentUser && shipmentResponse && !shipmentResponseError && checkoutCanBeFinished">
-        <button type="button" class="btn btn-primary btn-lg" (click)="finishCheckoutClicked()">
-          FINISH CHECKOUT
-        </button>
-
-        <button *ngIf="blobsToSave.length > 0 || pdfFormattingProcessing"
-                [disabled]="pdfFormattingProcessing"
-                type="button"
-                class="btn btn-primary btn-lg"
-                (click)="saveAllBlobs()">
-          SAVE TICKET
-          <fa *ngIf="pdfFormattingProcessing"
-              name="spinner"
-              animation="spin"
-              [fixed]="true"></fa>
-        </button>
-      </ng-container>
-
       <a type="button" *ngIf="!currentUser"
          class="btn btn-primary"
          [routerLink]="['/auth/login']"

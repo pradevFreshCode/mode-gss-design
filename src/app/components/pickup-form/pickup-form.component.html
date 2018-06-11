@@ -1,5 +1,5 @@
 <div class="card-group">
-  <div class="col-6 offset-6">
+  <div class="col-6 offset-3">
     <div class="row">
       <div class="col-12">
         <h4>
@@ -56,6 +56,16 @@
                   (click)="processPickup()">
             Book Pickup Now
             <fa *ngIf="isPickupProcessing"
+                name="spinner"
+                animation="spin"
+                [fixed]="true"></fa>
+          </button>
+          <button [disabled]="pdfFormattingProcessing"
+                  type="button"
+                  class="btn btn-primary btn-lg"
+                  (click)="saveAllBlobs()">
+            Download ticket
+            <fa *ngIf="pdfFormattingProcessing"
                 name="spinner"
                 animation="spin"
                 [fixed]="true"></fa>

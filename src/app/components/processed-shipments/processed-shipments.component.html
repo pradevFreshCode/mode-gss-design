@@ -4,74 +4,18 @@
       <h3>Processed shipments</h3>
     </div>
   </div>
+  <div class="row" *ngIf="isLoading">
+    <div class="col-12 text-center">
+      <h3>
+        <fa name="spinner"
+            animation="spin"
+            [fixed]="true"></fa>
+      </h3>
+    </div>
+  </div>
   <div class="row" *ngFor="let shipment of shipmentsToDisplay">
-    <div class="col-12 card m-b-5">
-      <div class="card-body">
-        <div class="row">
-          <div class="col-md-4">
-            <h5>Origin</h5>
-            <p *ngIf="!shipment.Origin">No data</p>
-            <p *ngIf="shipment.Origin?.Name"><b>Name</b>: {{shipment.Origin.Name}}</p>
-            <p *ngIf="shipment.Origin?.Email"><b>Email</b>: {{shipment.Origin.Email}}</p>
-            <p *ngIf="shipment.Origin?.PhoneNumber"><b>Phone Number</b>: {{shipment.Origin.PhoneNumber}}</p>
-            <ng-container *ngIf="shipment.Origin?.Address">
-              <p *ngIf="shipment.Origin.Address.BuildingName"><b>Building Name</b>:
-                {{shipment.Origin.Address.BuildingName}}</p>
-              <p *ngIf="shipment.Origin.Address.StreetAddress"><b>Street Address</b>:
-                {{shipment.Origin.Address.StreetAddress}}</p>
-              <p *ngIf="shipment.Origin.Address.Suburb"><b>Suburb</b>: {{shipment.Origin.Address.Suburb}}</p>
-              <p *ngIf="shipment.Origin.Address.City"><b>City</b>: {{shipment.Origin.Address.City}}</p>
-              <p *ngIf="shipment.Origin.Address.PostCode"><b>Post Code</b>: {{shipment.Origin.Address.PostCode}}</p>
-              <p *ngIf="shipment.Origin.Address.CountryCode"><b>Country Code</b>:
-                {{shipment.Origin.Address.CountryCode}}</p>
-            </ng-container>
-          </div>
-          <div class="col-md-4">
-            <h5>Destination</h5>
-            <p *ngIf="!shipment.Destination">No data</p>
-            <p *ngIf="shipment.Destination?.Name"><b>Name</b>: {{shipment.Destination.Name}}</p>
-            <p *ngIf="shipment.Destination?.Email"><b>Email</b>: {{shipment.Destination.Email}}</p>
-            <p *ngIf="shipment.Destination?.PhoneNumber"><b>Phone Number</b>: {{shipment.Destination.PhoneNumber}}</p>
-            <p *ngIf="shipment.Destination?.DeliveryInstructions"><b>Delivery Instructions</b>:
-              {{shipment.Destination.DeliveryInstructions}}</p>
-            <p *ngIf="shipment.Destination?.SendTrackingEmail"><b>Send Tracking Email</b>: <b>Yes</b></p>
-            <ng-container *ngIf="shipment.Destination?.Address">
-              <p *ngIf="shipment.Destination.Address.BuildingName"><b>Building Name</b>:
-                {{shipment.Destination.Address.BuildingName}}</p>
-              <p *ngIf="shipment.Destination.Address.StreetAddress"><b>Street Address</b>:
-                {{shipment.Destination.Address.StreetAddress}}</p>
-              <p *ngIf="shipment.Destination.Address.Suburb"><b>Suburb</b>: {{shipment.Destination.Address.Suburb}}</p>
-              <p *ngIf="shipment.Destination.Address.City"><b>City</b>: {{shipment.Destination.Address.City}}</p>
-              <p *ngIf="shipment.Destination.Address.PostCode"><b>Post Code</b>:
-                {{shipment.Destination.Address.PostCode}}</p>
-              <p *ngIf="shipment.Destination.Address.CountryCode"><b>Country Code</b>:
-                {{shipment.Destination.Address.CountryCode}}</p>
-            </ng-container>
-          </div>
-          <div class="col-md-4">
-            <h5>Shipment details</h5>
-            <p *ngIf="shipment.Message && !shipment.CarrierName"><b>Message</b>: {{shipment.Message}}</p>
-            <p *ngIf="shipment.HasTrackPaks"><b>Has Track Paks</b>: <b>Yes</b></p>
-            <p *ngIf="shipment.CarrierName"><b>Carrier Name</b>: {{shipment.CarrierName}}</p>
-
-            <ng-container *ngFor="let consignment of shipment.Consignments">
-              <p *ngIf="consignment.Connote"><b>Connote</b>: {{consignment.Connote}}</p>
-              <!--Cost differs from cost on our site. It's better to hide now. Need to be discussed-->
-              <!--<p *ngIf="consignment.Cost"><b>Cost</b>: {{consignment.Cost}}</p>-->
-              <p *ngIf="consignment.IsSaturdayDelivery"><b>Is Saturday Delivery</b>: <b>Yes</b></p>
-            </ng-container>
-            <h6 *ngIf="shipment.isPickupRequested"><b>Is pickup requested</b>: <b>Yes</b></h6>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-12 text-left text-md-right">
-            <span *ngIf="shipment.createdAtString">
-              Created at: <b>{{shipment.createdAtString}}</b>
-            </span>
-          </div>
-        </div>
-      </div>
+    <div class="col-12">
+      <app-processed-shipment [shipment]="shipment"></app-processed-shipment>
     </div>
   </div>
 </div>

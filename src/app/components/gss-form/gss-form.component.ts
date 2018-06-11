@@ -41,7 +41,7 @@ export class GssFormComponent implements OnInit {
 
   loaderpath = environment.assets_dir + 'ajax-loader.gif';
 
-  steps = ['sender details', 'recipient details', 'package size', 'payment', 'checkout', 'book pickup', 'pickup success'];
+  steps = ['sender details', 'recipient details', 'package size', 'payment', 'checkout and pickup', 'pickup success'];
   wizardStep: number;
 
   ratesRequest: RatesRequest;
@@ -132,34 +132,12 @@ export class GssFormComponent implements OnInit {
     this.paymentComponent.processPayment();
   }
 
-  // processCheckout(isEmail: boolean = true) {
-  //   this.isProcessing = true;
-  //   this.checkoutComponent.processCheckout(isEmail);
-  // }
-
-  onCheckoutDone(checkoutResult: any) {
-    this.isProcessing = false;
-    if (!checkoutResult) {
-      // alert('error occurred.');
-    } else {
-      this.pickupRequest = new PickupRequestModel(
-        checkoutResult.Consignments[0] ? checkoutResult.Consignments[0].ConsignmentId : null,
-        checkoutResult.Consignments[0] ? checkoutResult.Consignments[0].Connote : null,
-        checkoutResult.SiteId,
-        9,
-        '',
-        checkoutResult._id
-      );
-      this.clickNext();
-    }
-  }
-
   goToStartClicked() {
     this.wizardStep = 0;
   }
 
   pickupProcessed(processingResult: any) {
-    this.wizardStep = 6;
+    this.wizardStep = 5;
     this.pickupProcessMessage = processingResult;
   }
 }

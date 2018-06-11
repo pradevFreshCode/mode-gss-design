@@ -1,19 +1,19 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {RatesRequest} from '../../models/rates-request';
+import {Component, Input, Output, EventEmitter, OnChanges} from '@angular/core';
 import {PickupRequestModel} from '../../models/pickup-request.model';
 import {GssRequestService} from '../../services/gss-request.service';
 import {PaymentProcessService} from '../../modules/data-services/services/payment-process.service';
-import {SessionService} from '../../services/session.service';
-import {UserModel} from '../../modules/data-services/models/User.model';
+import {BlobWithNameModel} from '../../models/blob-with-name.model';
+import {saveAs} from 'file-saver';
+import {ProcessedShipmentModel} from '../../models/processed-shipment.model';
 
 @Component({
   selector: 'app-pickup-form',
   templateUrl: './pickup-form.component.html',
   styleUrls: ['./pickup-form.component.css']
 })
-export class PickupFormComponent implements OnInit {
-  @Input() ratesRequest: RatesRequest;
+export class PickupFormComponent implements OnChanges {
   @Input() pickupRequestModel: PickupRequestModel;
+  @Input() checkoutResult: ProcessedShipmentModel;
 
   @Output() pickupProcessed = new EventEmitter<any>();
 
@@ -22,6 +22,9 @@ export class PickupFormComponent implements OnInit {
   isPackageReady: boolean = false;
   isPickupProcessing: boolean = false;
   pickupProcessingError: string;
+  currentShipmentHasConsignments: boolean = false;
+  pdfFormattingProcessing: boolean = false;
+  blobsToSave: BlobWithNameModel[] = [];
 
   constructor(private _gssRequestService: GssRequestService,
               private _paymentProcessService: PaymentProcessService) {
@@ -30,9 +33,21 @@ export class PickupFormComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
-    // uncomment to test using fake data
-    // this.pickupRequestModel = new PickupRequestModel(6215943, 'AIG00012137', 4180, 10, '');
+  ngOnChanges() {
+    if (!!this.checkoutResult && !this.pickupRequestModel) {
+      this._checkCurrentShipmentHasConsignments();
+
+      this.pickupRequestModel = new PickupRequestModel(
+        this.checkoutResult.Consignments[0] ? this.checkoutResult.Consignments[0].ConsignmentId : null,
+        this.checkoutResult.Consignments[0] ? this.checkoutResult.Consignments[0].Connote : null,
+        this.checkoutResult.SiteId,
+        9,
+        '',
+        this.checkoutResult._id
+      );
+
+      this._prepareTickets();
+    }
   }
 
   processPickup() {
@@ -48,5 +63,47 @@ export class PickupFormComponent implements OnInit {
         this.isPickupProcessing = false;
       }
     );
+  }
+
+  private _checkCurrentShipmentHasConsignments() {
+    this.currentShipmentHasConsignments = !!this.checkoutResult
+      && !!this.checkoutResult.Consignments
+      && !!this.checkoutResult.Consignments.length;
+  }
+
+  private _prepareTickets() {
+    this.pdfFormattingProcessing = true;
+    this.blobsToSave = [];
+
+    if (this.currentShipmentHasConsignments) {
+      this.checkoutResult.Consignments.forEach(item => {
+        this._gssRequestService.downloadLabel(item.Connote)
+          .subscribe(
+            response => {
+              const binaryPdf = atob(response[0]);
+              const length = binaryPdf.length;
+              const arrayBuf = new ArrayBuffer(length);
+              const uintArray = new Uint8Array(arrayBuf);
+              for (let i = 0; i < length; i++) {
+                uintArray[i] = binaryPdf.charCodeAt(i);
+              }
+              const blob = new Blob([uintArray], {type: 'application/pdf'});
+              this.blobsToSave.push(new BlobWithNameModel(item.Connote + '.pdf', blob));
+              this.pdfFormattingProcessing = false;
+            },
+            error => {
+              console.log('error occured when label downloaded', error);
+            }
+          );
+      });
+    } else {
+      this.pdfFormattingProcessing = false;
+    }
+  }
+
+  saveAllBlobs() {
+    this.blobsToSave.forEach(bs => {
+      saveAs(bs.Blob, bs.Name);
+    });
   }
 }

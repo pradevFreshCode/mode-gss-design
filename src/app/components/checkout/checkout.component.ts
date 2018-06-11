@@ -27,12 +27,10 @@ export class CheckoutComponent implements OnInit {
   shipmentResponse: ProcessedShipmentModel;
   shipmentErrorResponse: any;
   currentUser: UserModel = null;
-  pdfFormattingProcessing: boolean = false;
 
-  blobsToSave: BlobWithNameModel[] = [];
   isShipmentResponseWaiting: boolean = false;
   shipmentResponseError: string;
-  checkoutCanBeFinished:boolean = false;
+  checkoutCanBeFinished: boolean = false;
 
   constructor(private gssRequestService: GssRequestService,
               private _paymentProcessService: PaymentProcessService,
@@ -47,10 +45,6 @@ export class CheckoutComponent implements OnInit {
         this.processCheckout();
       }
     });
-  }
-
-  finishCheckoutClicked() {
-    this.checkoutDone.emit(this.shipmentResponse);
   }
 
   public processCheckout() {
@@ -111,7 +105,6 @@ export class CheckoutComponent implements OnInit {
     req.DisableFreightForwardEmails = this.availToGo.IsEmail ? false : true;
     req.Cost = this.availToGo.Cost;
 
-    this.blobsToSave = [];
     this.isShipmentResponseWaiting = true;
     this._paymentProcessService.postShipments(req)
       .subscribe(
@@ -125,36 +118,11 @@ export class CheckoutComponent implements OnInit {
               errMsg += JSON.stringify(item) + '\n';
             });
             this.shipmentResponseError = errMsg;
-          } else {
-            // download labels
-
-            // if data returned without errors, return response object
-            this.pdfFormattingProcessing = true;
-            this.shipmentResponse.Consignments.forEach(item => {
-              this.gssRequestService.downloadLabel(item.Connote)
-                .subscribe(
-                  response => {
-                    // console.log(response);
-                    const binaryPdf = atob(response[0]);
-                    const length = binaryPdf.length;
-                    const arrayBuf = new ArrayBuffer(length);
-                    const uintArray = new Uint8Array(arrayBuf);
-                    for (let i = 0; i < length; i++) {
-                      uintArray[i] = binaryPdf.charCodeAt(i);
-                    }
-                    const blob = new Blob([uintArray], {type: 'application/pdf'});
-                    this.blobsToSave.push(new BlobWithNameModel(item.Connote + '.pdf', blob));
-                    this.pdfFormattingProcessing = false;
-                  },
-                  error => {
-                    console.log('error occured when label downloaded', error);
-                  }
-                );
-            });
           }
 
           if (this.shipmentResponse.Consignments[0] && this.shipmentResponse.Consignments[0].ConsignmentId) {
             this.checkoutCanBeFinished = true;
+            this.checkoutDone.emit(this.shipmentResponse);
           } else {
             this.shipmentResponseError = "Server respond with no consignments!";
           }
@@ -168,11 +136,5 @@ export class CheckoutComponent implements OnInit {
           console.log(err);
         }
       );
-  }
-
-  saveAllBlobs() {
-    this.blobsToSave.forEach(bs => {
-      saveAs(bs.Blob, bs.Name);
-    });
   }
 }

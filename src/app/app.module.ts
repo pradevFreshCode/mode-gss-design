@@ -48,6 +48,8 @@ import {PasswordChangeComponent} from './components/password-change/password-cha
 import { PasswordChangedComponent } from './components/password-changed/password-changed.component';
 import { BookingPickupDoneComponent } from './components/booking-pickup-done/booking-pickup-done.component';
 import {LocalStorageExtendedService} from './services/localStorageExtendedService';
+import { ProcessedShipmentComponent } from './components/processed-shipment/processed-shipment.component';
+import { CheckoutAndPickupComponentComponent } from './components/checkout-and-pickup-component/checkout-and-pickup-component.component';
 
 @NgModule({
   declarations: [
@@ -72,7 +74,9 @@ import {LocalStorageExtendedService} from './services/localStorageExtendedServic
     ProcessedShipmentsComponent,
     PasswordChangeComponent,
     PasswordChangedComponent,
-    BookingPickupDoneComponent
+    BookingPickupDoneComponent,
+    ProcessedShipmentComponent,
+    CheckoutAndPickupComponentComponent
   ],
   imports: [
     BrowserModule,

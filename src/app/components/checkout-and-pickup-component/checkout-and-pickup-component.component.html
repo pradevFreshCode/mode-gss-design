@@ -1,0 +1,10 @@
+<app-checkout *ngIf="!checkoutResult"
+              #checkout
+              [ratesRequest]="ratesRequest"
+              [availToGo]="availToGo"
+              (checkoutDone)="onCheckoutDone($event)"></app-checkout>
+
+<app-pickup-form *ngIf="checkoutResult"
+                 [checkoutResult]="checkoutResult"
+                 [pickupRequestModel]="pickupRequest"
+                 (pickupProcessed)="onPickupProcessed($event)"></app-pickup-form>
