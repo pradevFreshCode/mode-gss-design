@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="card-deck mb-3 text-center">
+  <div class="card-deck mb-3 text-center row justify-content-center">
     <div class="col-md-4" *ngFor="let pkg of packageOptions; let i = index">
       <div class="card mb-4 box-shadow">
         <div class="card-header">
@@ -12,7 +12,7 @@
           </p>
           <h4 class="card-title pricing-card-title">{{pkg.Price | currency}}
           </h4>
-          <button [hidden]="isAvailLoading[i]" class="btn btn-lg btn-block btn-info" type="button" (click)="goWithIt(i)">
+          <button [hidden]="isAvailLoading[i]" [disabled]="isLoading" class="btn btn-lg btn-block btn-info" type="button" (click)="goWithIt(i)">
             SELECT
           </button>
             <p [hidden]="!isAvailLoading[i]">
@@ -54,7 +54,7 @@
           </form>
           <h4 class="card-title pricing-card-title">{{ customRate | currency }}
           </h4>
-          <button type="button" [disabled]="customRate <= 0" class="btn btn-lg btn-block btn-info" type="button"
+          <button type="button" [disabled]="customRate <= 0 || isLoading" class="btn btn-lg btn-block btn-info" type="button"
             (click)="goWithCustom()">
             SELECT
           </button>

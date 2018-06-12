@@ -5,7 +5,7 @@ import {ReplaySubject} from 'rxjs/ReplaySubject';
 export interface ISessionService {
     Token: string;
 
-    TokenRefreshedEvent: EventEmitter<string>;
+  TokenReplaySubject: ReplaySubject<string>;
 
     CurrentUserReplaySubject: ReplaySubject<UserModel>;
 

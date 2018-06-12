@@ -6,8 +6,9 @@
     <div hidden class="form-group row">
       <label class="control-label col-md-2" for="OriginCountry">Country*</label>
       <div class="controls col-md-10">
-        <select class="form-control" id="OriginCountry" required name="OriginCountry" [(ngModel)]="ratesRequest.Origin.Address.CountryCode"
-          #CountryCode="ngModel" disabled>
+        <select class="form-control" id="OriginCountry" required name="OriginCountry"
+                [(ngModel)]="ratesRequest.Origin.Address.CountryCode"
+                #CountryCode="ngModel" disabled>
           <option *ngFor="let country of countriesList" [value]="country.countryCode">
             {{country.countryName}}
           </option>
@@ -16,48 +17,76 @@
     </div>
     <div class="form-group row">
       <div class="col-md-6">
-        <input id="OriginName" name="OriginName" class="form-control" required maxlength="50" [(ngModel)]="ratesRequest.Origin.Name"
-          [class.alert-danger]="OriginName.invalid && (OriginName.dirty || OriginName.touched)" placeholder="YOUR NAME" #OriginName="ngModel">
+        <input id="OriginName" name="OriginName" class="form-control" required maxlength="50"
+               [(ngModel)]="ratesRequest.Origin.Name"
+               [class.alert-danger]="OriginName.invalid && (OriginName.dirty || OriginName.touched)"
+               placeholder="YOUR NAME" #OriginName="ngModel">
       </div>
       <div class="col-md-6">
-        <input id="OriginBuilding" name="OriginBuilding" class="form-control" maxlength="60" [(ngModel)]="ratesRequest.Origin.Address.BuildingName"
-          placeholder="BUSINESS/BUILDING (OPTIONAL)" #OriginBuilding="ngModel">
+        <input id="OriginBuilding" name="OriginBuilding" class="form-control" maxlength="60"
+               [(ngModel)]="ratesRequest.Origin.Address.BuildingName"
+               placeholder="BUSINESS/BUILDING (OPTIONAL)" #OriginBuilding="ngModel">
       </div>
     </div>
     <div class="form-group row">
       <div class="col-md-12">
-        <input type="text" id="OriginStreet" name="OriginStreet" class="form-control" required maxlength="60" placeholder="STREET ADDRESS"
-          [formControl]="searchControl" autocomplete="off" (focusout)="setStreetTouched()" [(ngModel)]="ratesRequest.Origin.Address.StreetAddress"
-          [class.alert-danger]="!isStreetValid() && isStreetTouched" #OriginStreet>
+        <input type="text" id="OriginStreet" name="OriginStreet" class="form-control" required maxlength="60"
+               placeholder="STREET ADDRESS"
+               [formControl]="searchControl" autocomplete="off" (focusout)="setStreetTouched()"
+               [(ngModel)]="ratesRequest.Origin.Address.StreetAddress"
+               [class.alert-danger]="!isStreetValid() && isStreetTouched" #OriginStreet>
       </div>
     </div>
     <div class="form-group row">
       <div class="col-md-6">
-        <input id="OriginSuburb" name="OriginSuburb" class="form-control" required maxlength="60" [(ngModel)]="ratesRequest.Origin.Address.Suburb"
-          placeholder="SUBURB" [class.alert-danger]="OriginSuburb.invalid && (OriginSuburb.dirty || OriginSuburb.touched)"
-          #OriginSuburb="ngModel">
+        <input id="OriginSuburb" name="OriginSuburb" class="form-control" required maxlength="60"
+               [(ngModel)]="ratesRequest.Origin.Address.Suburb"
+               placeholder="SUBURB"
+               [class.alert-danger]="OriginSuburb.invalid && (OriginSuburb.dirty || OriginSuburb.touched)"
+               #OriginSuburb="ngModel">
       </div>
       <div class="col-md-6">
-        <input id="OriginState" name="OriginState" class="form-control" required maxlength="60" [(ngModel)]="ratesRequest.Origin.Address.City"
-          placeholder="CITY" [class.alert-danger]="OriginState.invalid && (OriginState.dirty || OriginState.touched)" #OriginState="ngModel">
+        <input id="OriginState" name="OriginState" class="form-control" required maxlength="60"
+               [(ngModel)]="ratesRequest.Origin.Address.City"
+               placeholder="CITY"
+               [class.alert-danger]="OriginState.invalid && (OriginState.dirty || OriginState.touched)"
+               #OriginState="ngModel">
       </div>
     </div>
     <div class="form-group row">
       <div class="col-md-6">
-        <input id="OriginPostcode" name="OriginPostcode" class="form-control" required maxlength="10" [(ngModel)]="ratesRequest.Origin.Address.PostCode"
-          placeholder="POST CODE" [class.alert-danger]="OriginPostcode.invalid && (OriginPostcode.dirty || OriginPostcode.touched)"
-          #OriginPostcode="ngModel">
+        <input id="OriginPostcode" name="OriginPostcode" class="form-control" required maxlength="10"
+               [(ngModel)]="ratesRequest.Origin.Address.PostCode"
+               placeholder="POST CODE"
+               [class.alert-danger]="OriginPostcode.invalid && (OriginPostcode.dirty || OriginPostcode.touched)"
+               #OriginPostcode="ngModel">
       </div>
       <div class="col-md-6">
-        <input id="OriginPhone" name="OriginPhone" class="form-control" minlength="7" maxlength="60" [(ngModel)]="ratesRequest.Origin.PhoneNumber"
-          placeholder="PHONE (OPTIONAL)" #OriginPhone="ngModel">
+        <input id="OriginPhone"
+               name="OriginPhone"
+               class="form-control"
+               minlength="7"
+               maxlength="60"
+               [(ngModel)]="ratesRequest.Origin.PhoneNumber"
+               placeholder="PHONE"
+               required
+               [class.alert-danger]="OriginPhone.invalid && (OriginPhone.dirty || OriginPhone.touched)"
+               #OriginPhone="ngModel">
       </div>
     </div>
     <div class="form-group row">
       <div class="col-md-12">
-        <input type="email" id="OriginEmail" name="OriginEmail" class="form-control" maxlength="200" [(ngModel)]="ratesRequest.Origin.Email"
-          placeholder="EMAIL ADDRESS (OPTIONAL)" [email]="ratesRequest.Origin.Email != '' && ratesRequest.Origin.Email != null"
-          [class.alert-danger]="OriginEmail.invalid && (OriginEmail.dirty || OriginEmail.touched)" #OriginEmail="ngModel">
+        <input type="email"
+               id="OriginEmail"
+               name="OriginEmail"
+               class="form-control"
+               maxlength="200"
+               [(ngModel)]="ratesRequest.Origin.Email"
+               placeholder="EMAIL ADDRESS"
+               [email]="ratesRequest.Origin.Email != '' && ratesRequest.Origin.Email != null"
+               required
+               [class.alert-danger]="OriginEmail.invalid && (OriginEmail.dirty || OriginEmail.touched)"
+               #OriginEmail="ngModel">
       </div>
     </div>
   </div>
@@ -69,3 +98,5 @@
     </agm-map>
   </div>
 </div>
+
+

@@ -7,6 +7,8 @@ import {AgmCoreModule, MapsAPILoader} from '@agm/core';
 import {GeocodingService} from '../../services/geocoding.service';
 import {CountryWithCodeModel} from '../../models/country-with-code.model';
 import {CountriesListProviderService} from '../../services/countries-list-provider.service';
+import {UserModel} from '../../modules/data-services/models/User.model';
+import {SessionService} from '../../services/session.service';
 
 @Component({
   selector: 'app-sender-form',
@@ -34,7 +36,6 @@ export class SenderFormComponent implements OnInit {
 
   ngOnInit() {
     this.countriesList = this._countriesListProviderService.FullCountriesList;
-
     // set the country to NZ
     this.ratesRequest.Origin.Address.CountryCode = 'NZ';
     this.isStreetTouched = false;

@@ -16,15 +16,15 @@ export class SessionService implements ISessionService {
   private _token: string;
   private _currentUserReplaySubject = new ReplaySubject<UserModel>(1);
   private _currentUser: UserModel = null;
-  private _tokenRefreshedEvent = new EventEmitter<string>();
+  private _tokenReplaySubject = new ReplaySubject<string>(1);
   private _closeTabAfterSignIn: boolean;
 
   get Token(): string {
     return this._token;
   }
 
-  get TokenRefreshedEvent(): EventEmitter<string> {
-    return this._tokenRefreshedEvent;
+  get TokenReplaySubject(): ReplaySubject<string> {
+    return this._tokenReplaySubject;
   }
 
   get CurrentUserReplaySubject(): ReplaySubject<UserModel> {
@@ -63,6 +63,7 @@ export class SessionService implements ISessionService {
 
   private reinitTokenFromLocalStorage(): void {
     this._token = this._localStorageService.get(environment.JWTTokenLocalStorageKey);
+    this._tokenReplaySubject.next(this.Token);
   }
 
   private processTokenResponse(response): boolean {
@@ -71,6 +72,7 @@ export class SessionService implements ISessionService {
     if (token) {
       this._token = token;
       this._localStorageService.set(environment.JWTTokenLocalStorageKey, token);
+      this._tokenReplaySubject.next(token);
       return true;
     } else {
       return false;
@@ -160,6 +162,7 @@ export class SessionService implements ISessionService {
     this._localStorageService.remove(environment.JWTTokenLocalStorageKey);
     this._token = null;
     this._currentUserReplaySubject.next(null);
+    this._tokenReplaySubject.next(null);
     this._localStorageService.broadcastMessage({current_user_changed: null});
     this._localStorageService.broadcastMessage({jwt_token_changed: null});
   }

@@ -31,7 +31,8 @@ export class PackageComponent implements OnInit {
   isNoCustomAvails: boolean;
 
   available: any;
-  isAvailLoading: boolean[];
+  isAvailLoading: boolean[] = [];
+  isLoading: boolean;
 
   constructor(private gssRequestService: GssRequestService) {
   }
@@ -126,7 +127,6 @@ export class PackageComponent implements OnInit {
   }
 
   public goWithIt(idx: number) {
-    this.setAvailLoading(idx);
     // create Packages
     this.ratesRequest.Packages = [];
 
@@ -147,6 +147,8 @@ export class PackageComponent implements OnInit {
     // copy existing ratesRequest
     const toGo = Object.assign({}, this.ratesRequest);
 
+    this.setAvailLoading(idx);
+    this.isLoading = true;
     this.gssRequestService.getAvails(this.ratesRequest)
       .map(data => {
         data.Available.sort((a, b) => {
@@ -165,18 +167,21 @@ export class PackageComponent implements OnInit {
           } else {
             alert('No availables.');
           }
+          this.setAvailLoading(idx, false);
+          this.isLoading = false;
         },
         err => {
           // TODO error
           alert('error occurred.');
-        },
-        () => {
+          console.log('err', err);
+          this.setAvailLoading(idx, false);
+          this.isLoading = false;
         }
       );
 
   }
 
-  public setAvailLoading(idx: number) {
-    this.isAvailLoading[idx] = true;
+  public setAvailLoading(idx: number, state: boolean = true) {
+    this.isAvailLoading[idx] = state;
   }
 }

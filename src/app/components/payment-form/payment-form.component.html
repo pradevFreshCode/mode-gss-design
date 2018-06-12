@@ -1,14 +1,55 @@
-<div class="card-group">
-  <div class="col-md-12">
-    <h4>PAYMENT {{availToGo.Cost | currency}}</h4>
-  </div>
-  <div class="col-md-3"></div>
-  <form class="col-md-6" novalidate (ngSubmit)="processPayment()" [formGroup]="stripeTest">
-    <div class="modal-body">
-      <input type="text" class="form-control" required [class.alert-danger]="isNameError" formControlName="name" (change)="isNameError = false;cardError = '';"
-        placeholder="NAME ON CARD">
-      <ngx-stripe-card [options]="cardOptions" [elementsOptions]="elementsOptions"></ngx-stripe-card>
-      <span *ngIf="cardError !== undefined && cardError !== null && cardError.length > 0" class="text-danger">{{cardError}}</span>
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <h4>PAYMENT {{availToGo.Cost | currency}}</h4>
     </div>
-  </form>
-  <div class="col-md-3"></div>
+  </div>
+  <div class="row">
+    <form class="col-6 offset-3" novalidate (ngSubmit)="processPayment()" [formGroup]="stripeTest">
+      <div class="modal-body">
+        <input type="text" class="form-control" required [class.alert-danger]="isNameError" formControlName="name"
+               (change)="isNameError = false;cardError = '';"
+               placeholder="NAME ON CARD">
+        <ngx-stripe-card [options]="cardOptions" [elementsOptions]="elementsOptions"></ngx-stripe-card>
+        <span *ngIf="cardError !== undefined && cardError !== null && cardError.length > 0" class="text-danger">{{cardError}}</span>
+      </div>
+    </form>
+  </div>
+  <div class="row" *ngIf="isCardResponseWaiting">
+    <div class="col-12 center">
+      <h5>
+        Card processing <fa name="spinner"
+                                animation="spin"
+                                [fixed]="true"></fa>
+      </h5>
+    </div>
+  </div>
+  <div class="row" *ngIf="isShipmentResponseWaiting">
+    <div class="col-12 center">
+      <h5>
+        Shipment processing <fa name="spinner"
+                                animation="spin"
+                                [fixed]="true"></fa>
+      </h5>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="shipmentErrorResponse">
+    <div class="col-12">
+      <div class="text-danger text-center">
+        {{shipmentErrorResponse}}
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 center">
+      <button type="button"
+              *ngIf="shipmentResponse && !!shipmentErrorResponse"
+              class="btn btn-primary btn-lg"
+              (click)="processCheckout()">
+        TRY ONE MORE TIME
+      </button>
+    </div>
+  </div>
+</div>

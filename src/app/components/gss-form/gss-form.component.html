@@ -8,75 +8,100 @@
     <!--<span class="col-md-2 step" [class.text-dark]="wizardStep === 5">6. {{steps[5] | uppercase}}</span>-->
   </div>
 </div>
-<div class="container">
-  <div style="margin: 2rem 0;">
-    <form #senderForm="ngForm">
-      <div [@slideInOut] *ngIf="wizardStep == 0">
-        <app-sender-form [ratesRequest]="ratesRequest"></app-sender-form>
-      </div>
-    </form>
-    <form #receiverForm="ngForm">
-      <div [@slideInOut] *ngIf="wizardStep == 1">
-        <app-receiver-form [ratesRequest]="ratesRequest"></app-receiver-form>
-      </div>
-    </form>
-    <form #packageForm="ngForm">
-      <div [@slideInOut] *ngIf="wizardStep == 2">
-        <app-package [ratesRequest]="ratesRequest" (goClicked)="onGo($event)"></app-package>
-      </div>
-    </form>
-    <form #paymentForm="ngForm">
-      <div [@slideInOut] *ngIf="wizardStep == 3">
-        <app-payment-form #payment [ratesRequest]="ratesRequest" [availToGo]="availToGo"
-                          (cardDone)="onCardDone($event)"></app-payment-form>
-      </div>
-    </form>
 
-    <div [@slideInOut] *ngIf="wizardStep == 4">
-      <app-checkout-and-pickup-component [ratesRequest]="ratesRequest"
-                                         [availToGo]="availToGo" (pickupProcessed)="pickupProcessed($event)"></app-checkout-and-pickup-component>
-    </div>
-
-    <div [@slideInOut] *ngIf="wizardStep == 5">
-      <app-booking-pickup-done [pickupProcessMessage]="pickupProcessMessage" (goToStartClicked)="goToStartClicked()"></app-booking-pickup-done>
+<div class="container" *ngIf="!currentUser && !userToken">
+  <div class="form-group row m-t-15">
+    <div class="col-12">
+      <div class="alert alert-info" role="alert">
+        <p>
+          Only authorized users can perform booking process.
+        </p>
+        <p>
+          Please, <a [routerLink]="['/auth/login']" [queryParams]="{closeAfterSignIn: true}" target="_blank">SIGN IN</a>,
+          to store your history, and be able to use our app
+          pickup process.
+        </p>
+        <p>
+          Pay attention! You don't need to close this page. Form will be enabled even after
+          registration/login in another tab
+        </p>
+      </div>
     </div>
   </div>
 </div>
-<footer class="footer">
-  <div class="container center" [hidden]="isProcessing">
-    <button *ngIf="[0,4,5].indexOf(wizardStep) < 0" type="button" style="margin-right: 20px;"
-            class="btn btn-light btn-sm" (click)="clickBack()">BACK
-    </button>
-    <button *ngIf="wizardStep === 0" type="button" class="btn btn-primary btn-lg" [disabled]="senderForm.invalid"
-            (click)="clickNext()">
-      NEXT STEP
-    </button>
-    <button *ngIf="wizardStep === 1" type="button" class="btn btn-primary btn-lg" [disabled]="receiverForm.invalid"
-            (click)="clickNext()">
-      NEXT STEP
-    </button>
-    <button *ngIf="wizardStep === 3" type="button" class="btn btn-primary btn-lg" [disabled]="paymentForm.invalid"
-            (click)="processPayment()">
-      PAY
-    </button>
-    <!--<button *ngIf="wizardStep === 4" type="button" class="btn btn-primary btn-lg" (click)="processCheckout(false)">-->
+
+<ng-container *ngIf="currentUser">
+  <div class="container">
+    <div style="margin: 2rem 0;">
+      <form #senderForm="ngForm">
+        <div [@slideInOut] *ngIf="wizardStep == 0">
+          <app-sender-form [ratesRequest]="ratesRequest"></app-sender-form>
+        </div>
+      </form>
+      <form #receiverForm="ngForm">
+        <div [@slideInOut] *ngIf="wizardStep == 1">
+          <app-receiver-form [ratesRequest]="ratesRequest"></app-receiver-form>
+        </div>
+      </form>
+      <form #packageForm="ngForm">
+        <div [@slideInOut] *ngIf="wizardStep == 2">
+          <app-package [ratesRequest]="ratesRequest" (goClicked)="onGo($event)"></app-package>
+        </div>
+      </form>
+      <form #paymentForm="ngForm">
+        <div [@slideInOut] *ngIf="wizardStep == 3">
+          <app-payment-form #payment [ratesRequest]="ratesRequest" [availToGo]="availToGo"
+                            (checkoutDone)="onCheckoutDone($event)"></app-payment-form>
+        </div>
+      </form>
+
+      <div [@slideInOut] *ngIf="wizardStep == 4">
+        <app-pickup-form [checkoutResult]="checkoutResult"
+                         (pickupProcessed)="pickupProcessed($event)"></app-pickup-form>
+      </div>
+
+      <div [@slideInOut] *ngIf="wizardStep == 5">
+        <app-booking-pickup-done [pickupProcessMessage]="pickupProcessMessage"
+                                 (goToStartClicked)="goToStartClicked()"></app-booking-pickup-done>
+      </div>
+    </div>
+  </div>
+  <footer class="footer">
+    <div class="container center" [hidden]="isProcessing">
+      <button *ngIf="[1,2].indexOf(wizardStep) > -1" type="button" style="margin-right: 20px;"
+              class="btn btn-light btn-sm" (click)="clickBack()">BACK
+      </button>
+      <button *ngIf="wizardStep === 0" type="button" class="btn btn-primary btn-lg" [disabled]="senderForm.invalid"
+              (click)="clickNext()">
+        NEXT STEP
+      </button>
+      <button *ngIf="wizardStep === 1" type="button" class="btn btn-primary btn-lg" [disabled]="receiverForm.invalid"
+              (click)="clickNext()">
+        NEXT STEP
+      </button>
+      <button *ngIf="wizardStep === 3" type="button" class="btn btn-primary btn-lg" [disabled]="paymentForm.invalid"
+              (click)="processPayment()">
+        PAY
+      </button>
+      <!--<button *ngIf="wizardStep === 4" type="button" class="btn btn-primary btn-lg" (click)="processCheckout(false)">-->
       <!--PROCESS CHECKOUT-->
-    <!--</button>-->
-    <!--<button *ngIf="wizardStep === 4" type="button" class="btn btn-primary btn-lg" (click)="processCheckout(true)">-->
-    <!--EMAIL TICKET-->
-    <!--</button>-->
-    <!--<span *ngIf="wizardStep === 4">&nbsp;</span>-->
-    <!--<button *ngIf="wizardStep === 4" type="button" class="btn btn-primary btn-lg" (click)="processCheckout(false)">-->
-    <!--PRINT-->
-    <!--</button>-->
-  </div>
-  <div class="container center" [hidden]="!isProcessing">
-    <img id="img_loader_processing" [src]="loaderpath" [hidden]="!isProcessing">
-  </div>
-  <!--
-  <p>valid: {{ packageForm.valid }}</p>
-  <p>isUnitAndKgOkay: {{ isUnitAndKgOkay() }}</p>
-  <p>ratesRequest: {{ ratesRequest | json }}</p>
-  <p>availToGo: {{ availToGo | json }}</p>
-  -->
-</footer>
+      <!--</button>-->
+      <!--<button *ngIf="wizardStep === 4" type="button" class="btn btn-primary btn-lg" (click)="processCheckout(true)">-->
+      <!--EMAIL TICKET-->
+      <!--</button>-->
+      <!--<span *ngIf="wizardStep === 4">&nbsp;</span>-->
+      <!--<button *ngIf="wizardStep === 4" type="button" class="btn btn-primary btn-lg" (click)="processCheckout(false)">-->
+      <!--PRINT-->
+      <!--</button>-->
+    </div>
+    <div class="container center" [hidden]="!isProcessing || wizardStep === 3">
+      <img id="img_loader_processing" [src]="loaderpath" [hidden]="!isProcessing">
+    </div>
+    <!--
+    <p>valid: {{ packageForm.valid }}</p>
+    <p>isUnitAndKgOkay: {{ isUnitAndKgOkay() }}</p>
+    <p>ratesRequest: {{ ratesRequest | json }}</p>
+    <p>availToGo: {{ availToGo | json }}</p>
+    -->
+  </footer>
+</ng-container>

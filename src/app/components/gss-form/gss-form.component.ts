@@ -16,6 +16,9 @@ import {PaymentFormComponent} from '../payment-form/payment-form.component';
 import {CheckoutComponent} from '../checkout/checkout.component';
 import {saveAs} from 'file-saver';
 import {PickupRequestModel} from '../../models/pickup-request.model';
+import {SessionService} from '../../services/session.service';
+import {UserModel} from '../../modules/data-services/models/User.model';
+import {ProcessedShipmentModel} from '../../models/processed-shipment.model';
 
 @Component({
   selector: 'app-gss-form',
@@ -41,7 +44,7 @@ export class GssFormComponent implements OnInit {
 
   loaderpath = environment.assets_dir + 'ajax-loader.gif';
 
-  steps = ['sender details', 'recipient details', 'package size', 'payment', 'checkout and pickup', 'pickup success'];
+  steps = ['sender details', 'recipient details', 'package size', 'payment', 'pickup', 'pickup success'];
   wizardStep: number;
 
   ratesRequest: RatesRequest;
@@ -52,13 +55,22 @@ export class GssFormComponent implements OnInit {
   availToGo: any;
   isProcessing: boolean;
 
-  pickupRequest: PickupRequestModel = null;
+  checkoutResult: ProcessedShipmentModel = null;
   pickupProcessMessage: string;
+  currentUser: UserModel;
+  userToken: string;
 
-  constructor() {
+  constructor(private _sessionService: SessionService) {
   }
 
   ngOnInit() {
+    this._sessionService.CurrentUserReplaySubject.subscribe(currentUser => {
+      this.currentUser = currentUser;
+    });
+    this._sessionService.TokenReplaySubject.subscribe(token => {
+      this.userToken = token;
+    });
+
     this.wizardStep = 0;
     this.ratesRequest = new RatesRequest();
     this.ratesRequest.Origin = new Origin();
@@ -120,12 +132,12 @@ export class GssFormComponent implements OnInit {
     this.clickNext();
   }
 
-  onCardDone(isDone: boolean) {
-    this.isProcessing = false;
-    if (isDone) {
-      this.clickNext();
-    }
-  }
+  // onCardDone(isDone: boolean) {
+  //   this.isProcessing = false;
+  //   if (isDone) {
+  //     this.clickNext();
+  //   }
+  // }
 
   processPayment() {
     this.isProcessing = true;
@@ -139,5 +151,11 @@ export class GssFormComponent implements OnInit {
   pickupProcessed(processingResult: any) {
     this.wizardStep = 5;
     this.pickupProcessMessage = processingResult;
+  }
+
+  onCheckoutDone(checkoutResult: any) {
+    this.isProcessing = false;
+    this.checkoutResult = checkoutResult;
+    this.clickNext();
   }
 }
