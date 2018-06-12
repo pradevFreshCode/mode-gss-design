@@ -1,151 +1,5 @@
 <div class="container">
   <div class="card-deck mb-3 text-center">
-    <!--
-    <div class="col-md-4">
-      <div class="card mb-4 box-shadow">
-        <div class="card-header">
-          <h1 class="my-0 font-weight-normal" style="color: #c13885; font-weight: 900 !important;">A5</h1>
-        </div>
-        <div class="card-body">
-          <p>(21 X 26 X 2CM UP TO 2KG)</p>
-          <p>
-            Usually fits 1 item of clothing
-          </p>
-          <h4 [hidden]="isA5Loading" class="card-title pricing-card-title">{{a5Rate | currency}}
-          </h4>
-          <p [hidden]="!isA5Loading">
-              <img id="img_loader" [src]="loaderpath">
-          </p>
-          <div class="dropdown">
-            <button [disabled]="a5Rate <= 0" class="btn btn-lg btn-block btn-info dropdown-toggle"
-              type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              SELECT
-            </button>
-            <div class="dropdown-menu">
-              <span class="dropdown-item">
-                <button class="btn btn-lg btn-block btn-primary" (click)="goWithA5()">
-                Email Ticket
-                </button>
-              </span>
-              <span class="dropdown-item">
-                <button class="btn btn-lg btn-block btn-primary" (click)="goWithA5(false)">
-                Print
-                </button>
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card mb-4 box-shadow">
-        <div class="card-header">
-          <h1 class="my-0 font-weight-normal" style="color: #c13885; font-weight: 900 !important;">A4</h1>
-        </div>
-        <div class="card-body">
-          <p>(28 X 39 X 2CM UP TO 2KG)</p>
-          <p>
-            Usually fits 2 items of clothing
-          </p>
-          <h4 [hidden]="isA4Loading" class="card-title pricing-card-title">{{a4Rate | currency}}
-          </h4>
-          <p [hidden]="!isA4Loading">
-            <img id="img_loader" [src]="loaderpath">
-          </p>
-          <div class="dropdown">
-            <button [disabled]="a4Rate <= 0" class="btn btn-lg btn-block btn-info dropdown-toggle" type="button" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-              SELECT
-            </button>
-            <div class="dropdown-menu">
-              <span class="dropdown-item">
-                <button class="btn btn-lg btn-block btn-primary" (click)="goWithA4()">
-                  Email Ticket
-                </button>
-              </span>
-              <span class="dropdown-item">
-                <button class="btn btn-lg btn-block btn-primary" (click)="goWithA4(false)">
-                  Print
-                </button>
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card mb-4 box-shadow">
-        <div class="card-header">
-          <h1 class="my-0 font-weight-normal" style="color: #c13885; font-weight: 900 !important;">A3</h1>
-        </div>
-        <div class="card-body">
-          <p>(36 X 41 X 4CM UP TO 2KG)</p>
-          <p>
-            Usually fits 3 items of clothing
-          </p>
-          <h4 [hidden]="isA3Loading" class="card-title pricing-card-title">{{a3Rate | currency}}
-          </h4>
-          <p [hidden]="!isA3Loading">
-            <img id="img_loader" [src]="loaderpath">
-          </p>
-          <div class="dropdown">
-            <button [disabled]="a3Rate <= 0" class="btn btn-lg btn-block btn-info dropdown-toggle" type="button" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-              SELECT
-            </button>
-            <div class="dropdown-menu">
-              <span class="dropdown-item">
-                <button class="btn btn-lg btn-block btn-primary" (click)="goWithA3()">
-                  Email Ticket
-                </button>
-              </span>
-              <span class="dropdown-item">
-                <button class="btn btn-lg btn-block btn-primary" (click)="goWithA3(false)">
-                  Print
-                </button>
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card mb-4 box-shadow">
-        <div class="card-header">
-          <h1 class="my-0 font-weight-normal" style="color: #c13885; font-weight: 900 !important;">A2</h1>
-        </div>
-        <div class="card-body">
-          <p>(45 X 45 X 5CM UP TO 2KG)</p>
-          <p>
-            Usually fits 4 items of clothing
-          </p>
-          <h4 [hidden]="isA2Loading" class="card-title pricing-card-title">{{a2Rate | currency}}
-          </h4>
-          <p [hidden]="!isA2Loading">
-            <img id="img_loader" [src]="loaderpath">
-          </p>
-          <div class="dropdown">
-            <button [disabled]="a2Rate <= 0" class="btn btn-lg btn-block btn-info dropdown-toggle" type="button" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-              SELECT
-            </button>
-            <div class="dropdown-menu">
-              <span class="dropdown-item">
-                <button class="btn btn-lg btn-block btn-primary" (click)="goWithA2()">
-                  Email Ticket
-                </button>
-              </span>
-              <span class="dropdown-item">
-                <button class="btn btn-lg btn-block btn-primary" (click)="goWithA2(false)">
-                  Print
-                </button>
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  -->
     <div class="col-md-4" *ngFor="let pkg of packageOptions; let i = index">
       <div class="card mb-4 box-shadow">
         <div class="card-header">
@@ -187,8 +41,12 @@
             <p class="text-danger" [hidden]="!isNoCustomAvails">No available rates for the inputs.</p>
             <p [hidden]="isCustomLoading">
               Type in your measurements and&nbsp;
-              <button type="submit" [disabled]="customWidth === undefined || customLength === undefined || customHeight === undefined || customWeight === undefined
-              || customWidth <= 0 || customLength <= 0 || customHeight <= 0 || customWeight <= 0" class="btn btn-info" (click)="getCustomAvail()">Get the Rate</button>
+              <button type="submit"
+                      [disabled]="customWidth === undefined || customLength === undefined || customHeight === undefined || customWeight === undefined || customWidth <= 0 || customLength <= 0 || customHeight <= 0 || customWeight <= 0"
+                      class="btn btn-info"
+                      (click)="getCustomAvail()">
+                Get the Rate
+              </button>
             </p>
             <p [hidden]="!isCustomLoading">
               <img id="img_loader" [src]="loaderpath" [hidden]="!isCustomLoading">

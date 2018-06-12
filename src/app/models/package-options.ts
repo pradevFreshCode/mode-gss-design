@@ -21,7 +21,7 @@ export const PACKAGE_OPTIONS: Package[] = [
     2,
     'GSS-A5 SATCHEL',
     'A5 SATCHEL',
-    'AS',
+    'A5',
     'Box',
     'Usually fits 1 item of clothing',
     6.95),
