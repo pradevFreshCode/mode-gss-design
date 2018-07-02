@@ -5,9 +5,7 @@
   <div class="p-r-10 ml-auto">
     <a type="button" *ngIf="!currentUser"
        class="btn btn-primary"
-       [routerLink]="['/auth/login']"
-       target="_blank"
-       [queryParams]="{closeAfterSignIn: true}">
+       [routerLink]="['/auth/login']">
       Sign In
     </a>
     <span class="text-white p-r-10" *ngIf="!!currentUser">
