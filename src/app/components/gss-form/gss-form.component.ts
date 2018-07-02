@@ -59,6 +59,7 @@ export class GssFormComponent implements OnInit {
   pickupProcessMessage: string;
   currentUser: UserModel;
   userToken: string;
+  authorizationStepLoading: boolean = false;
 
   constructor(private _sessionService: SessionService) {
   }
@@ -157,5 +158,15 @@ export class GssFormComponent implements OnInit {
     this.isProcessing = false;
     this.checkoutResult = checkoutResult;
     this.clickNext();
+  }
+
+  onAuthLoadingStateChanged(newState: boolean) {
+    this.authorizationStepLoading = newState;
+  }
+
+  onConfirmEmailApiRespondSuccess(response) {
+    this._sessionService.reinitCurrentUser().subscribe(user => {
+
+    });
   }
 }

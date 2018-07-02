@@ -50,6 +50,9 @@ import { BookingPickupDoneComponent } from './components/booking-pickup-done/boo
 import {LocalStorageExtendedService} from './services/localStorageExtendedService';
 import { ProcessedShipmentComponent } from './components/processed-shipment/processed-shipment.component';
 import { CheckoutAndPickupComponentComponent } from './components/checkout-and-pickup-component/checkout-and-pickup-component.component';
+import { LoginFormComponent } from './components/login-form/login-form.component';
+import { RegisterFormComponent } from './components/register-form/register-form.component';
+import { EmailConfirmationFormComponent } from './components/email-confirmation-form/email-confirmation-form.component';
 
 @NgModule({
   declarations: [
@@ -76,7 +79,10 @@ import { CheckoutAndPickupComponentComponent } from './components/checkout-and-p
     PasswordChangedComponent,
     BookingPickupDoneComponent,
     ProcessedShipmentComponent,
-    CheckoutAndPickupComponentComponent
+    CheckoutAndPickupComponentComponent,
+    LoginFormComponent,
+    RegisterFormComponent,
+    EmailConfirmationFormComponent
   ],
   imports: [
     BrowserModule,

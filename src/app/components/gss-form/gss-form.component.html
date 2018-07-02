@@ -9,28 +9,30 @@
   </div>
 </div>
 
-<div class="container" *ngIf="!currentUser && !userToken">
-  <div class="form-group row m-t-15">
-    <div class="col-12">
-      <div class="alert alert-info" role="alert">
-        <p>
-          Only authorized users can perform booking process.
-        </p>
-        <p>
-          Please, <a [routerLink]="['/auth/login']">SIGN IN</a>,
-          to store your history, and be able to use our app
-          pickup process.
-        </p>
-        <p>
-          Pay attention! You don't need to close this page. Form will be enabled even after
-          registration/login in another tab
-        </p>
-      </div>
+<div [@slideInOut] class="container" *ngIf="!currentUser && !userToken">
+  <div class="row">
+    <div class="col-12 col-md-4">
+      <app-login-form [showAdditionalLinks]="false"
+                      [submitButtonDisabled]="authorizationStepLoading"
+                      (loadingStateChanged)="onAuthLoadingStateChanged($event)"></app-login-form>
+    </div>
+    <div class="col-12 col-md-6 offset-md-2">
+      <app-register-form [showAdditionalLinks]="false"
+                         [submitButtonDisabled]="authorizationStepLoading"
+                         (loadingStateChanged)="onAuthLoadingStateChanged($event)" [formTitle]="'New Customer? Register'"></app-register-form>
     </div>
   </div>
 </div>
 
-<ng-container *ngIf="currentUser">
+<div [@slideInOut] class="container" *ngIf="!!currentUser && !currentUser.confirmedAt">
+  <div class="row">
+    <div class="col-12 col-md-6 offset-md-3 col-lg-4 offset-lg-4">
+      <app-email-confirmation-form (confirmEmailApiRespondSuccess)="onConfirmEmailApiRespondSuccess($event)"></app-email-confirmation-form>
+    </div>
+  </div>
+</div>
+
+<ng-container *ngIf="!!currentUser && !!currentUser.confirmedAt">
   <div class="container">
     <div style="margin: 2rem 0;">
       <form #senderForm="ngForm">
